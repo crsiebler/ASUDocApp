@@ -1,0 +1,211 @@
+<?php
+
+namespace ClassicAirAviation\UserBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Entity\User as BaseUser;
+use ClassicAirAviation\LocationBundle\Entity\Location;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * User
+ *
+ * @ORM\Table(name="users")
+ * @ORM\Entity(repositoryClass="ClassicAirAviation\UserBundle\Repository\UserRepository")
+ */
+class User extends BaseUser {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var \stdClass $company
+     *
+     * @ORM\ManyToOne(targetEntity="Company", fetch="EAGER")
+     */
+    protected $company;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
+     * @ORM\JoinTable(name="user_roles",
+     *                  joinColumns={@ORM\JoinColumn(name="userID", referencedColumnName="id")},
+     *                  inverseJoinColumns={@ORM\JoinColumn(name="roleID", referencedColumnName="id")}
+     *              )
+     */
+    protected $userRoles;
+
+    /**
+     *
+     * @ORM\Column(name="firstName", type="string", length=75)
+     */
+    protected $firstName;
+
+    /**
+     *
+     * @ORM\Column(name="lastName", type="string", length=75)
+     */
+    protected $lastName;
+
+    /**
+     *
+     * @ORM\ManyToMany(targetEntity="ClassicAirAviation\LocationBundle\Entity\Location", inversedBy="assignedUsers")
+     * @ORM\JoinTable(name="user_assigned_locations",
+     *                  joinColumns={@ORM\JoinColumn(name="userID", referencedColumnName="id")},
+     *                  inverseJoinColumns={@ORM\JoinColumn(name="locationID", referencedColumnName="id")}
+     *              )
+     */
+    protected $assignedLocations;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="ClassicAirAviation\LocationBundle\Entity\Location", fetch="EAGER")
+     */
+    protected $defaultLocation;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="ClassicAirAviation\FlightSchoolBundle\Entity\FlightInstructorPreference", fetch="LAZY", mappedBy="user")
+     */
+    protected $instructorPreferences;
+    
+    public function addRole($role) {
+        //make sure user doesn't already have the role
+        $hasRole = false;
+
+        foreach ($this->userRoles as $userRole) {
+            if ($userRole == $role) {
+                $hasRole = true;
+            }
+        }
+
+        if (!$hasRole)
+            $this->userRoles->add($role);
+
+        return $this;
+    }
+
+    public function getRoles() {
+        return $this->userRoles->toArray();
+    }
+
+    public function hasRole($role) {
+        foreach ($this->userRoles as $userRole) {
+            if ($userRole == $role) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function hasRoleByName($role) {
+        foreach ($this->userRoles as $userRole) {
+            if ($userRole->getName() == $role) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getCompany() {
+        return $this->company;
+    }
+
+    public function setCompany(Company $company) {
+        $this->company = $company;
+        return $this;
+    }
+
+    public function __construct() {
+        parent::__construct();
+        $this->userRoles = new ArrayCollection();
+        $this->assignedLocations = new ArrayCollection();
+    }
+
+    public function getUserRoles() {
+        return $this->userRoles;
+    }
+
+    public function setUserRoles($userRoles) {
+        $this->userRoles = $userRoles;
+        return $this;
+    }
+
+    public function getFirstName() {
+        return $this->firstName;
+    }
+
+    public function setFirstName($firstName) {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function getLastName() {
+        return $this->lastName;
+    }
+
+    public function setLastName($lastName) {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    public function getIsFlightInstructor() {
+        return $this->isFlightInstructor;
+    }
+
+    public function getAssignedLocations() {
+        return $this->assignedLocations;
+    }
+
+    public function setAssignedLocations($assignedLocations) {
+        $this->assignedLocations = $assignedLocations;
+        return $this;
+    }
+
+    public function notInLocation(Location $location) {
+        foreach ($this->getAssignedLocations() as $assignedLocation) {
+            if ($location->getId() == $assignedLocation->getId()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function __toString() {
+        return $this->getFirstName() . ' ' . $this->getLastName();
+    }
+    
+    public function getInstructorPreferences() {
+        return $this->instructorPreferences;
+    }
+
+    public function setInstructorPreferences($instructorPreferences) {
+        $this->instructorPreferences = $instructorPreferences;
+        return $this;
+    }    
+    
+    public function getDefaultLocation() {
+        return $this->defaultLocation;
+    }
+
+    public function setDefaultLocation($defaultLocation) {
+        $this->defaultLocation = $defaultLocation;
+        return $this;
+    }
+}
