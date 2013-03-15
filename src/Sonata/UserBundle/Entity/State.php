@@ -1,6 +1,6 @@
 <?php
 
-namespace ClassicAirAviation\UserBundle\Entity;
+namespace Sonata\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ClassicAirAviation\UserBundle\Entity\State
  *
  * @ORM\Table(name="states")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class State {
 

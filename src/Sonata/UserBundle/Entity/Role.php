@@ -1,12 +1,12 @@
 <?php
 
-namespace ClassicAirAviation\UserBundle\Entity;
+namespace Sonata\UserBundle\Entity;
 
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ClassicAirAviation\UserBundle\Entity\Role
+ * Sonata\UserBundle\Entity\Role
  *
  * @ORM\Table(name="roles")
  * @ORM\Entity()

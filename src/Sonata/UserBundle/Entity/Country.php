@@ -1,6 +1,6 @@
 <?php
 
-namespace ClassicAirAviation\UserBundle\Entity;
+namespace Sonata\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ClassicAirAviation\UserBundle\Entity\Country
  *
  * @ORM\Table(name="countries")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Country {
 
@@ -44,14 +44,14 @@ class Country {
 
     /**
      * @ORM\OneToMany(targetEntity="State", mappedBy="country")
-     * @var type 
+     * @var type
      */
     protected $states;
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -69,7 +69,7 @@ class Country {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName() {
         return $this->name;
@@ -87,7 +87,7 @@ class Country {
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode() {
         return $this->code;
@@ -105,7 +105,7 @@ class Country {
     /**
      * Get zipCodeRequired
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getZipCodeRequired() {
         return $this->zipCodeRequired;
@@ -122,5 +122,4 @@ class Country {
     public function setStates($states) {
         $this->states = $states;
     }
-
 }
