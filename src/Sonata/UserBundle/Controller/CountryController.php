@@ -1,14 +1,18 @@
 <?php
 
-namespace GhostArmor\UserBundle\Controller;
+namespace Sonata\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 //use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-//use GhostArmor\UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 
-class countryController extends Controller {
+class CountryController extends Controller {
 
+    /**
+     * @Route("/state")
+     */
     public function stateChangeAction() {
         $request = $this->getRequest();
         $countryID = $request->request->get('country');

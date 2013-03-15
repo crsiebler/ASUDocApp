@@ -24,6 +24,8 @@ class AppKernel extends Kernel {
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Craue\FormFlowBundle\CraueFormFlowBundle(),
             new Sonata\UserBundle\SonataUserBundle(),
+            new Sonata\TestBundle\SonataTestBundle(),
+            new Sonata\SecurityBundle\SonataSecurityBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

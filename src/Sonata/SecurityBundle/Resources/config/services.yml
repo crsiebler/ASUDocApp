@@ -1,0 +1,36 @@
+parameters:
+  sonata_security.navbar.class: Sonata\SecurityBundle\NavBar\MenuBuilder
+
+services:
+  sonata_security.navbar:
+      class: '%mopa_bootstrap.navbar.generic%'
+      scope: request
+      arguments:
+          - { leftmenu: @sonata_security.navbar_main_menu=, rightmenu: @sonata_security.navbar_right_menu= }
+          - {}
+          - { title: "Sonata Doc App", titleRoute: "sonata_test_default_index", fixedTop: true, isFluid: true }
+      tags:
+          - { name: mopa_bootstrap.navbar, alias: frontendNavbar }
+
+  sonata_security.navbar_menu_builder:
+      class: '%sonata_security.navbar.class%'
+      scope: request
+      arguments: [ '@knp_menu.factory', '@security.context', '@session' ]
+
+  sonata_security.navbar_main_menu:
+      class: Knp\Menu\MenuItem
+      factory_service: sonata_security.navbar_menu_builder
+      factory_method: createMainMenu
+      arguments: [ '@request' ]
+      scope: request
+      tags:
+          - { name: knp_menu.menu, alias: main }
+
+  sonata_security.navbar_right_menu:
+      class: Knp\Menu\MenuItem
+      factory_service: sonata_security.navbar_menu_builder
+      factory_method: createRightSideDropdownMenu
+      arguments: [ '@request' ]
+      scope: request
+      tags:
+          - { name: knp_menu.menu, alias: main }

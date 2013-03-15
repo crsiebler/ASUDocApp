@@ -1,0 +1,40 @@
+<?php
+
+namespace Sonata\SecurityBundle\NavBar;
+
+use Mopa\Bundle\BootstrapBundle\Navbar\AbstractNavbarMenuBuilder;
+use Knp\Menu\FactoryInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\HttpFoundation\Request;
+
+class MenuBuilder extends AbstractNavbarMenuBuilder {
+
+    //put your code here
+    protected $isLoggedIn;
+    protected $session;
+    protected $user;
+
+    public function __construct(FactoryInterface $factory, SecurityContextInterface $securityContext, $session) {
+        parent::__construct($factory);
+
+        $this->user = $securityContext->getToken()->getUser();
+        $this->isLoggedIn = $securityContext->isGranted('IS_AUTHENTICATED_FULLY');
+        $this->session = $session;
+    }
+
+    public function createMainMenu(Request $request) {
+        $menu = $this->factory->createItem('root');
+        $menu->setChildrenAttribute('class', 'nav');
+
+        return $menu;
+    }
+
+    public function createRightSideDropdownMenu(Request $request) {
+        $menu = $this->factory->createItem('root');
+        $menu->setChildrenAttribute('class', 'nav pull-right');
+
+//        $menu->addChild('Impressum', array('route' => 'impressum'));
+
+        return $menu;
+    }
+}

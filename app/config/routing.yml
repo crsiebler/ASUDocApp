@@ -1,3 +1,13 @@
+sonata_security:
+    resource: "@SonataSecurityBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+sonata_test:
+    resource: "@SonataTestBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
@@ -20,4 +30,4 @@ fos_user_change_password:
 sonata_user:
     resource: "@SonataUserBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /user
