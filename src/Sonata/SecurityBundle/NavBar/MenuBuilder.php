@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MenuBuilder extends AbstractNavbarMenuBuilder {
 
-    //put your code here
     protected $isLoggedIn;
     protected $session;
     protected $user;
@@ -33,7 +32,23 @@ class MenuBuilder extends AbstractNavbarMenuBuilder {
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttribute('class', 'nav pull-right');
 
-//        $menu->addChild('Impressum', array('route' => 'impressum'));
+        if (!$this->isLoggedIn) {
+            $menu->addChild('Login', array('route' => 'fos_user_security_login'));
+        } else {
+            $menu->addChild('Logout', array('route' => 'fos_user_security_logout'));
+        }
+
+        return $menu;
+    }
+
+    public function createNavbarsSubnavMenu(Request $request) {
+        $menu = $this->createSubnavbarMenuItem();
+
+        return $menu;
+    }
+
+    public function createComponentsSubnavMenu(Request $request) {
+        $menu = $this->createSubnavbarMenuItem();
 
         return $menu;
     }
