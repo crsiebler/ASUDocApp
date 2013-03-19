@@ -6,11 +6,11 @@
 
     <!--
     <parameters>
-        <parameter key="sonata_test.example.class">Sonata\TestBundle\Example</parameter>
+        <parameter key="sonata_website.example.class">Sonata\WebsiteBundle\Example</parameter>
     </parameters>
 
     <services>
-        <service id="sonata_test.example" class="%sonata_test.example.class%">
+        <service id="sonata_website.example" class="%sonata_website.example.class%">
             <argument type="service" id="service_id" />
             <argument>plain_value</argument>
             <argument>%parameter_name%</argument>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sonata\TestBundle\Tests\Controller;
+namespace Sonata\WebsiteBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

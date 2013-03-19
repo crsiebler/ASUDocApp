@@ -81,9 +81,9 @@ mopa_bootstrap:
       #template: ::navbar.html.twig
     initializr:
       meta:
-          title:        "Sonata Doc App"
-          description:  "This is test site"
-          keywords:     "keyword1,keyword 2"
+          title:        "Sonata DocApp"
+          description:  "Project for CSE360 at Arizona State University. Website is a mock application for a Doctor's Office."
+          keywords:     "ASU,CSE360,Software,Engineering,Doctor"
           author_name:  "Cory Siebler"
           author_url:   "/human.txt"
           nofollow:     false

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sonata\TestBundle\Controller;
+namespace Sonata\WebsiteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

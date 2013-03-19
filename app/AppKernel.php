@@ -24,12 +24,11 @@ class AppKernel extends Kernel {
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Craue\FormFlowBundle\CraueFormFlowBundle(),
             new Sonata\UserBundle\SonataUserBundle(),
-            new Sonata\TestBundle\SonataTestBundle(),
             new Sonata\SecurityBundle\SonataSecurityBundle(),
+            new Sonata\WebsiteBundle\SonataWebsiteBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            $bundles[] = new Acme\DemoBundle\AcmeDemoBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();

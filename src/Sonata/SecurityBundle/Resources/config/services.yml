@@ -8,7 +8,7 @@ services:
       arguments:
           - { leftmenu: @sonata_security.navbar_main_menu=, rightmenu: @sonata_security.navbar_right_menu= }
           - {}
-          - { title: "Sonata Doc App", titleRoute: "sonata_test_default_index", fixedTop: true, isFluid: true }
+          - { title: "Sonata DocApp", titleRoute: "sonata_website_default_index", fixedTop: true, isFluid: false }
       tags:
           - { name: mopa_bootstrap.navbar, alias: frontendNavbar }
 
