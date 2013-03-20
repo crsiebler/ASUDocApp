@@ -15,4 +15,18 @@ class DefaultController extends Controller {
     public function indexAction() {
         return array();
     }
+
+    /**
+     * @Route("/search")
+     * @Template("SonataWebsite:Search:results")
+     */
+    public function searchAction() {
+        $searchTerm = $this->getRequest()->query->get('searchTerm');
+
+        if (isset($searchTerm)) {
+            return array();
+        } else {
+            return $this->redirect($this->generateUrl('sonata_website'));
+        }
+    }
 }

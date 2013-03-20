@@ -7,8 +7,8 @@ services:
       scope: request
       arguments:
           - { leftmenu: @sonata_security.navbar_main_menu=, rightmenu: @sonata_security.navbar_right_menu= }
-          - {}
-          - { title: "Sonata DocApp", titleRoute: "sonata_website_default_index", fixedTop: true, isFluid: false }
+          - { searchform: Sonata\WebsiteBundle\Form\SearchType }
+          - { title: "Sonata DocApp", titleRoute: "sonata_website_default_index", fixedTop: true, isFluid: false, inverse: true }
       tags:
           - { name: mopa_bootstrap.navbar, alias: frontendNavbar }
 
