@@ -1,8 +1,8 @@
 <?php
 
-namespace ClassicAirAviation\UserBundle\DataFixtures\ORM;
+namespace Sonata\UserBundle\DataFixtures\ORM;
 
-use ClassicAirAviation\UserBundle\Entity\State;
+use Sonata\UserBundle\Entity\State;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -20,7 +20,7 @@ class StateFixtures extends AbstractFixture implements OrderedFixtureInterface, 
         $fh = fopen('app/csvDumps/states.csv', 'r');
 
         $repo = $this->_container->get('doctrine')->getManager()->getRepository('ClassicAirAviationUserBundle:Country');
-        
+
         $state = array();
         while (($data = fgetcsv($fh)) !== false) {
             $state = new State();
@@ -30,14 +30,13 @@ class StateFixtures extends AbstractFixture implements OrderedFixtureInterface, 
             $state->setTaxRate($data[4]);
             $manager->persist($state);
         }
-        
+
         $manager->flush();
     }
 
     public function setContainer(ContainerInterface $container = null) {
         $this->_container = $container;
     }
-
 }
 
 ?>

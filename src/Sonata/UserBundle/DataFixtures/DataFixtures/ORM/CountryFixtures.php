@@ -1,8 +1,8 @@
 <?php
 
-namespace ClassicAirAviation\UserBundle\DataFixtures\ORM;
+namespace Sonata\UserBundle\DataFixtures\ORM;
 
-use ClassicAirAviation\UserBundle\Entity\Country;
+use Sonata\UserBundle\Entity\Country;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 

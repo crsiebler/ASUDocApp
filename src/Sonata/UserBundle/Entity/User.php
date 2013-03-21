@@ -27,8 +27,7 @@ class User extends BaseUser {
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
      * @ORM\JoinTable(name="user_roles",
      *                  joinColumns={@ORM\JoinColumn(name="userID", referencedColumnName="id")},
-     *                  inverseJoinColumns={@ORM\JoinColumn(name="roleID", referencedColumnName="id")}
-     *              )
+     *                  inverseJoinColumns={@ORM\JoinColumn(name="roleID", referencedColumnName="id")})
      */
     protected $userRoles;
 
@@ -87,7 +86,7 @@ class User extends BaseUser {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
