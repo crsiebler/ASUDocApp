@@ -4,35 +4,16 @@
 
 {% block head_style %}
 {{ parent() }}
-<style>
-        body {
-            background-color: #eee;
-        }
-
-        .content {
-            -webkit-border-radius: 20px;
-            -moz-border-radius: 20px;
-            border-radius: 20px;
-            padding: 20px;
-            background-color: white;
-        }
-
-        footer {
-            -webkit-border-radius: 20px;
-            -moz-border-radius: 20px;
-            border-radius: 20px;
-            padding-left: 20px;
-            padding-right: 20px;
-            background-color: white;
-        }
-</style>
+{% stylesheets
+    'less/main.less'
+debug=false %}
+<link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+{% endstylesheets %}
 {% endblock head_style %}
 
 {% block header %}&nbsp;{% endblock header %}
 
-{% block content_content %}
-    {% block fos_user_content %}{% endblock fos_user_content %}
-{% endblock content_content %}
+{% block content_content %}{% endblock content_content %}
 
 {% block footer %}
 <hr>

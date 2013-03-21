@@ -1,0 +1,83 @@
+@page_width: 800px;
+@page_padding: 20px;
+@page_internal_width: @page_width - @page_padding;
+
+.rounded(@radius: 3px) {
+    border-radius: @radius;
+    -moz-border-radius: @radius;
+    -webkit-border-radius: @radius;
+}
+
+document {
+    width: @page_width !important;
+    padding: @page_padding;
+    margin: auto;
+
+    h1.header_tag {
+        margin-bottom: 0px;
+        text-align: center;
+    }
+
+    .section {
+        margin-bottom: 15px;
+        .rounded(5px);
+
+        h3 {
+            font-size: 16px !important;
+            margin-top: 0px;
+            text-align: center;
+        }
+    }
+
+    input[type=text], textarea {
+        width: @page_internal_width !important;
+    }
+}
+
+body {
+    background-color: #eee;
+}
+
+.content {
+    .rounded(20px);
+    padding: 20px;
+    background-color: white;
+}
+
+footer {
+    .rounded(20px);
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: white;
+}
+
+.page-header {
+    padding-bottom: 0px;
+    margin: 15px 0 25px;
+}
+
+.page-header > h1 {
+    margin: 10px 0 5px;
+}
+
+form {
+    margin: 0 0 0 10px;
+}
+
+#remember_me {
+    display: inline-block;
+    margin: 0;
+}
+
+label[for="remember_me"] {
+    display: inline;
+}
+
+input#password {
+    display: block;
+}
+
+input[type="submit"] {
+    display: block;
+    margin-top: 15px;
+}
