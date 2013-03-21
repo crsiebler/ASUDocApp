@@ -2,9 +2,40 @@
 
 {% block container_class %}container{% endblock container_class %}
 
+{% block head_style %}
+{{ parent() }}
+<style>
+        body {
+            background-color: #eee;
+        }
+
+        .content {
+            -webkit-border-radius: 20px;
+            -moz-border-radius: 20px;
+            border-radius: 20px;
+            padding: 20px;
+            background-color: white;
+        }
+
+        footer {
+            -webkit-border-radius: 20px;
+            -moz-border-radius: 20px;
+            border-radius: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: white;
+        }
+</style>
+{% endblock head_style %}
+
 {% block header %}&nbsp;{% endblock header %}
+
+{% block content_content %}
+    {% block fos_user_content %}{% endblock fos_user_content %}
+{% endblock content_content %}
 
 {% block footer %}
 <hr>
 <p>&copy; 2013 <a href="http://www.asu.edu/" target="_blank">Sonata, an ASU student collaboration</a></p>
+<hr>
 {% endblock footer %}

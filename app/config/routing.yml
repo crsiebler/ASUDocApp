@@ -3,6 +3,16 @@ sonata_website:
     type: annotation
     prefix: /
 
+sonata_security:
+    resource: "@SonataSecurityBundle/Controller/"
+    type: annotation
+    prefix: /security
+
+sonata_user:
+    resource: "@SonataUserBundle/Controller/"
+    type: annotation
+    prefix: /user
+
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
