@@ -77,14 +77,14 @@ mopa_bootstrap:
         show_legend: false
         show_child_legend: false
         error_type: block
-    #navbar:
+    navbar: ~
       #template: ::navbar.html.twig
     initializr:
       meta:
           title:        "Sonata DocApp"
           description:  "Project for CSE360 at Arizona State University. Website is a mock application for a Doctor's Office."
           keywords:     "ASU,CSE360,Software,Engineering,Doctor"
-          author_name:  "Cory Siebler"
+          author_name:  "Cory Siebler,Bryan Garcia,Kyle Rota,Peter Tinsley,Ben Prather"
           author_url:   "/human.txt"
           nofollow:     false
           noindex:      false

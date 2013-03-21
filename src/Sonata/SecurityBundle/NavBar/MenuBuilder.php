@@ -32,7 +32,7 @@ class MenuBuilder extends AbstractNavbarMenuBuilder {
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttribute('class', 'nav pull-right');
 
-        if ($this->isLoggedIn) {
+        if (!$this->isLoggedIn) {
             $menu->addChild('Login', array('route' => 'fos_user_security_login'));
         } else {
             $menu->addChild('Logout', array('route' => 'fos_user_security_logout'));

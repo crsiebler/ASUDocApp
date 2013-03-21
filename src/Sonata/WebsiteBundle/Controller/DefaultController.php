@@ -4,6 +4,7 @@ namespace Sonata\WebsiteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller {
@@ -18,15 +19,16 @@ class DefaultController extends Controller {
 
     /**
      * @Route("/search")
-     * @Template("SonataWebsite:Search:results")
+     * @Method({"POST"})
+     * @Template()
      */
     public function searchAction() {
-        $searchTerm = $this->getRequest()->query->get('searchTerm');
+        // Use deep search because parameter is in a multidimensional array
+        $searchTerm = $this->getRequest()->get('sonata_websitebundle_searchtype[searchTerm]', null, true);
 
-        if (isset($searchTerm)) {
-            return array();
-        } else {
-            return $this->redirect($this->generateUrl('sonata_website'));
-        }
+        //@todo add user logged in check
+        //@todo create userRepository to search for patient names and/or doctor, nurse, admin, EMT
+
+        return array('searchTerm' => $searchTerm);
     }
 }
