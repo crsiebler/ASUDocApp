@@ -19,7 +19,7 @@ class StateFixtures extends AbstractFixture implements OrderedFixtureInterface, 
     public function load(\Doctrine\Common\Persistence\ObjectManager $manager) {
         $fh = fopen('app/csvDumps/states.csv', 'r');
 
-        $repo = $this->_container->get('doctrine')->getManager()->getRepository('ClassicAirAviationUserBundle:Country');
+        $repo = $this->_container->get('doctrine')->getManager()->getRepository('SonataUserBundle:Country');
 
         $state = array();
         while (($data = fgetcsv($fh)) !== false) {

@@ -15,8 +15,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 class User extends BaseUser {
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -32,13 +30,11 @@ class User extends BaseUser {
     protected $userRoles;
 
     /**
-     *
      * @ORM\Column(name="firstName", type="string", length=75)
      */
     protected $firstName;
 
     /**
-     *
      * @ORM\Column(name="lastName", type="string", length=75)
      */
     protected $lastName;
