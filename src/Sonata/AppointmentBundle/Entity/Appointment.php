@@ -3,6 +3,7 @@
 namespace Sonata\AppointmentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Sonata\AppointmentBundle\Entity\Note;
 
 /**
  * Appointment
@@ -50,7 +51,7 @@ class Appointment {
     private $glucose;
 
     /**
-     * @ORM\OneToOne(targetEntity="BloodPressure")
+     * @ORM\OneToOne(targetEntity="Sonata\HealthBundle\Entity\BloodPressure")
      */
     private $bloodPressure;
 

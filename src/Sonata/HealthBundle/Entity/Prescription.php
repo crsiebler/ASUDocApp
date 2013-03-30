@@ -64,6 +64,12 @@ class Prescription {
     private $reason;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Sonata\UserBundle\Entity\User", inversedBy="prescriptions", fetch="EAGER")
+     * @ORM\JoinColumn(name="patientID", referencedColumnName="id", nullable=false)
+     */
+    private $patient;
+
+    /**
      * Get id
      *
      * @return integer
@@ -190,5 +196,14 @@ class Prescription {
      */
     public function getReason() {
         return $this->reason;
+    }
+
+    public function getPatient() {
+        return $this->patient;
+    }
+
+    public function setPatient($patient) {
+        $this->patient = $patient;
+        return $this;
     }
 }

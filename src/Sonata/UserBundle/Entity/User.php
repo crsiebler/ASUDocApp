@@ -5,6 +5,9 @@ namespace Sonata\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\Common\Collections\ArrayCollection;
+use Sonata\HealthBundle\Entity\Prescription;
+use Sonata\HealthBundle\Entity\Allergy;
+use Sonata\AppointmentBundle\Entity\Appointment;
 
 /**
  * User
@@ -55,20 +58,25 @@ class User extends BaseUser {
     private $insuranceInfo;
 
     /**
-     * @ORM\OneToMany(targetEntity="Prescription", mappedBy="patient")
+     * @ORM\OneToMany(targetEntity="Sonata\HealthBundle\Entity\Prescription", mappedBy="patient")
      */
     private $prescriptions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Allergies", mappedBy="patient")
+     * @ORM\OneToMany(targetEntity="Sonata\HealthBundle\Entity\Allergy", mappedBy="patient")
      */
     private $allergies;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appointment", mappedBy="patient")
+     * @ORM\OneToMany(targetEntity="Sonata\AppointmentBundle\Entity\Appointment", mappedBy="patient")
      */
     private $appointmentInfo;
 
+    /**
+     *
+     * @param type $role
+     * @return \Sonata\UserBundle\Entity\User
+     */
     public function addRole($role) {
         //make sure user doesn't already have the role
         $hasRole = false;
@@ -85,10 +93,19 @@ class User extends BaseUser {
         return $this;
     }
 
+    /**
+     *
+     * @return type
+     */
     public function getRoles() {
         return $this->userRoles->toArray();
     }
 
+    /**
+     *
+     * @param type $role
+     * @return boolean
+     */
     public function hasRole($role) {
         foreach ($this->userRoles as $userRole) {
             if ($userRole == $role) {

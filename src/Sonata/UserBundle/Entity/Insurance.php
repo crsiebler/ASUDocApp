@@ -22,7 +22,7 @@ class Insurance {
     private $id;
 
     /**
-     * @ORM\Column(name="name", type="string, length=75)
+     * @ORM\Column(name="name", type="string", length=75)
      */
     private $name;
 
