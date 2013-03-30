@@ -35,4 +35,5 @@ class RegistrationFormType extends BaseType {
     public function getName() {
         return 'sonata_user_registration';
     }
+
 }

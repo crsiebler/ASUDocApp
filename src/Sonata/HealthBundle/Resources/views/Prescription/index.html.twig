@@ -1,0 +1,51 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Prescription list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Dateexpires</th>
+                <th>Dateprescribed</th>
+                <th>Frequency</th>
+                <th>Dosage</th>
+                <th>Name</th>
+                <th>Reason</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('prescription_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{% if entity.dateExpires %}{{ entity.dateExpires|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.datePrescribed %}{{ entity.datePrescribed|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.frequency }}</td>
+                <td>{{ entity.dosage }}</td>
+                <td>{{ entity.name }}</td>
+                <td>{{ entity.reason }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('prescription_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('prescription_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('prescription_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

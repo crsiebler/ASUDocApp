@@ -1,22 +1,22 @@
 sonata_appointment:
     resource: "@SonataAppointmentBundle/Controller/"
     type:     annotation
-    prefix:   /appointment
+    prefix:   /
 
 sonata_health:
     resource: "@SonataHealthBundle/Controller/"
     type:     annotation
-    prefix:   /health
+    prefix:   /
 
 sonata_security:
     resource: "@SonataSecurityBundle/Controller/"
     type:     annotation
-    prefix:   /security
+    prefix:   /
 
 sonata_user:
     resource: "@SonataUserBundle/Controller/"
     type:     annotation
-    prefix:   /user
+    prefix:   /
 
 sonata_website:
     resource: "@SonataWebsiteBundle/Controller/"

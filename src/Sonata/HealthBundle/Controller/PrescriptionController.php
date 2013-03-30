@@ -1,33 +1,33 @@
 <?php
 
-namespace Sonata\UserBundle\Controller;
+namespace Sonata\HealthBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sonata\UserBundle\Entity\User;
-use Sonata\UserBundle\Form\UserType;
+use Sonata\HealthBundle\Entity\Prescription;
+use Sonata\HealthBundle\Form\PrescriptionType;
 
 /**
- * User controller.
+ * Prescription controller.
  *
- * @Route("/user")
+ * @Route("/prescription")
  */
-class UserController extends Controller {
+class PrescriptionController extends Controller {
 
     /**
-     * Lists all User entities.
+     * Lists all Prescription entities.
      *
-     * @Route("/", name="user")
+     * @Route("/", name="prescription")
      * @Method("GET")
      * @Template()
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('SonataUserBundle:User')->findAll();
+        $entities = $em->getRepository('SonataHealthBundle:Prescription')->findAll();
 
         return array(
             'entities' => $entities,
@@ -35,15 +35,15 @@ class UserController extends Controller {
     }
 
     /**
-     * Creates a new User entity.
+     * Creates a new Prescription entity.
      *
-     * @Route("/", name="user_create")
+     * @Route("/", name="prescription_create")
      * @Method("POST")
-     * @Template("SonataUserBundle:User:new.html.twig")
+     * @Template("SonataHealthBundle:Prescription:new.html.twig")
      */
     public function createAction(Request $request) {
-        $entity = new User();
-        $form = $this->createForm(new UserType(), $entity);
+        $entity = new Prescription();
+        $form = $this->createForm(new PrescriptionType(), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -51,7 +51,7 @@ class UserController extends Controller {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('prescription_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -61,15 +61,15 @@ class UserController extends Controller {
     }
 
     /**
-     * Displays a form to create a new User entity.
+     * Displays a form to create a new Prescription entity.
      *
-     * @Route("/new", name="user_new")
+     * @Route("/new", name="prescription_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction() {
-        $entity = new User();
-        $form = $this->createForm(new UserType(), $entity);
+        $entity = new Prescription();
+        $form = $this->createForm(new PrescriptionType(), $entity);
 
         return array(
             'entity' => $entity,
@@ -78,19 +78,19 @@ class UserController extends Controller {
     }
 
     /**
-     * Finds and displays a User entity.
+     * Finds and displays a Prescription entity.
      *
-     * @Route("/{id}", name="user_show")
+     * @Route("/{id}", name="prescription_show")
      * @Method("GET")
      * @Template()
      */
     public function showAction($id) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataUserBundle:User')->find($id);
+        $entity = $em->getRepository('SonataHealthBundle:Prescription')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            throw $this->createNotFoundException('Unable to find Prescription entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -102,22 +102,22 @@ class UserController extends Controller {
     }
 
     /**
-     * Displays a form to edit an existing User entity.
+     * Displays a form to edit an existing Prescription entity.
      *
-     * @Route("/{id}/edit", name="user_edit")
+     * @Route("/{id}/edit", name="prescription_edit")
      * @Method("GET")
      * @Template()
      */
     public function editAction($id) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataUserBundle:User')->find($id);
+        $entity = $em->getRepository('SonataHealthBundle:Prescription')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            throw $this->createNotFoundException('Unable to find Prescription entity.');
         }
 
-        $editForm = $this->createForm(new UserType(), $entity);
+        $editForm = $this->createForm(new PrescriptionType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -128,30 +128,30 @@ class UserController extends Controller {
     }
 
     /**
-     * Edits an existing User entity.
+     * Edits an existing Prescription entity.
      *
-     * @Route("/{id}", name="user_update")
+     * @Route("/{id}", name="prescription_update")
      * @Method("PUT")
-     * @Template("SonataUserBundle:User:edit.html.twig")
+     * @Template("SonataHealthBundle:Prescription:edit.html.twig")
      */
     public function updateAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataUserBundle:User')->find($id);
+        $entity = $em->getRepository('SonataHealthBundle:Prescription')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            throw $this->createNotFoundException('Unable to find Prescription entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new UserType(), $entity);
+        $editForm = $this->createForm(new PrescriptionType(), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('user_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('prescription_edit', array('id' => $id)));
         }
 
         return array(
@@ -162,9 +162,9 @@ class UserController extends Controller {
     }
 
     /**
-     * Deletes a User entity.
+     * Deletes a Prescription entity.
      *
-     * @Route("/{id}", name="user_delete")
+     * @Route("/{id}", name="prescription_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id) {
@@ -173,21 +173,21 @@ class UserController extends Controller {
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SonataUserBundle:User')->find($id);
+            $entity = $em->getRepository('SonataHealthBundle:Prescription')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find User entity.');
+                throw $this->createNotFoundException('Unable to find Prescription entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('user'));
+        return $this->redirect($this->generateUrl('prescription'));
     }
 
     /**
-     * Creates a form to delete a User entity by id.
+     * Creates a form to delete a Prescription entity by id.
      *
      * @param mixed $id The entity id
      *

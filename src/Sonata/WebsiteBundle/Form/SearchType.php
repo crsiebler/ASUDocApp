@@ -10,17 +10,17 @@ class SearchType extends AbstractType implements NavbarFormInterface {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-            ->setAttribute('render_fieldset', false)
-            ->setAttribute('label_render', false)
-            ->setAttribute('show_legend', false)
-            ->add('searchTerm', 'text', array(
-                'widget_control_group' => false,
-                'widget_controls' => false,
-                'attr' => array(
-                    'placeholder' => "search",
-                    'class' => "input-medium search-query"
-                )
-            ))
+                ->setAttribute('render_fieldset', false)
+                ->setAttribute('label_render', false)
+                ->setAttribute('show_legend', false)
+                ->add('searchTerm', 'text', array(
+                    'widget_control_group' => false,
+                    'widget_controls' => false,
+                    'attr' => array(
+                        'placeholder' => "search",
+                        'class' => "input-medium search-query"
+                    )
+                ))
         ;
     }
 
@@ -31,4 +31,5 @@ class SearchType extends AbstractType implements NavbarFormInterface {
     public function getRoute() {
         return 'sonata_website_default_search';
     }
+
 }
