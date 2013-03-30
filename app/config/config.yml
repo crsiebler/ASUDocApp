@@ -31,17 +31,17 @@ assetic:
     debug:          %kernel.debug%
     use_controller: false
     #Linux Version
-    java: /usr/bin/java
+    #java: /usr/bin/java
     #Windows Version
-    #java: "C:\\Program Files (x86)\\Java\\jre6\\bin\\java.exe"
+    java: "C:\\Program Files (x86)\\Java\\jre6\\bin\\java.exe"
     filters:
         less:
           #Linux Version
-          node: /usr/bin/node
-          node_paths: [/usr/lib/node_modules]
+          #node: /usr/bin/node
+          #node_paths: [/usr/lib/node_modules]
           #Windows Verison
-          #node: [ "C:\\nodejs\\node.exe" ]
-          #node_paths: [ "C:\\nodejs\\", "C:\\nodejs\\node_modules\\" ]
+          node: [ "C:\\nodejs\\node.exe" ]
+          node_paths: [ "C:\\nodejs\\", "C:\\nodejs\\node_modules\\" ]
           apply_to: "\.less$"
           cssrewrite: ~
         yui_css:

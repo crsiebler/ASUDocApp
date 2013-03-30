@@ -3,6 +3,7 @@
 namespace Sonata\AppointmentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Sonata\UserBundle\Entity\User;
 
 /**
  * Note
@@ -36,9 +37,10 @@ class Note {
     private $dateCreated;
 
     /**
-     * @ORM\OneToOne(targetEntity="Users")
+     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="doctor_id", referencedColumnName="id")
      */
-    private $createBy;
+    private $createdBy;
 
     /**
      * Get id
@@ -89,12 +91,12 @@ class Note {
         return $this->dateCreated;
     }
 
-    public function getCreateBy() {
+    public function getCreatedBy() {
         return $this->createBy;
     }
 
-    public function setCreateBy($createBy) {
-        $this->createBy = $createBy;
+    public function setCreatedBy($createdBy) {
+        $this->createdBy = $createdBy;
         return $this;
     }
 }
