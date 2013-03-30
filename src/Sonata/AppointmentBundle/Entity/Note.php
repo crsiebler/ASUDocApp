@@ -36,6 +36,11 @@ class Note {
     private $dateCreated;
 
     /**
+     * @ORM\OneToOne(targetEntity="Users")
+     */
+    private $createBy;
+
+    /**
      * Get id
      *
      * @return integer
@@ -52,7 +57,6 @@ class Note {
      */
     public function setNote($note) {
         $this->note = $note;
-
         return $this;
     }
 
@@ -73,7 +77,6 @@ class Note {
      */
     public function setDateCreated($dateCreated) {
         $this->dateCreated = $dateCreated;
-
         return $this;
     }
 
@@ -84,5 +87,14 @@ class Note {
      */
     public function getDateCreated() {
         return $this->dateCreated;
+    }
+
+    public function getCreateBy() {
+        return $this->createBy;
+    }
+
+    public function setCreateBy($createBy) {
+        $this->createBy = $createBy;
+        return $this;
     }
 }

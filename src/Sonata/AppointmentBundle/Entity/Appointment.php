@@ -50,6 +50,16 @@ class Appointment {
     private $glucose;
 
     /**
+     * @ORM\OneToOne(targetEntity="BloodPressure")
+     */
+    private $bloodPressure;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Note")
+     */
+    private $note;
+
+    /**
      * Get id
      *
      * @return integer
@@ -87,7 +97,6 @@ class Appointment {
      */
     public function setWeight($weight) {
         $this->weight = $weight;
-
         return $this;
     }
 
@@ -129,7 +138,6 @@ class Appointment {
      */
     public function setGlucose($glucose) {
         $this->glucose = $glucose;
-
         return $this;
     }
 
@@ -140,5 +148,41 @@ class Appointment {
      */
     public function getGlucose() {
         return $this->glucose;
+    }
+
+    /**
+     *
+     * @return type
+     */
+    public function getBloodPressure() {
+        return $this->bloodPressure;
+    }
+
+    /**
+     *
+     * @param type $bloodPressure
+     * @return \Sonata\AppointmentBundle\Entity\Appointment
+     */
+    public function setBloodPressure($bloodPressure) {
+        $this->bloodPressure = $bloodPressure;
+        return $this;
+    }
+
+    /**
+     *
+     * @return type
+     */
+    public function getNote() {
+        return $this->note;
+    }
+
+    /**
+     *
+     * @param type $note
+     * @return \Sonata\AppointmentBundle\Entity\Appointment
+     */
+    public function setNote($note) {
+        $this->note = $note;
+        return $this;
     }
 }

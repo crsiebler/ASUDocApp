@@ -80,7 +80,6 @@ class Prescription {
      */
     public function setDateExpires($dateExpires) {
         $this->dateExpires = $dateExpires;
-
         return $this;
     }
 
@@ -101,7 +100,6 @@ class Prescription {
      */
     public function setDatePrescribed($datePrescribed) {
         $this->datePrescribed = $datePrescribed;
-
         return $this;
     }
 
@@ -122,7 +120,6 @@ class Prescription {
      */
     public function setFrequency($frequency) {
         $this->frequency = $frequency;
-
         return $this;
     }
 
@@ -143,7 +140,6 @@ class Prescription {
      */
     public function setDosage($dosage) {
         $this->dosage = $dosage;
-
         return $this;
     }
 
@@ -164,7 +160,6 @@ class Prescription {
      */
     public function setName($name) {
         $this->name = $name;
-
         return $this;
     }
 
@@ -185,7 +180,6 @@ class Prescription {
      */
     public function setReason($reason) {
         $this->reason = $reason;
-
         return $this;
     }
 

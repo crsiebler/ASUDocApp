@@ -52,7 +52,6 @@ class BloodPressure {
      */
     public function setMax($max) {
         $this->max = $max;
-
         return $this;
     }
 
