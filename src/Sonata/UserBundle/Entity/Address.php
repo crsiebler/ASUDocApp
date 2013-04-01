@@ -26,20 +26,6 @@ class Address {
     protected $id;
 
     /**
-     * @ORM\Column(name="firstName", type="string", length=50, nullable=true)
-     * @Assert\NotBlank(message="Please enter a first name")
-     * @var string $firstName
-     */
-    protected $firstName;
-
-    /**
-     * @ORM\Column(name="lastName", type="string", length=50, nullable=true)
-     * @Assert\NotBlank(message="Please enter a last name")
-     * @var string $lastName 
-     */
-    protected $lastName;
-
-    /**
      * @var string $address
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
