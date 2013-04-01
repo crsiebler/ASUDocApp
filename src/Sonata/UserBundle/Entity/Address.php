@@ -26,20 +26,6 @@ class Address {
     protected $id;
 
     /**
-     * @ORM\Column(name="firstName", type="string", length=50, nullable=true)
-     * @Assert\NotBlank(message="Please enter a first name")
-     * @var string $firstName
-     */
-    protected $firstName;
-
-    /**
-     * @ORM\Column(name="lastName", type="string", length=50, nullable=true)
-     * @Assert\NotBlank(message="Please enter a last name")
-     * @var string $lastName 
-     */
-    protected $lastName;
-
-    /**
      * @var string $address
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
@@ -90,13 +76,6 @@ class Address {
     protected $zipcode;
 
     /**
-     * @var string $name
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
-     */
-    protected $name;
-
-    /**
      * @ORM\Column(name="phoneNumber", type="string", length=15, nullable=true)
      * @var string $phoneNumber 
      */
@@ -105,33 +84,6 @@ class Address {
     /**
      * @ORM\Column(name="companyName", type="string", length=255, nullable=true)
      * @var string $companyName 
-     */
-    protected $companyName;
-
-    /**
-     * @var decimal $longitude
-     *
-     * @ORM\Column(name="longitude", type="decimal", scale=7, precision=10, nullable=true)
-     */
-    protected $longitude;
-
-    /**
-     * @var decimal $latutude
-     *
-     * @ORM\Column(name="latitude", type="decimal", scale=7, precision=10, nullable=true)
-     */
-    protected $latitude;
-
-    /**
-     *
-     * @ORM\Column(name="isResidential", type="boolean")
-     */
-    protected $isResidential;
-
-    /**
-     * Get id
-     *
-     * @return integer 
      */
     public function getId() {
         return $this->id;
@@ -143,9 +95,6 @@ class Address {
      * @param string $address
      */
     public function setAddress($address) {
-        if ($address != $this->address) {
-            $this->resetGeoCoordinates();
-        }
         $this->address = $address;
         return $this;
     }
@@ -165,9 +114,6 @@ class Address {
      * @param string $address2
      */
     public function setAddress2($address2) {
-        if ($address2 != $this->address2) {
-            $this->resetGeoCoordinates();
-        }
         $this->address2 = $address2;
         return $this;
     }
@@ -187,9 +133,6 @@ class Address {
      * @param string $city
      */
     public function setCity($city) {
-        if ($city != $this->city) {
-            $this->resetGeoCoordinates();
-        }
         $this->city = $city;
         return $this;
     }
@@ -209,9 +152,6 @@ class Address {
      * @param string $state
      */
     public function setState($state) {
-        if ($state != $this->state) {
-            $this->resetGeoCoordinates();
-        }
         $this->state = $state;
         return $this;
     }
@@ -231,9 +171,6 @@ class Address {
      * @param string $country
      */
     public function setCountry($country) {
-        if ($country != $this->country) {
-            $this->resetGeoCoordinates();
-        }
         $this->country = $country;
         return $this;
     }
@@ -266,48 +203,6 @@ class Address {
         return $this->zipcode;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     */
-    public function setName($name) {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName() {
-        return $this->name;
-    }
-
-    public function getFirstName() {
-        return $this->firstName;
-    }
-
-    public function getLastName() {
-        return $this->lastName;
-    }
-
-    public function setFirstName($firstName) {
-        $this->firstName = $firstName;
-        return $this;
-    }
-
-    public function setLastName($lastName) {
-        $this->lastName = $lastName;
-        return $this;
-    }
-
-    public function __construct() {
-        $this->name = "Default";
-        $this->isResidential = true;
-    }
-
     public function getPhoneNumber() {
         return $this->phoneNumber;
     }
@@ -317,18 +212,8 @@ class Address {
         return $this;
     }
 
-    public function getCompanyName() {
-        return $this->companyName;
-    }
-
-    public function setCompanyName($companyName) {
-        $this->companyName = $companyName;
-        return $this;
-    }
-
     public function __toString() {
-        $string = $this->firstName . ' ' . $this->lastName . '<br />';
-        $string .= $this->address . '<br />';
+        $string = $this->address . '<br />';
 
         if ($this->address2 != "") {
             $string .= $this->address2 . '<br />';
@@ -343,70 +228,12 @@ class Address {
         return $string;
     }
 
-    public function __clone() {
-        if ($this->id) {
-            $this->id = null;
-        }
-    }
-
-    public function getLongitude() {
-        return $this->longitude;
-    }
-
-    public function setLongitude($longitude) {
-        $this->longitude = $longitude;
-        return $this;
-    }
-
-    public function getLatitude() {
-        return $this->latitude;
-    }
-
-    public function setLatitude($latitude) {
-        $this->latitude = $latitude;
-        return $this;
-    }
-
-    public function setGeoCoordinates($coordinates) {
-        if (isset($coordinates['lat']) && isset($coordinates['lng'])) {
-            $this->latitude = $coordinates['lat'];
-            $this->longitude = $coordinates['lng'];
-        } else {
-            throw new \InvalidArgumentException;
-        }
-
-        return $this;
-    }
-
-    private function resetGeoCoordinates() {
-        $this->latitude = null;
-        $this->longitude = null;
-    }
-
     public function isValid() {
         if ($this->address == "" || $this->city == "" || $this->country == "") {
             return false;
         } else {
             return true;
         }
-    }
-
-    public function cloneAddress() {
-        $newAddress = new Address();
-        $newAddress->setCompanyName($this->getCompanyName());
-        $newAddress->setFirstName($this->getFirstName());
-        $newAddress->setLastName($this->getLastName());
-        $newAddress->setCompanyName($this->getCompanyName());
-        $newAddress->setLatitude($this->getLatitude());
-        $newAddress->setLongitude($this->getLongitude());
-        $newAddress->setAddress($this->getAddress());
-        $newAddress->setAddress2($this->getAddress2());
-        $newAddress->setCity($this->getCity());
-        $newAddress->setState($this->getState());
-        $newAddress->setCountry($this->getCountry());
-        $newAddress->setZipcode($this->getZipcode());
-        $newAddress->setIsResidential($this->getIsResidential());
-        return $newAddress;
     }
 
     public function isStateValid(ExecutionContext $context) {
@@ -431,14 +258,4 @@ class Address {
             }
         }
     }
-
-    public function getIsResidential() {
-        return $this->isResidential;
-    }
-
-    public function setIsResidential($isResidential) {
-        $this->isResidential = $isResidential;
-        return $this;
-    }
-
 }
