@@ -92,7 +92,7 @@ class Note {
     }
 
     public function getCreatedBy() {
-        return $this->createBy;
+        return $this->createdBy;
     }
 
     public function setCreatedBy($createdBy) {

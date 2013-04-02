@@ -1,43 +1,46 @@
 {% extends '::base.html.twig' %}
 
-{% block body -%}
-    <h1>BloodPressure list</h1>
+{% block headline %}View All Blood Pressure Readings{% endblock headline %}
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Max</th>
-                <th>Min</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('bloodpressure_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.max }}</td>
-                <td>{{ entity.min }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('bloodpressure_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('bloodpressure_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{% block content_content %}
+{{ parent() }}
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Max</th>
+            <th>Min</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('bloodpressure_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.max }}</td>
+            <td>{{ entity.min }}</td>
+            <td>
+            <ul>
+                <li>
+                    <a href="{{ path('bloodpressure_show', { 'id': entity.id }) }}">show</a>
+                </li>
+                <li>
+                    <a href="{{ path('bloodpressure_edit', { 'id': entity.id }) }}">edit</a>
+                </li>
+            </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
-        <ul>
-        <li>
-            <a href="{{ path('bloodpressure_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+<ul>
+    <li>
+        <a href="{{ path('bloodpressure_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
+{% endblock content_content %}
+
+{% block content_sidebar %}{% endblock content_sidebar %}

@@ -1,6 +1,9 @@
 {% extends '::base.html.twig' %}
 
-{% block body -%}
+{% block headline %}Editing Note #{{ entity.username }}{% endblock headline %}
+
+{% block content_content %}
+{{ parent() }}
     <h1>Note edit</h1>
 
     <form action="{{ path('note_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
@@ -25,4 +28,6 @@
         </form>
     </li>
 </ul>
-{% endblock %}
+{% endblock content_content %}
+
+{% block content_sidebar %}{% endblock content_sidebar %}

@@ -27,7 +27,6 @@ class StateFixtures extends AbstractFixture implements OrderedFixtureInterface, 
             $state->setName($data[1]);
             $state->setCode($data[2]);
             $state->setCountry($repo->findOneByCode($data[3]));
-            $state->setTaxRate($data[4]);
             $manager->persist($state);
         }
 

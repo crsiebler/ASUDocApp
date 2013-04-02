@@ -20,12 +20,12 @@ class RolesFixtures extends AbstractFixture implements OrderedFixtureInterface {
 
         $role2 = new Role();
         $role2->setName('site-admin')
-                ->setDisplay('Website Admin')
+                ->setDisplayName('Website Admin')
                 ->setDescription('User has ability to modify any information on the website.');
 
         $role3 = new Role();
         $role3->setName('patient')
-                ->setDisplay('Patient')
+                ->setDisplayName('Patient')
                 ->setDescription('Doctor\'s office patient.');
 
         $role4 = new Role();

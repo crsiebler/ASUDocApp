@@ -30,20 +30,20 @@ class User extends BaseUser {
      *                  joinColumns={@ORM\JoinColumn(name="userID", referencedColumnName="id")},
      *                  inverseJoinColumns={@ORM\JoinColumn(name="roleID", referencedColumnName="id")})
      */
-    protected $userRoles;
+    private $userRoles;
 
     /**
      * @ORM\Column(name="firstName", type="string", length=75)
      */
-    protected $firstName;
+    private $firstName;
 
     /**
      * @ORM\Column(name="lastName", type="string", length=75)
      */
-    protected $lastName;
+    private $lastName;
 
     /**
-     * @ORM\Column(name="primaryDoctor", type="string", length=128)
+     * @ORM\Column(name="primaryDoctor", type="string", length=128, nullable=true)
      */
     private $primaryDoctor;
 

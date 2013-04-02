@@ -43,127 +43,148 @@ class UsersFixtures extends AbstractFixture implements OrderedFixtureInterface, 
         // Initialize Basic User information
         $user1->setFirstName('Cory')
                 ->setLastName('Siebler')
+                ->setUsername('csiebler@asu.edu')
                 ->setEmail('csiebler@asu.edu')
                 ->setPlainPassword('asucse360')
                 ->setEnabled(true);
 
         $user2->setFirstName('Kyle')
                 ->setLastName('Rota')
+                ->setUsername('krota@asu.edu')
                 ->setEmail('krota@asu.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user3->setFirstName('Bryan')
                 ->setLastName('Garcia')
+                ->setUsername('bryan.garcia@asu.edu')
                 ->setEmail('bryan.garcia@asu.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user4->setFirstName('Peter')
                 ->setLastName('Tinsley')
+                ->setUsername('ptinsley@asu.edu')
                 ->setEmail('ptinsley@asu.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user5->setFirstName('Ben')
                 ->setLastName('Prather')
+                ->setUsername('bprather@asu.edu')
                 ->setEmail('bprather@asu.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user6->setFirstName('Test')
                 ->setLastName('Patient')
+                ->setUsername('patient@sonata.edu')
                 ->setEmail('patient@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user7->setFirstName('Demo1')
                 ->setLastName('Patient')
+                ->setUsername('patient1@sonata.edu')
                 ->setEmail('patient1@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user8->setFirstName('Demo2')
                 ->setLastName('Patient')
+                ->setUsername('patient2@sonata.edu')
                 ->setEmail('patient2@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user9->setFirstName('Demo3')
                 ->setLastName('Patient')
+                ->setUsername('patient3@sonata.edu')
                 ->setEmail('patient3@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user10->setFirstName('Demo4')
                 ->setLastName('Patient')
+                ->setUsername('patient4@sonata.edu')
                 ->setEmail('patient4@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user11->setFirstName('Demo5')
                 ->setLastName('Patient')
+                ->setUsername('patient5@sonata.edu')
                 ->setEmail('patient5@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user12->setFirstName('Test')
                 ->setLastName('Doctor')
+                ->setUsername('doctor@sonata.edu')
                 ->setEmail('doctor@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user13->setFirstName('Demo1')
                 ->setLastName('Doctor')
+                ->setUsername('doctor1@sonata.edu')
                 ->setEmail('doctor1@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user14->setFirstName('Demo2')
                 ->setLastName('Doctor')
+                ->setUsername('doctor2@sonata.edu')
                 ->setEmail('doctor2@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user15->setFirstName('Demo3')
                 ->setLastName('Doctor')
+                ->setUsername('doctor3@sonata.edu')
                 ->setEmail('doctor3@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user16->setFirstName('Test')
                 ->setLastName('Nurse')
+                ->setUsername('nurse@sonata.edu')
                 ->setEmail('nurse@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user17->setFirstName('Demo1')
                 ->setLastName('Nurse')
+                ->setUsername('nurse1@sonata.edu')
                 ->setEmail('nurse1@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user18->setFirstName('Demo2')
                 ->setLastName('Nurse')
+                ->setUsername('nurse2@sonata.edu')
                 ->setEmail('nurse2@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user19->setFirstName('Demo3')
                 ->setLastName('Nurse')
+                ->setUsername('nurse3@sonata.edu')
                 ->setEmail('nurse3@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user20->setFirstName('Test')
                 ->setLastName('Office-Admin')
+                ->setUsername('office-admin@sonata.edu')
                 ->setEmail('office-admin@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 
         $user21->setFirstName('Test')
                 ->setLastName('EMT')
-                ->setEamil('emt@sonata.edu')
+                ->setUsername('emt@sonata.edu')
+                ->setEmail('emt@sonata.edu')
                 ->setPlainPassword('password')
                 ->setEnabled(true);
 

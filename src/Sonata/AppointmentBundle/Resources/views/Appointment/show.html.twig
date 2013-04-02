@@ -1,34 +1,35 @@
 {% extends '::base.html.twig' %}
 
-{% block body -%}
-    <h1>Appointment</h1>
+{% block headline %}View Appointment #{{ entity.id }}{% endblock headline %}
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Dateof</th>
-                <td>{{ entity.dateOf|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Weight</th>
-                <td>{{ entity.weight }}</td>
-            </tr>
-            <tr>
-                <th>Height</th>
-                <td>{{ entity.height }}</td>
-            </tr>
-            <tr>
-                <th>Glucose</th>
-                <td>{{ entity.glucose }}</td>
-            </tr>
-        </tbody>
-    </table>
+{% block content_content %}
+{{ parent() }}
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Dateof</th>
+            <td>{{ entity.dateOf|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Weight</th>
+            <td>{{ entity.weight }}</td>
+        </tr>
+        <tr>
+            <th>Height</th>
+            <td>{{ entity.height }}</td>
+        </tr>
+        <tr>
+            <th>Glucose</th>
+            <td>{{ entity.glucose }}</td>
+        </tr>
+    </tbody>
+</table>
 
-        <ul class="record_actions">
+<ul class="record_actions">
     <li>
         <a href="{{ path('appointment') }}">
             Back to the list
@@ -47,4 +48,6 @@
         </form>
     </li>
 </ul>
-{% endblock %}
+{% endblock content_content %}
+
+{% block content_sidebar %}{% endblock content_sidebar %}

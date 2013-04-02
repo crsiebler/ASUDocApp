@@ -1,20 +1,23 @@
 {% extends '::base.html.twig' %}
 
-{% block body -%}
-    <h1>Allergy creation</h1>
+{% block headline %}Add Allergy{% endblock headline %}
 
-    <form action="{{ path('allergy_create') }}" method="post" {{ form_enctype(form) }}>
-        {{ form_widget(form) }}
-        <p>
-            <button type="submit">Create</button>
-        </p>
-    </form>
+{% block content_content %}
+{{ parent() }}
+<form action="{{ path('allergy_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Create</button>
+    </p>
+</form>
 
-        <ul class="record_actions">
+<ul class="record_actions">
     <li>
         <a href="{{ path('allergy') }}">
             Back to the list
         </a>
     </li>
 </ul>
-{% endblock %}
+{% endblock content_content %}
+
+{% block content_sidebar %}{% endblock content_sidebar %}
