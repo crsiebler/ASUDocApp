@@ -9,14 +9,12 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class AppointmentType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder
-                ->add('dateOf')
+        $builder->add('dateOf')
                 ->add('weight')
                 ->add('height')
                 ->add('glucose')
                 ->add('bloodPressure')
-                ->add('note')
-        ;
+                ->add('note');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {

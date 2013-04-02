@@ -9,7 +9,7 @@ use Sonata\UserBundle\Entity\Role;
 class RolesFixtures extends AbstractFixture implements OrderedFixtureInterface {
 
     public function getOrder() {
-        return 1;
+        return 3;
     }
 
     public function load(\Doctrine\Common\Persistence\ObjectManager $manager) {

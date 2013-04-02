@@ -17,15 +17,11 @@ class AddressType extends AbstractType {
             $country = null;
         }
 
-        $builder
-                ->add('firstName', null, array(
+        $builder->add('firstName', null, array(
                     'label' => "First name:"
                 ))
                 ->add('lastName', null, array(
                     'label' => 'Last name:'
-                ))
-                ->add('companyName', null, array(
-                    'label' => 'Company Name:'
                 ))
                 ->add('phoneNumber', null, array(
                     'label' => 'Phone number:'
@@ -65,7 +61,7 @@ class AddressType extends AbstractType {
                 ))
                 ->add('zipcode', null, array(
                     'label' => 'Zipcode:'
-        ));
+                ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {

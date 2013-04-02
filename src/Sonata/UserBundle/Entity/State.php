@@ -42,15 +42,9 @@ class State {
     protected $country;
 
     /**
-     * @ORM\Column(name="taxRate", type="decimal", scale=2)
-     * @var type 
-     */
-    protected $taxRate;
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -68,7 +62,7 @@ class State {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName() {
         return $this->name;
@@ -86,7 +80,7 @@ class State {
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode() {
         return $this->code;
@@ -104,18 +98,10 @@ class State {
     /**
      * Get country
      *
-     * @return object 
+     * @return object
      */
     public function getCountry() {
         return $this->country;
-    }
-
-    public function getTaxRate() {
-        return $this->taxRate;
-    }
-
-    public function setTaxRate($taxRate) {
-        $this->taxRate = $taxRate;
     }
 
     public function __toString() {
