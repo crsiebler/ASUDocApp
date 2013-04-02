@@ -5,6 +5,7 @@ namespace Sonata\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\Common\Collections\ArrayCollection;
+use Sonata\UserBundle\Entity\Role;
 use Sonata\HealthBundle\Entity\Prescription;
 use Sonata\HealthBundle\Entity\Allergy;
 use Sonata\AppointmentBundle\Entity\Appointment;
@@ -138,6 +139,7 @@ class User extends BaseUser {
     public function __construct() {
         parent::__construct();
         $this->userRoles = new ArrayCollection();
+        $this->setPlainPassword(substr(md5(microtime().rand()),0,10)); // Autogenerate Password
     }
 
     public function getUserRoles() {
@@ -217,6 +219,19 @@ class User extends BaseUser {
 
     public function setAllergies($allergies) {
         $this->allergies = $allergies;
+        return $this;
+    }
+
+    /**
+     * Override setEmail Method so that Username
+     * is set to Email.
+     *
+     * @param type $email
+     * @return \Sonata\UserBundle\Entity\User
+     */
+    public function setEmail($email) {
+        $this->email = $email;
+        $this->setUsername($email);
         return $this;
     }
 

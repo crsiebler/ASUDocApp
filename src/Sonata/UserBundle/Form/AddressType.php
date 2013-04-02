@@ -17,13 +17,7 @@ class AddressType extends AbstractType {
             $country = null;
         }
 
-        $builder->add('firstName', null, array(
-                    'label' => "First name:"
-                ))
-                ->add('lastName', null, array(
-                    'label' => 'Last name:'
-                ))
-                ->add('phoneNumber', null, array(
+        $builder->add('phoneNumber', null, array(
                     'label' => 'Phone number:'
                 ))
                 ->add('address', null, array(
@@ -36,22 +30,21 @@ class AddressType extends AbstractType {
                     'label' => 'City:'
                 ))
                 ->add('country', 'entity', array(
-                    'class' => 'GhostArmorUserBundle:Country',
+                    'class' => 'SonataUserBundle:Country',
                     'label' => 'Country',
                     'required' => true,
                     'empty_value' => 'Please select a country',
                 ))
                 ->add('state', 'entity', array(
-                    'class' => 'GhostArmorUserBundle:State',
+                    'class' => 'SonataUserBundle:State',
                     'empty_value' => 'Please select a state',
                     'required' => false,
                     'query_builder' => function ($repository) use ($country) {
-                        $queryBuilder = $repository->createQueryBuilder('s')
-                                ->select('s');
+                        $queryBuilder = $repository->createQueryBuilder('s')->select('s');
 
                         if ($country != null) {
                             $queryBuilder->where('s.country = :country')
-                            ->setParameter("country", $country);
+                                         ->setParameter('country', $country);
                         }
 
                         return $queryBuilder;

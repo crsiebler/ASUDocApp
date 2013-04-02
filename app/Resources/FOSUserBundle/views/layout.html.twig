@@ -10,6 +10,8 @@
 {% block headline %}
     {% if "login" in app.request.attributes.get('_route') %}
     Login
+    {% elseif "register" in app.request.attributes.get('_route') %}
+    Register New User
     {% else %}
     FOSUser Template
     {% endif %}
