@@ -43,6 +43,10 @@ class UserController extends Controller {
      */
     public function createAction(Request $request) {
         $entity = new User();
+
+        // Add Role to Login for all new Users
+        $entity->addRole($em->getRepository('SonataUserBundle:Role')->findByName("ROLE_USER"));
+
         $form = $this->createForm(new UserType(), $entity);
         $form->bind($request);
 
@@ -195,9 +199,8 @@ class UserController extends Controller {
      */
     private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
-                        ->add('id', 'hidden')
-                        ->getForm()
-        ;
+                    ->add('id', 'hidden')
+                    ->getForm();
     }
 
 }

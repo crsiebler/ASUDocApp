@@ -119,7 +119,7 @@ class User extends BaseUser {
 
     public function hasRoleByName($role) {
         foreach ($this->userRoles as $userRole) {
-            if ($userRole->getName() == $role) {
+            if (0 === strcmp($userRole->getName(), $role)) {
                 return true;
             }
         }
