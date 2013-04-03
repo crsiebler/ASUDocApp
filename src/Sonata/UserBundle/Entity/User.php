@@ -74,22 +74,21 @@ class User extends BaseUser {
     private $appointmentInfo;
 
     /**
+     * @ORM\Column(type="datetime")
+     * @var DateTime $createdOn
+     */
+    protected $createdOn;
+
+    /**
      *
      * @param type $role
      * @return \Sonata\UserBundle\Entity\User
      */
     public function addRole($role) {
         //make sure user doesn't already have the role
-        $hasRole = false;
-
-        foreach ($this->userRoles as $userRole) {
-            if ($userRole == $role) {
-                $hasRole = true;
-            }
-        }
-
-        if (!$hasRole)
+        if (!$this->hasRole($role)) {
             $this->userRoles->add($role);
+        }
 
         return $this;
     }
@@ -138,7 +137,11 @@ class User extends BaseUser {
 
     public function __construct() {
         parent::__construct();
+        $this->createdOn = new \DateTime('NOW');
         $this->userRoles = new ArrayCollection();
+        $this->appointmentInfo = new ArrayCollection();
+        $this->allergies = new ArrayCollection();
+        $this->prescriptions = new ArrayCollection();
         $this->setPlainPassword(substr(md5(microtime().rand()),0,10)); // Autogenerate Password
     }
 
@@ -233,6 +236,10 @@ class User extends BaseUser {
         $this->email = $email;
         $this->setUsername($email);
         return $this;
+    }
+
+    public function getCreatedOn() {
+        return $this->createdOn;
     }
 
     public function __toString() {

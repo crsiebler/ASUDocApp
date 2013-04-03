@@ -27,6 +27,7 @@ class RegistrationFormType extends BaseType {
                     'class' => 'SonataUserBundle:Role',
                     'property' => 'displayName',
                     'required' => true,
+                    'multiple' => true,
                     'label' => 'User Role:',
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('r')

@@ -35,53 +35,6 @@ class UserController extends Controller {
     }
 
     /**
-     * Creates a new User entity.
-     *
-     * @Route("/", name="user_create")
-     * @Method("POST")
-     * @Template("SonataUserBundle:User:new.html.twig")
-     */
-    public function createAction(Request $request) {
-        $entity = new User();
-
-        // Add Role to Login for all new Users
-        $entity->addRole($em->getRepository('SonataUserBundle:Role')->findByName("ROLE_USER"));
-
-        $form = $this->createForm(new UserType(), $entity);
-        $form->bind($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
-        }
-
-        return array(
-            'entity' => $entity,
-            'form' => $form->createView(),
-        );
-    }
-
-    /**
-     * Displays a form to create a new User entity.
-     *
-     * @Route("/new", name="user_new")
-     * @Method("GET")
-     * @Template()
-     */
-    public function newAction() {
-        $entity = new User();
-        $form = $this->createForm(new UserType(), $entity);
-
-        return array(
-            'entity' => $entity,
-            'form' => $form->createView(),
-        );
-    }
-
-    /**
      * Finds and displays a User entity.
      *
      * @Route("/{id}", name="user_show")

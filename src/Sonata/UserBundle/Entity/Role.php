@@ -36,15 +36,9 @@ class Role implements RoleInterface {
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @var type 
+     * @var type
      */
     protected $description;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @var DateTime $createdOn
-     */
-    protected $createdOn;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="userRoles")
@@ -54,7 +48,7 @@ class Role implements RoleInterface {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -76,15 +70,11 @@ class Role implements RoleInterface {
     }
 
     function __construct() {
-        $this->createdOn = new \DateTime('NOW');
+        
     }
 
     public function getName() {
         return $this->name;
-    }
-
-    public function getCreatedOn() {
-        return $this->createdOn;
     }
 
     public function getDescription() {

@@ -11,7 +11,9 @@
     {% if "login" in app.request.attributes.get('_route') %}
     Login
     {% elseif "register" in app.request.attributes.get('_route') %}
-    Register New User
+    User Registration
+    {% elseif "confirmed" in app.request.attributes.get('_route') %}
+    Success!
     {% else %}
     FOSUser Template
     {% endif %}

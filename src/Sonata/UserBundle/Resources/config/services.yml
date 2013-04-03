@@ -4,3 +4,9 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: sonata_user_registration }
+
+    sonata_user.listener.registration:
+        class: Sonata\UserBundle\EventListener\RegistrationListener
+        arguments: [ '@doctrine.orm.default_entity_manager', '@fos_user.user_manager', '@router' ]
+        tags:
+            - { name: kernel.event_subscriber }
