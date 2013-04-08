@@ -18,18 +18,27 @@ class RegistrationListener implements EventSubscriberInterface {
     private $em;
     private $userManager;
     private $router;
+    private $user;
 
     public function __construct(EntityManager $em, UserManager $userManager, UrlGeneratorInterface $router) {
         $this->em = $em;
         $this->userManager = $userManager;
         $this->router = $router;
+        $this->user = null;
     }
 
     public static function getSubscribedEvents() {
-        return array(FOSUserEvents::REGISTRATION_INITIALIZE => 'onRegistrationInitialize');
+        return array(
+            FOSUserEvents::REGISTRATION_INITIALIZE => 'onRegistrationInitialize',
+            FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationSuccess',
+        );
     }
 
     public function onRegistrationInitialize(UserEvent $event) {
-        $event->getUser()->addRole($this->em->getRepository('SonataUserBundle:Role')->findByName('ROLE_USER'));
+        $this->user = $event->getUser();
+    }
+    
+    public function onRegistrationSuccess() {
+        $this->user->addRole($this->em->getRepository('SonataUserBundle:Role')->findOneByName('ROLE_USER'));
     }
 }
