@@ -52,28 +52,28 @@ class UsersFixtures extends AbstractFixture implements OrderedFixtureInterface, 
                 ->setLastName('Rota')
                 ->setUsername('krota@asu.edu')
                 ->setEmail('krota@asu.edu')
-                ->setPlainPassword('password')
+                ->setPlainPassword('asucse360')
                 ->setEnabled(true);
 
         $user3->setFirstName('Bryan')
                 ->setLastName('Garcia')
                 ->setUsername('bryan.garcia@asu.edu')
                 ->setEmail('bryan.garcia@asu.edu')
-                ->setPlainPassword('password')
+                ->setPlainPassword('asucse360')
                 ->setEnabled(true);
 
         $user4->setFirstName('Peter')
                 ->setLastName('Tinsley')
                 ->setUsername('ptinsley@asu.edu')
                 ->setEmail('ptinsley@asu.edu')
-                ->setPlainPassword('password')
+                ->setPlainPassword('asucse360')
                 ->setEnabled(true);
 
         $user5->setFirstName('Ben')
                 ->setLastName('Prather')
                 ->setUsername('bprather@asu.edu')
                 ->setEmail('bprather@asu.edu')
-                ->setPlainPassword('password')
+                ->setPlainPassword('asucse360')
                 ->setEnabled(true);
 
         $user6->setFirstName('Test')
