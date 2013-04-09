@@ -4,7 +4,7 @@ namespace Sonata\UserBundle\EventListener;
 
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\UserEvent;
-use FOS\UserBundle\Doctrine\UserManager;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -15,30 +15,30 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * @author csiebler
  */
 class RegistrationListener implements EventSubscriberInterface {
-    private $em;
-    private $userManager;
-    private $router;
-    private $user;
 
-    public function __construct(EntityManager $em, UserManager $userManager, UrlGeneratorInterface $router) {
+    private $em;
+    private $router;
+
+    public function __construct(EntityManager $em, UrlGeneratorInterface $router) {
         $this->em = $em;
-        $this->userManager = $userManager;
         $this->router = $router;
-        $this->user = null;
     }
 
     public static function getSubscribedEvents() {
         return array(
             FOSUserEvents::REGISTRATION_INITIALIZE => 'onRegistrationInitialize',
-            FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationSuccess',
+            FOSUserEvents::REGISTRATION_COMPLETED => 'onRegistrationCompleted',
         );
     }
 
     public function onRegistrationInitialize(UserEvent $event) {
-        $this->user = $event->getUser();
+        $event->getUser()->addRole($this->em->getRepository('SonataUserBundle:Role')->findOneByName('ROLE_USER'));
+    }
+
+    public function onRegistrationCompleted(FilterUserResponseEvent $event) {
+        $url = $this->router->generate('sonata_user_registration_confirmed');
+        $response = $event->getResponse();
+        $response = new RedirectResponse($url);
     }
     
-    public function onRegistrationSuccess() {
-        $this->user->addRole($this->em->getRepository('SonataUserBundle:Role')->findOneByName('ROLE_USER'));
-    }
 }

@@ -7,6 +7,6 @@ services:
 
     sonata_user.listener.registration:
         class: Sonata\UserBundle\EventListener\RegistrationListener
-        arguments: [ '@doctrine.orm.default_entity_manager', '@fos_user.user_manager', '@router' ]
+        arguments: [ '@doctrine.orm.default_entity_manager', '@router' ]
         tags:
             - { name: kernel.event_subscriber }
