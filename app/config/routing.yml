@@ -8,11 +8,6 @@ sonata_health:
     type:     annotation
     prefix:   /
 
-sonata_security:
-    resource: "@SonataSecurityBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 sonata_user:
     resource: "@SonataUserBundle/Controller/"
     type:     annotation
