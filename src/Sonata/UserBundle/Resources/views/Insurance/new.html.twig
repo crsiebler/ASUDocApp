@@ -1,16 +1,17 @@
 {% extends '::base.html.twig' %}
 
-{% block body -%}
-    <h1>Insurance creation</h1>
+{% block headline %}Add Insurance Information{% endblock headline %}
 
-    <form action="{{ path('insurance_create') }}" method="post" {{ form_enctype(form) }}>
-        {{ form_widget(form) }}
-        <p>
-            <button type="submit">Create</button>
-        </p>
-    </form>
+{% block content_content %}
+{{ parent() }}
+<form action="{{ path('insurance_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Create</button>
+    </p>
+</form>
 
-        <ul class="record_actions">
+<ul class="record_actions">
     <li>
         <a href="{{ path('insurance') }}">
             Back to the list

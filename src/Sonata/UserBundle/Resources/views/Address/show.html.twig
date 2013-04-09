@@ -1,38 +1,35 @@
 {% extends '::base.html.twig' %}
 
-{% block body -%}
-    <h1>Address</h1>
+{% block headline %}View Address{% endblock headline %}
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>{{ entity.address }}</td>
-            </tr>
-            <tr>
-                <th>Address2</th>
-                <td>{{ entity.address2 }}</td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td>{{ entity.city }}</td>
-            </tr>
-            <tr>
-                <th>Zipcode</th>
-                <td>{{ entity.zipcode }}</td>
-            </tr>
-            <tr>
-                <th>Phonenumber</th>
-                <td>{{ entity.phoneNumber }}</td>
-            </tr>
-        </tbody>
-    </table>
+{% block content_content %}
+{{ parent() }}
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Address</th>
+            <td>{{ entity.address }}</td>
+        </tr>
+        <tr>
+            <th>Address2</th>
+            <td>{{ entity.address2 }}</td>
+        </tr>
+        <tr>
+            <th>City</th>
+            <td>{{ entity.city }}</td>
+        </tr>
+        <tr>
+            <th>Zipcode</th>
+            <td>{{ entity.zipcode }}</td>
+        </tr>
+        <tr>
+            <th>Phonenumber</th>
+            <td>{{ entity.phoneNumber }}</td>
+        </tr>
+    </tbody>
+</table>
 
-        <ul class="record_actions">
+<ul class="record_actions">
     <li>
         <a href="{{ path('address') }}">
             Back to the list
@@ -43,12 +40,7 @@
             Edit
         </a>
     </li>
-    <li>
-        <form action="{{ path('address_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
 </ul>
-{% endblock %}
+{% endblock content_content %}
+
+{% block content_sidebar %}{% endblock content_sidebar %}
