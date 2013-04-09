@@ -3,7 +3,6 @@
 namespace Sonata\AppointmentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\AppointmentBundle\Entity\Note;
 
 /**
  * Appointment
@@ -56,9 +55,15 @@ class Appointment {
     private $bloodPressure;
 
     /**
-     * @ORM\OneToOne(targetEntity="Note")
+     * @ORM\OneToOne(targetEntity="Sonata\AppointmentBundle\Entity\Note")
      */
     private $note;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Sonata\UserBundle\Entity\User", inversedBy="appointments", fetch="EAGER")
+     * @ORM\JoinColumn(name="patientID", referencedColumnName="id", nullable=false)
+     */
+    private $patient;
 
     /**
      * Get id
@@ -184,6 +189,15 @@ class Appointment {
      */
     public function setNote($note) {
         $this->note = $note;
+        return $this;
+    }
+
+    public function getPatient() {
+        return $this->patient;
+    }
+
+    public function setPatient($patient) {
+        $this->patient = $patient;
         return $this;
     }
 }

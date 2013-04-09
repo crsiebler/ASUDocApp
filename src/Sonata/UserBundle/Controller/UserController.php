@@ -2,12 +2,15 @@
 
 namespace Sonata\UserBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\UserEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sonata\UserBundle\Entity\User;
 use Sonata\UserBundle\Form\UserType;
 
 /**
@@ -37,7 +40,7 @@ class UserController extends Controller {
     /**
      * Finds and displays a User entity.
      *
-     * @Route("/{id}", name="user_show")
+     * @Route("/{id}", requirements={"id" = "\d+"}, name="user_show")
      * @Method("GET")
      * @Template()
      */
@@ -50,18 +53,15 @@ class UserController extends Controller {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
         return array(
             'entity' => $entity,
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
      * Displays a form to edit an existing User entity.
      *
-     * @Route("/{id}/edit", name="user_edit")
+     * @Route("/{id}/edit", requirements={"id" = "\d+"}, name="user_edit")
      * @Method("GET")
      * @Template()
      */
@@ -75,19 +75,17 @@ class UserController extends Controller {
         }
 
         $editForm = $this->createForm(new UserType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
      * Edits an existing User entity.
      *
-     * @Route("/{id}", name="user_update")
+     * @Route("/{id}", requirements={"id" = "\d+"}, name="user_update")
      * @Method("PUT")
      * @Template("SonataUserBundle:User:edit.html.twig")
      */
@@ -119,41 +117,62 @@ class UserController extends Controller {
     }
 
     /**
-     * Deletes a User entity.
-     *
-     * @Route("/{id}", name="user_delete")
-     * @Method("DELETE")
+     * @Route("/register", name="user_registration")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, $id) {
-        $form = $this->createDeleteForm($id);
-        $form->bind($request);
+    public function registerAction(Request $request) {
+        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
+        $formFactory = $this->container->get('fos_user.registration.form.factory');
+        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->container->get('fos_user.user_manager');
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->container->get('event_dispatcher');
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SonataUserBundle:User')->find($id);
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find User entity.');
+        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, new UserEvent($user, $request));
+
+        $form = $formFactory->createForm();
+        $form->setData($user);
+
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
+
+                $userManager->updateUser($user);
+
+                // Specify redirect URL to go to after User is registered
+                if (null === $response = $event->getResponse()) {
+                    $url = $this->container->get('router')->generate('user_registration_confirmed');
+                    $response = new RedirectResponse($url);
+                }
+
+                // Create Flash Message for User registration success
+                $message = $this->get('translator')->trans('registration.flash.user_created', array(), 'FOSUserBundle');
+                $this->get('session')->getFlashBag()->add('success', $message);
+
+                return $response;
             }
-
-            $em->remove($entity);
-            $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('user'));
+        return $this->container->get('templating')->renderResponse('SonataUserBundle:User:register.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
 
     /**
-     * Creates a form to delete a User entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return Symfony\Component\Form\Form The form
+     * @Route("/confirmed", name="user_registration_confirmed")
+     * @Method({"GET", "POST"})
      */
-    private function createDeleteForm($id) {
-        return $this->createFormBuilder(array('id' => $id))
-                    ->add('id', 'hidden')
-                    ->getForm();
-    }
+    public function confirmedAction() {
+        $user = $this->container->get('security.context')->getToken()->getUser();
 
+        return $this->container->get('templating')->renderResponse('SonataUserBundle:User:confirmed.html.twig', array(
+            'user' => $user,
+        ));
+    }
 }

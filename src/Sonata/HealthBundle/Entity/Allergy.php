@@ -29,6 +29,12 @@ class Allergy {
     private $type;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Sonata\UserBundle\Entity\User", inversedBy="allergies", fetch="EAGER")
+     * @ORM\JoinColumn(name="patientID", referencedColumnName="id", nullable=false)
+     */
+    private $patient;
+
+    /**
      * Get id
      *
      * @return integer
@@ -55,5 +61,14 @@ class Allergy {
      */
     public function getType() {
         return $this->type;
+    }
+
+    public function getPatient() {
+        return $this->patient;
+    }
+
+    public function setPatient($patient) {
+        $this->patient = $patient;
+        return $this;
     }
 }

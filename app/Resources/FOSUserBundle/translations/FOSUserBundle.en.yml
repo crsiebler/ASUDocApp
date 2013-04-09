@@ -1,6 +1,9 @@
 imports:
-  - { resource: "@FOSUserBundle/Resources/config/translations/FOSUserBundle.en.yml" }
+    - { resource: "@FOSUserBundle/Resources/config/translations/FOSUserBundle.en.yml" }
 
 security:
     login:
-        email: "Email:"
+      email: "Email:"
+
+registration:
+    back: Add another user

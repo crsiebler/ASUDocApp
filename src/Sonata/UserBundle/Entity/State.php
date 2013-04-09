@@ -5,7 +5,7 @@ namespace Sonata\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ClassicAirAviation\UserBundle\Entity\State
+ * Sonata\UserBundle\Entity\State
  *
  * @ORM\Table(name="states")
  * @ORM\Entity()
@@ -36,7 +36,7 @@ class State {
     protected $code;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Country", inversedBy="states")
+     * @ORM\ManyToOne(targetEntity="Sonata\UserBundle\Entity\Country", inversedBy="states")
      * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
      */
     protected $country;

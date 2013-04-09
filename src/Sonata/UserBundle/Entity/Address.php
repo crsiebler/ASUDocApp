@@ -30,9 +30,11 @@ class Address {
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Please enter a street address")
-     * @Assert\MinLength(limit=3, message="Your address must have at least {{ limit }} characters")
-     * @Assert\MaxLength(limit=255, message="Your address cannont have at more than {{ limit }} characters")
-     * 
+     * @Assert\Length(
+     *      min = "3",
+     *      max = "50",
+     *      minMessage = "Your address must have at least {{ limit }} characters"),
+     *      maxMessage = "Your address cannont have at more than {{ limit }} characters"))
      */
     protected $address;
 
@@ -77,13 +79,13 @@ class Address {
 
     /**
      * @ORM\Column(name="phoneNumber", type="string", length=15, nullable=true)
-     * @var string $phoneNumber 
+     * @var string $phoneNumber
      */
     protected $phoneNumber;
 
     /**
      * @ORM\Column(name="companyName", type="string", length=255, nullable=true)
-     * @var string $companyName 
+     * @var string $companyName
      */
     public function getId() {
         return $this->id;
@@ -102,7 +104,7 @@ class Address {
     /**
      * Get address
      *
-     * @return string 
+     * @return string
      */
     public function getAddress() {
         return $this->address;
@@ -121,7 +123,7 @@ class Address {
     /**
      * Get address2
      *
-     * @return string 
+     * @return string
      */
     public function getAddress2() {
         return $this->address2;
@@ -140,7 +142,7 @@ class Address {
     /**
      * Get city
      *
-     * @return string 
+     * @return string
      */
     public function getCity() {
         return $this->city;
@@ -159,7 +161,7 @@ class Address {
     /**
      * Get state
      *
-     * @return string 
+     * @return string
      */
     public function getState() {
         return $this->state;
@@ -178,7 +180,7 @@ class Address {
     /**
      * Get country
      *
-     * @return string 
+     * @return string
      */
     public function getCountry() {
         return $this->country;
@@ -197,7 +199,7 @@ class Address {
     /**
      * Get zipcode
      *
-     * @return string 
+     * @return string
      */
     public function getZipcode() {
         return $this->zipcode;

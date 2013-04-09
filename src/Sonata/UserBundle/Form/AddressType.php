@@ -64,7 +64,7 @@ class AddressType extends AbstractType {
     }
 
     public function getName() {
-        return 'sonata_userbundle_addresstype';
+        return 'addressForm';
     }
 
 }

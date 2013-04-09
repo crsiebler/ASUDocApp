@@ -5,7 +5,7 @@ namespace Sonata\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ClassicAirAviation\UserBundle\Entity\Country
+ * Sonata\UserBundle\Entity\Country
  *
  * @ORM\Table(name="countries")
  * @ORM\Entity()
@@ -43,7 +43,7 @@ class Country {
     protected $zipCodeRequired;
 
     /**
-     * @ORM\OneToMany(targetEntity="State", mappedBy="country")
+     * @ORM\OneToMany(targetEntity="Sonata\UserBundle\Entity\State", mappedBy="country")
      * @var type
      */
     protected $states;

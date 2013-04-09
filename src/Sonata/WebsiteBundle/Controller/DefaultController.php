@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class DefaultController extends Controller {
 
     /**
-     * @Route("/")
+     * @Route("/", name="homepage")
      * @Template()
      */
     public function indexAction() {
@@ -18,7 +18,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/search")
+     * @Route("/search", name="search")
      * @Method({"POST"})
      * @Template()
      */

@@ -41,7 +41,7 @@ class Role implements RoleInterface {
     protected $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="userRoles")
+     * @ORM\ManyToMany(targetEntity="Sonata\UserBundle\Entity\User", mappedBy="userRoles")
      */
     protected $users;
 
@@ -70,7 +70,7 @@ class Role implements RoleInterface {
     }
 
     function __construct() {
-        
+
     }
 
     public function getName() {

@@ -3,7 +3,6 @@
 namespace Sonata\AppointmentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\UserBundle\Entity\User;
 
 /**
  * Note

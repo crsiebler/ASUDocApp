@@ -29,7 +29,7 @@ class SearchType extends AbstractType implements NavbarFormInterface {
     }
 
     public function getRoute() {
-        return 'sonata_website_default_search';
+        return 'search';
     }
 
 }

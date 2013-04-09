@@ -5,10 +5,6 @@ namespace Sonata\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\Common\Collections\ArrayCollection;
-use Sonata\UserBundle\Entity\Role;
-use Sonata\HealthBundle\Entity\Prescription;
-use Sonata\HealthBundle\Entity\Allergy;
-use Sonata\AppointmentBundle\Entity\Appointment;
 
 /**
  * User
@@ -26,7 +22,7 @@ class User extends BaseUser {
     protected $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="Sonata\UserBundle\Entity\Role", inversedBy="users")
      * @ORM\JoinTable(name="user_roles",
      *                  joinColumns={@ORM\JoinColumn(name="userID", referencedColumnName="id")},
      *                  inverseJoinColumns={@ORM\JoinColumn(name="roleID", referencedColumnName="id")})
@@ -49,12 +45,12 @@ class User extends BaseUser {
     private $primaryDoctor;
 
     /**
-     * @ORM\OneToOne(targetEntity="Address")
+     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\Address")
      */
     private $address;
 
     /**
-     * @ORM\OneToOne(targetEntity="Insurance")
+     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\Insurance")
      */
     private $insuranceInfo;
 
@@ -71,7 +67,7 @@ class User extends BaseUser {
     /**
      * @ORM\OneToMany(targetEntity="Sonata\AppointmentBundle\Entity\Appointment", mappedBy="patient")
      */
-    private $appointmentInfo;
+    private $appointments;
 
     /**
      * @ORM\Column(type="datetime")
@@ -207,12 +203,12 @@ class User extends BaseUser {
         return $this;
     }
 
-    public function getAppointmentInfo() {
-        return $this->appointmentInfo;
+    public function getAppointments() {
+        return $this->appointments;
     }
 
-    public function setAppointmentInfo($appointmentInfo) {
-        $this->appointmentInfo = $appointmentInfo;
+    public function setAppointments($appointments) {
+        $this->appointments = $appointments;
         return $this;
     }
 
