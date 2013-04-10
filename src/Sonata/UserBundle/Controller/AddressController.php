@@ -20,25 +20,31 @@ class AddressController extends Controller {
     /**
      * Creates a new Address entity.
      *
-     * @Route("/", name="address_create")
+     * @Route("/create/{userID}, requirements={"userID" = "\d+"}, name="address_create")
      * @Method("POST")
      * @Template("SonataUserBundle:Address:new.html.twig")
      */
-    public function createAction(Request $request) {
-        $entity = new Address();
-        $form = $this->createForm(new AddressType(), $entity);
+    public function createAction($userID, Request $request) {
+        $address = new Address();
+        $form = $this->createForm(new AddressType(), $address);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            
+            // Add Address to User
+            $user = $em->getRepository('SonataUserBundle:User')->find($userID);
+            $user->setAddress($address);
+            
+            $em->persist($user);
+            $em->persist($address);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('address_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('address_show', array('id' => $address->getId())));
         }
 
         return array(
-            'entity' => $entity,
+            'entity' => $address,
             'form' => $form->createView(),
         );
     }
@@ -46,15 +52,16 @@ class AddressController extends Controller {
     /**
      * Displays a form to create a new Address entity.
      *
-     * @Route("/new", name="address_new")
+     * @Route("/new/{userID}", requirements={"userID" = "\d+"}, name="address_new")
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction($userID) {
         $entity = new Address();
         $form = $this->createForm(new AddressType(), $entity);
 
         return array(
+            'userID' => $userID,
             'entity' => $entity,
             'form' => $form->createView(),
         );
@@ -63,57 +70,52 @@ class AddressController extends Controller {
     /**
      * Finds and displays a Address entity.
      *
-     * @Route("/{id}", name="address_show")
+     * @Route("/show/{userID}", requirements={"userID" = "\d+"}, name="address_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id) {
+    public function showAction($userID) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataUserBundle:Address')->find($id);
+        $entity = $em->getRepository('SonataUserBundle:User')->find($userID)->getAddress();
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Address entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
         return array(
             'entity' => $entity,
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
      * Displays a form to edit an existing Address entity.
      *
-     * @Route("/{id}/edit", name="address_edit")
+     * @Route("/edit/{userID}", requirements={"userID" = "\d+"}, name="address_edit")
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id) {
+    public function editAction($userID) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataUserBundle:Address')->find($id);
+        $entity = $em->getRepository('SonataUserBundle:User')->find($userID)->getAddress();
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Address entity.');
         }
 
         $editForm = $this->createForm(new AddressType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
      * Edits an existing Address entity.
      *
-     * @Route("/{id}", name="address_update")
+     * @Route("/update/{id}", requirments={"id" = "\d+"}, name="address_update")
      * @Method("PUT")
      * @Template("SonataUserBundle:Address:edit.html.twig")
      */
@@ -126,7 +128,6 @@ class AddressController extends Controller {
             throw $this->createNotFoundException('Unable to find Address entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new AddressType(), $entity);
         $editForm->bind($request);
 
@@ -140,7 +141,6 @@ class AddressController extends Controller {
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         );
     }
 }
