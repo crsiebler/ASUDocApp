@@ -20,7 +20,7 @@ class AddressController extends Controller {
     /**
      * Creates a new Address entity.
      *
-     * @Route("/create/{userID}, requirements={"userID" = "\d+"}, name="address_create")
+     * @Route("/create/{userID}", requirements={"userID" = "\d+"}, name="address_create")
      * @Method("POST")
      * @Template("SonataUserBundle:Address:new.html.twig")
      */
@@ -115,7 +115,7 @@ class AddressController extends Controller {
     /**
      * Edits an existing Address entity.
      *
-     * @Route("/update/{id}", requirments={"id" = "\d+"}, name="address_update")
+     * @Route("/update/{id}", requirements={"id" = "\d+"}, name="address_update")
      * @Method("PUT")
      * @Template("SonataUserBundle:Address:edit.html.twig")
      */
