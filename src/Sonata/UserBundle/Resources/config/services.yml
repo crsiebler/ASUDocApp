@@ -10,9 +10,9 @@ services:
         arguments: ['@doctrine.orm.default_entity_manager', '@router']
         tags:
             - { name: kernel.event_subscriber }
-            
+
     sonata_user.listener.login_success:
         class: Sonata\UserBundle\EventListener\LoginListener
-        arguments:  ['@service_container', '@router']
+        arguments:  ['@router', '@security.context']
         tags:
-            - { name: kernel.event listener, event: security.interactive login, method: onLogin }
+            - { name: 'monolog.logger', channel: 'security' }

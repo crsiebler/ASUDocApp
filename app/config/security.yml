@@ -23,6 +23,7 @@ security:
             form_login:
                 provider: fos_userbundle
                 csrf_provider: form.csrf_provider
+                success_handler: sonata_user.listener.login_success
             logout:       true
             anonymous:    true
 
