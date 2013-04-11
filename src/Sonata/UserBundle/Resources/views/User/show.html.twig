@@ -11,15 +11,15 @@
             <td>{{ entity.email }}</td>
         </tr>
         <tr>
-            <th>Firstname</th>
+            <th>First Name</th>
             <td>{{ entity.firstName }}</td>
         </tr>
         <tr>
-            <th>Lastname</th>
+            <th>Last Name</th>
             <td>{{ entity.lastName }}</td>
         </tr>
         <tr>
-            <th>Primarydoctor</th>
+            <th>Primary Doctor</th>
             <td>{{ entity.primaryDoctor }}</td>
         </tr>
     </tbody>
@@ -35,13 +35,6 @@
         <a href="{{ path('user_edit', { 'id': entity.id }) }}">
             Edit
         </a>
-    </li>
-    <li>
-        <form action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
     </li>
 </ul>
 {% endblock content_content %}

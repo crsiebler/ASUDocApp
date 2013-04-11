@@ -52,15 +52,16 @@ class AddressController extends Controller {
     /**
      * Displays a form to create a new Address entity.
      *
-     * @Route("/new/{userID}", requirements={"userID" = "\d+"}, name="address_new")
+     * @Route("/new/{userName}/{userID}", requirements={"userID" = "\d+"}, name="address_new")
      * @Method("GET")
      * @Template()
      */
-    public function newAction($userID) {
+    public function newAction($userName, $userID) {
         $entity = new Address();
         $form = $this->createForm(new AddressType(), $entity);
 
         return array(
+            'userName' => $userName,
             'userID' => $userID,
             'entity' => $entity,
             'form' => $form->createView(),

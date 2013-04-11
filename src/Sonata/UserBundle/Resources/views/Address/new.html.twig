@@ -1,10 +1,10 @@
 {% extends '::base.html.twig' %}
 
-{% block headline %}Add Address{% endblock headline %}
+{% block headline %}Add Address for {{ userName }}{% endblock headline %}
 
 {% block content_content %}
 {{ parent() }}
-<form action="{{ path('address_create') }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('address_create', { 'userID': userID }) }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
         <button type="submit">Create</button>
@@ -13,9 +13,6 @@
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('address') }}">
-            Back to the list
-        </a>
     </li>
 </ul>
 {% endblock content_content %}

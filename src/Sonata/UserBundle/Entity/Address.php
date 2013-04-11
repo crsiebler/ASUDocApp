@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ExecutionContext;
 
 /**
- * ClassicAirAviation\UserBundle\Entity\Address
+ * Sonata\UserBundle\Entity\Address
  *
  * @ORM\Table(name="addresses")
  * @ORM\Entity()
@@ -83,10 +83,6 @@ class Address {
      */
     protected $phoneNumber;
 
-    /**
-     * @ORM\Column(name="companyName", type="string", length=255, nullable=true)
-     * @var string $companyName
-     */
     public function getId() {
         return $this->id;
     }
