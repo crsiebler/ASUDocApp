@@ -15,4 +15,4 @@ services:
         class: Sonata\UserBundle\EventListener\LoginListener
         arguments:  ['@service_container', '@router']
         tags:
-            - { name: 'monolog.logger', channel: 'security' }
+            - { name: kernel.event listener, event: security.interactive login, method: onLogin }
