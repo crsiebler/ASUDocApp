@@ -1,0 +1,25 @@
+{% extends '::base.html.twig' %}
+
+{% block headline %}Splash Page{% endblock headline %}
+
+{% block content_content %}
+{{ parent() }}
+{% if is_granted('ROLE_SITE-ADMIN') %}
+{% elseif is_granted('ROLE_DOCTOR') %}
+{% elseif is_granted('ROLE_PATIENT') %}
+{% elseif is_granted('ROLE_NURSE') %}
+{% elseif is_granted('ROLE_EMT') %}
+{% elseif is_granted('ROLE_ADMIN') %}
+{% endif %}
+{% endblock content_content %}
+
+{% block content_sidebar %}
+{{ parent() }}
+{% if is_granted('ROLE_SITE-ADMIN') %}
+{% elseif is_granted('ROLE_DOCTOR') %}
+{% elseif is_granted('ROLE_PATIENT') %}
+{% elseif is_granted('ROLE_NURSE') %}
+{% elseif is_granted('ROLE_EMT') %}
+{% elseif is_granted('ROLE_ADMIN') %}
+{% endif %}
+{% endblock content_sidebar %}
