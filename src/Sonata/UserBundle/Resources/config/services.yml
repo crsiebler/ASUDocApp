@@ -7,6 +7,12 @@ services:
 
     sonata_user.listener.registration:
         class: Sonata\UserBundle\EventListener\RegistrationListener
-        arguments: [ '@doctrine.orm.default_entity_manager', '@router' ]
+        arguments: ['@doctrine.orm.default_entity_manager', '@router']
         tags:
             - { name: kernel.event_subscriber }
+            
+    sonata_user.listener.login_success:
+        class: Sonata\UserBundle\EventListener\LoginListener
+        arguments:  ['@service_container', '@router']
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
