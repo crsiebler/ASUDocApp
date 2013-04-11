@@ -22,14 +22,26 @@ class LoginListener implements AuthenticationSuccessHandlerInterface {
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token) {
         if ($this->security->isGranted('ROLE_SITE-ADMIN')) {
-            $response = new RedirectResponse($this->router->generate('category_index'));
+            $response = new RedirectResponse($this->router->generate('user_site-admin_splash'));
         } elseif ($this->security->isGranted('ROLE_ADMIN')) {
-            $response = new RedirectResponse($this->router->generate('category_index'));
+            // Redirect to Office-Admin Splash Page
+            $response = new RedirectResponse($this->router->generate('user_admin_splash'));
+        } elseif ($this->security->isGranted('ROLE_PATIENT')) {
+            // Redirect to Patient Splash Page
+            $response = new RedirectResponse($this->router->generate('user_patient_splash'));
+        } elseif ($this->security->isGranted('ROLE_DOCTOR')) {
+            // Redirect to Doctor Splash Page
+            $response = new RedirectResponse($this->router->generate('user_doctor_splash'));
+        } elseif ($this->security->isGranted('ROLE_NURSE')) {
+            // Redirect to Nurse Splash Page
+            $response = new RedirectResponse($this->router->generate('user_nurse_splash'));
+        } elseif ($this->security->isGranted('ROLE_EMT')) {
+            // Redirect to EMT Splash Page
+            $response = new RedirectResponse($this->router->generate('user_emt_splash'));
         } elseif ($this->security->isGranted('ROLE_USER')) {
-            // redirect the user to where they were before the login process begun.
-            $referer_url = $request->headers->get('referer');
-
-            $response = new RedirectResponse($referer_url);
+            // Should not occur!!!
+            // Redirect to homepage if Role not given
+            $response = new RedirectResponse($this->router->generate('homepage'));
         }
 
         return $response;

@@ -61,7 +61,7 @@ class UserController extends Controller {
     /**
      * Displays a form to edit an existing User entity.
      *
-     * @Route("/{id}/edit", requirements={"id" = "\d+"}, name="user_edit")
+     * @Route("/edit/{id}", requirements={"id" = "\d+"}, name="user_edit")
      * @Method("GET")
      * @Template()
      */
@@ -85,7 +85,7 @@ class UserController extends Controller {
     /**
      * Edits an existing User entity.
      *
-     * @Route("/{id}", requirements={"id" = "\d+"}, name="user_update")
+     * @Route("/update/{id}", requirements={"id" = "\d+"}, name="user_update")
      * @Method("PUT")
      * @Template("SonataUserBundle:User:edit.html.twig")
      */
@@ -160,7 +160,7 @@ class UserController extends Controller {
         }
 
         return $this->container->get('templating')->renderResponse('SonataUserBundle:User:register.html.twig', array(
-            'form' => $form->createView(),
+                    'form' => $form->createView(),
         ));
     }
 
@@ -172,7 +172,7 @@ class UserController extends Controller {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         return $this->container->get('templating')->renderResponse('SonataUserBundle:User:confirmed.html.twig', array(
-            'user' => $user,
+                    'user' => $user,
         ));
     }
 }

@@ -6,9 +6,11 @@ parameters:
     database_user: sonata
     database_password: asucse360
     mailer_transport: smtp
-    mailer_host: 127.0.0.1
-    mailer_user: null
-    mailer_password: null
+    mailer_encryption: ssl
+    mailer_auth_mode: login
+    mailer_host: smtp.gmail.com
+    mailer_user: cory.siebler@gmail.com
+    mailer_password: tphcpugeyskixyjf
     locale: en
     secret: 274aea36a65c0bf329e5edf23c8e137172838a7a
     database_path: null
