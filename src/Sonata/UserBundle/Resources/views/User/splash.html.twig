@@ -7,6 +7,75 @@
 {% if is_granted('ROLE_SITE-ADMIN') %}
 {% elseif is_granted('ROLE_DOCTOR') %}
 {% elseif is_granted('ROLE_PATIENT') %}
+    <h3>Patient Information</h3>
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>First Name:</th>
+                <td>{{ user.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Last Name:</th>
+                <td>{{ user.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Primary Doctor:</th>
+                <td>{% if user.primaryDoctor is not null %}{{ user.primaryDoctor }}{% else %}None Specified{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% if user.getAddress() is not null %}
+        <h3>Address Information</h3>
+        <table class="record_proerties">
+            <tbody>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if user.getInsuranceInfo() is not null %}
+        <h3>Insurance Information</h3>
+        <table class="record_proerties">
+            <tbody>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if not user.getAllergies().empty() %}
+        <h3>Allergy Information</h3>
+        <table class="record_proerties">
+            <tbody>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if not user.getPrescriptions().empty() %}
+        <h3>Prescription Information</h3>
+        <table class="record_proerties">
+            <tbody>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
 {% elseif is_granted('ROLE_NURSE') %}
 {% elseif is_granted('ROLE_EMT') %}
 {% elseif is_granted('ROLE_ADMIN') %}
@@ -14,10 +83,48 @@
 {% endblock content_content %}
 
 {% block content_sidebar %}
-{{ parent() }}
 {% if is_granted('ROLE_SITE-ADMIN') %}
 {% elseif is_granted('ROLE_DOCTOR') %}
 {% elseif is_granted('ROLE_PATIENT') %}
+    <h2>Patient Actions</h2>
+    <ul>
+        <li>
+            {% if user.getAddress() is null %}
+                Add Address
+            {% else %}
+                Edit Address
+            {% endif %}
+        </li>
+        <li>
+            {% if user.getInsuranceInfo() is null %}
+                Add Insurance
+            {% else %}
+                Edit Insurance
+            {% endif %}
+        </li>
+        <li>
+            Add Allergy
+        </li>
+        {% if not user.getAllergies().empty() %}
+            <li>
+                Edit Allergies
+            </li>
+        {% endif %}
+        <li>
+            Add Prescription
+        </li>
+        {% if not user.getPrescriptions().empty() %}
+            <li>
+                Edit Prescription
+            </li>
+        {% endif %}
+        <li>
+            Add Blood Pressure Reading
+        </li>
+        <li>
+            Add Blood Glucose Levels
+        </li>
+    </ul>
 {% elseif is_granted('ROLE_NURSE') %}
 {% elseif is_granted('ROLE_EMT') %}
 {% elseif is_granted('ROLE_ADMIN') %}

@@ -21,23 +21,6 @@ use Sonata\UserBundle\Form\UserType;
 class UserController extends Controller {
 
     /**
-     * Lists all User entities.
-     *
-     * @Route("/", name="user")
-     * @Method("GET")
-     * @Template()
-     */
-    public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('SonataUserBundle:User')->findAll();
-
-        return array(
-            'entities' => $entities,
-        );
-    }
-
-    /**
      * Finds and displays a User entity.
      *
      * @Route("/{id}", requirements={"id" = "\d+"}, name="user_show")
@@ -123,6 +106,19 @@ class UserController extends Controller {
      */
     public function splashSiteAdminAction() {
         return array();
+    }
+
+    /**
+     * @Route("/patient/splash", name="user_patient_splash")
+     * @Method({"GET"})
+     * @Template("SonataUserBundle:User:splash.html.twig")
+     */
+    public function splashPatientAction() {
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        return array(
+            'user' => $user,
+        );
     }
 
     /**
