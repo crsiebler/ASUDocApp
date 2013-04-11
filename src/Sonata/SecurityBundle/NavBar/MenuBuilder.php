@@ -51,6 +51,11 @@ class MenuBuilder extends AbstractNavbarMenuBuilder {
                     'route' => 'user_show',
                     'routeParameters' => array('id' => $this->user->getId())
                 ));
+            } elseif ($this->user->hasRoleByName("ROLE_SITE-ADMIN")) {
+                $menu->addChild('Site-Admin', array(
+                    'route' => 'user_show',
+                    'routeParameters' => array('id' => $this->user->getId())
+                ));
             }
         } else {
             $dropdown = $this->createDropdownMenuItem($menu, "Developers", false, array('caret' => true));
