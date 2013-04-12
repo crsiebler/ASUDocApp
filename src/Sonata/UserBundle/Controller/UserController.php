@@ -98,6 +98,24 @@ class UserController extends Controller {
             'delete_form' => $deleteForm->createView(),
         );
     }
+    
+    /**
+     * @Route("/add/PrimaryDoctor/{userName}/{userID}", requirements={"userID" = "\d+"}, defaults={"userName" = null, "userID" = 0}, name="add_primary_doctor")
+     * @Method({"GET", "POST"})
+     * @Template()
+     */
+    public function addPrimaryDoctorAction() {
+        return array();
+    }
+    
+    /**
+     * @Route("/edit/PrimaryDoctor/{userName}/{userID}", requirements={"userID" = "\d+"}, defaults={"userName" = null, "userID" = 0}, name="edit_primary_doctor")
+     * @Method({"GET", "POST"})
+     * @Template()
+     */
+    public function editPrimaryDoctorAction() {
+        return array();
+    }
 
     /**
      * @Route("/site-admin/splash", name="user_site-admin_splash")

@@ -27,9 +27,9 @@ class MenuBuilder extends AbstractNavbarMenuBuilder {
 
         if ($this->isLoggedIn) {
             if ($this->user->hasRoleByName("ROLE_PATIENT")) {
+                // If the User is a Patient display the Patient Top Navbar Menu
                 $menu->addChild('Patient', array(
-                    'route' => 'user_show',
-                    'routeParameters' => array('id' => $this->user->getId())
+                    'route' => 'user_patient_splash',
                 ));
             } elseif ($this->user->hasRoleByName("ROLE_DOCTOR")) {
                 $menu->addChild('Doctor', array(
@@ -37,6 +37,7 @@ class MenuBuilder extends AbstractNavbarMenuBuilder {
                     'routeParameters' => array('id' => $this->user->getId())
                 ));
             } elseif ($this->user->hasRoleByName("ROLE_NURSE")) {
+                // If the User is a Nurse display the Nurse Top Navbar Menu
                 $menu->addChild('Nurse', array(
                     'route' => 'user_show',
                     'routeParameters' => array('id' => $this->user->getId())

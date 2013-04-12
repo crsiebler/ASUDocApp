@@ -2,6 +2,7 @@
 
 {% block headline %}Splash Page{% endblock headline %}
 
+{# !!! BODY CONTENT !!! #}
 {% block content_content %}
 {{ parent() }}
 {% if is_granted('ROLE_SITE-ADMIN') %}
@@ -57,10 +58,12 @@
         <h3>Allergy Information</h3>
         <table class="record_proerties">
             <tbody>
-                <tr>
-                    <th></th>
-                    <td></td>
-                </tr>
+                {% for allergy in user.getAllergies().empty() %}
+                    <tr>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     {% endif %}
@@ -69,10 +72,12 @@
         <h3>Prescription Information</h3>
         <table class="record_proerties">
             <tbody>
-                <tr>
-                    <th></th>
-                    <td></td>
-                </tr>
+                {% for prescription in user.getPrescriptions() %}
+                    <tr>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     {% endif %}
@@ -82,54 +87,67 @@
 {% endif %}
 {% endblock content_content %}
 
+{# !!! SIDE BAR CONTENT !!! #}
 {% block content_sidebar %}
+<h2>Actions</h2>
+<ul>
 {% if is_granted('ROLE_SITE-ADMIN') %}
 {% elseif is_granted('ROLE_DOCTOR') %}
 {% elseif is_granted('ROLE_PATIENT') %}
-    <h2>Patient Actions</h2>
-    <ul>
-        <li>
-            {% if user.getAddress() is null %}
-                <a href="{{ path('address_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Address</a>
-            {% else %}
-                <a href="{{ path('address_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Address</a>
-            {% endif %}
-        </li>
-        <li>
-            {# Insurance is OneToOne so Add or Edit check #}
-            {% if user.getInsuranceInfo() is null %}
-                <a href="{{ path('insurance_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Insurance</a>
-            {% else %}
-                <a href="{{ path('insurance_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Insurance</a>
-            {% endif %}
-        </li>
-        <li>
-            <a href="{{ path('allergy_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Allergy</a>
-        </li>
-        {# check to see if user has any Allergies to edit #}
-        {% if not user.getAllergies().empty() %}
-            <li>
-                <a href="{{ path('allergy_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Allergies</a>
-            </li>
+    <li>
+        {% if user.getAddress() is null %}
+            <a href="{{ path('address_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Address</a>
+        {% else %}
+            <a href="{{ path('address_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Address</a>
         {% endif %}
-        <li>
-            Add Prescription
-        </li>
-        {# check to see if user has any Prescriptions to edit #}
-        {% if not user.getPrescriptions().empty() %}
-            <li>
-                Edit Prescription
-            </li>
+    </li>
+    <li>
+        {# Insurance is OneToOne so Add or Edit check #}
+        {% if user.getInsuranceInfo() is null %}
+            <a href="{{ path('insurance_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Insurance</a>
+        {% else %}
+            <a href="{{ path('insurance_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Insurance</a>
         {% endif %}
+    </li>
+    <li>
+        {% if user.getPrimaryDoctor() is null %}
+            <a href="{{ path('add_primary_doctor', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Primary Doctor</a>
+        {% else %}
+            <a href="{{ path('edit_primary_doctor', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Primary Doctor</a>
+        {% endif %}
+    </li>
+    <li>
+        <a href="{{ path('allergy_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Allergy</a>
+    </li>
+    {# check to see if user has any Allergies to edit #}
+    {% if not user.getAllergies().empty() %}
         <li>
-            Add Blood Pressure Reading
-        </li>
+            <a href="{{ path('allergy_show', {'userName': user.getName(), 'userID': user.getId()}) }}">Show Allergies</a>
         <li>
-            Add Blood Glucose Levels
+            <a href="{{ path('allergy_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Allergies</a>
         </li>
-    </ul>
+    {% endif %}
+    <li>
+        Add Prescription
+    </li>
+    {# check to see if user has any Prescriptions to edit #}
+    {% if not user.getPrescriptions().empty() %}
+        <li>
+            Edit Prescriptions
+        </li>
+    {% endif %}
+    <li>
+        Add Blood Pressure Reading
+    </li>
+    <li>
+        Add Blood Glucose Levels
+    </li>
+    <li>
+        Add Weight
+    </li>
 {% elseif is_granted('ROLE_NURSE') %}
 {% elseif is_granted('ROLE_EMT') %}
 {% elseif is_granted('ROLE_ADMIN') %}
 {% endif %}
+</ul>    
 {% endblock content_sidebar %}
