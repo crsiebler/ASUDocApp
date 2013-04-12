@@ -92,27 +92,30 @@
             {% if user.getAddress() is null %}
                 <a href="{{ path('address_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Address</a>
             {% else %}
-                Edit Address
+                <a href="{{ path('address_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Address</a>
             {% endif %}
         </li>
         <li>
+            {# Insurance is OneToOne so Add or Edit check #}
             {% if user.getInsuranceInfo() is null %}
-                Add Insurance
+                <a href="{{ path('insurance_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Insurance</a>
             {% else %}
-                Edit Insurance
+                <a href="{{ path('insurance_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Insurance</a>
             {% endif %}
         </li>
         <li>
-            Add Allergy
+            <a href="{{ path('allergy_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Allergy</a>
         </li>
+        {# check to see if user has any Allergies to edit #}
         {% if not user.getAllergies().empty() %}
             <li>
-                Edit Allergies
+                <a href="{{ path('allergy_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Allergies</a>
             </li>
         {% endif %}
         <li>
             Add Prescription
         </li>
+        {# check to see if user has any Prescriptions to edit #}
         {% if not user.getPrescriptions().empty() %}
             <li>
                 Edit Prescription

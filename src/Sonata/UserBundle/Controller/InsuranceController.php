@@ -20,21 +20,27 @@ class InsuranceController extends Controller {
     /**
      * Creates a new Insurance entity.
      *
-     * @Route("/", name="insurance_create")
+     * @Route("/create/{userID}", requirements={"userID" = "\d+"}, name="insurance_create")
      * @Method("POST")
      * @Template("SonataUserBundle:Insurance:new.html.twig")
      */
-    public function createAction(Request $request) {
-        $entity = new Insurance();
-        $form = $this->createForm(new InsuranceType(), $entity);
+    public function createAction($userID, Request $request) {
+        $insurance = new Insurance();
+        $form = $this->createForm(new InsuranceType(), $insurance);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            
+            // Add Insurance to User
+            $user = $em->getRepository('SonataUserBundle:User')->find($userID);
+            $user->setInsuranceInfo($insurance);
+            
+            $em->persist($insurance);
+            $em->persist($user);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('insurance_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('insurance_show', array('userID' => $userID, 'id' => $insurance->getId())));
         }
 
         return array(
@@ -46,15 +52,17 @@ class InsuranceController extends Controller {
     /**
      * Displays a form to create a new Insurance entity.
      *
-     * @Route("/new", name="insurance_new")
+     * @Route("/new/{userName}/{userID}", requirements={"userID" = "\d+"}, name="insurance_new")
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction($userName, $userID) {
         $entity = new Insurance();
         $form = $this->createForm(new InsuranceType(), $entity);
 
         return array(
+            'userName' => $userName,
+            'userID' => $userID,
             'entity' => $entity,
             'form' => $form->createView(),
         );
@@ -63,14 +71,14 @@ class InsuranceController extends Controller {
     /**
      * Finds and displays a Insurance entity.
      *
-     * @Route("/{id}", name="insurance_show")
+     * @Route("/show/{userID}/{id}", name="insurance_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id) {
+    public function showAction($userID, $id) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataUserBundle:Insurance')->find($id);
+        $entity = $em->getRepository('SonataUserBundle:User')->find($userID)->getInsuranceInfo();
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Insurance entity.');
@@ -87,14 +95,14 @@ class InsuranceController extends Controller {
     /**
      * Displays a form to edit an existing Insurance entity.
      *
-     * @Route("/{id}/edit", name="insurance_edit")
+     * @Route("/edit/{userID}/{id}", name="insurance_edit")
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id) {
+    public function editAction($userID, $id) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataUserBundle:Insurance')->find($id);
+        $entity = $em->getRepository('SonataUserBundle:User')->find($userID)->getInsuranceInfo();
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Insurance entity.');
@@ -113,7 +121,7 @@ class InsuranceController extends Controller {
     /**
      * Edits an existing Insurance entity.
      *
-     * @Route("/{id}", name="insurance_update")
+     * @Route("/{id}", defaults={"userID" = 0}, name="insurance_update")
      * @Method("PUT")
      * @Template("SonataUserBundle:Insurance:edit.html.twig")
      */
