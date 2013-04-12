@@ -90,7 +90,7 @@
     <ul>
         <li>
             {% if user.getAddress() is null %}
-                Add Address
+                <a href="{{ path('address_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Address</a>
             {% else %}
                 Edit Address
             {% endif %}

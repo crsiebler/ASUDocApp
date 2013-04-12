@@ -17,10 +17,7 @@ class AddressType extends AbstractType {
             $country = null;
         }
 
-        $builder->add('phoneNumber', null, array(
-                    'label' => 'Phone number:'
-                ))
-                ->add('address', null, array(
+        $builder->add('address', null, array(
                     'label' => 'Address:'
                 ))
                 ->add('address2', null, array(
@@ -54,6 +51,9 @@ class AddressType extends AbstractType {
                 ))
                 ->add('zipcode', null, array(
                     'label' => 'Zipcode:'
+                ))
+                ->add('phoneNumber', null, array(
+                    'label' => 'Phone number:'
                 ));
     }
 

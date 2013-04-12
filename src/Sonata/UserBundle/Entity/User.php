@@ -238,6 +238,10 @@ class User extends BaseUser {
         return $this->createdOn;
     }
 
+    public function getName() {
+        return $this->getFirstName().' '.$this->getLastName();
+    }
+
     public function __toString() {
         return $this->getFirstName() . ' ' . $this->getLastName();
     }
