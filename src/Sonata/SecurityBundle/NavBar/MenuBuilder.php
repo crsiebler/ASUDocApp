@@ -1,4 +1,4 @@
-d<?php
+<?php
 
 namespace Sonata\SecurityBundle\NavBar;
 
