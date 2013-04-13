@@ -79,6 +79,11 @@ class Address {
 
     /**
      * @ORM\Column(name="phoneNumber", type="string", length=15, nullable=true)
+     * @Assert\Length(
+     *      min = "7",
+     *      max = "15",
+     *      minMessage = "Phone number must be at least {{ limit }} characters long",
+     *      maxMessage = "Phone number cannot be longer than than {{ limit }} characters long")
      * @var string $phoneNumber
      */
     protected $phoneNumber;

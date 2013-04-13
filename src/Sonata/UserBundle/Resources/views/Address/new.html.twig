@@ -15,6 +15,9 @@
     <li>
         <a href="{{ app.request.headers.get('referer') }}">Back</a>
     </li>
+    <li>
+        <a href="{{ path('user_show', { 'id': userID }) }}">Back to Patient Page</a>
+    </li>
 </ul>
 {% endblock content_content %}
 

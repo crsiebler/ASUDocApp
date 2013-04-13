@@ -114,7 +114,7 @@
         {% if user.getAddress() is null %}
             <a href="{{ path('address_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Address</a>
         {% else %}
-            <a href="{{ path('address_edit', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Address</a>
+            <a href="{{ path('address_edit', { 'id': user.getAddress().getId(), 'userID': user.getId(), 'userName': user.getName() }) }}">Edit Address</a>
         {% endif %}
     </li>
     <li>

@@ -20,11 +20,11 @@ class AddressController extends Controller {
     /**
      * Creates a new Address entity.
      *
-     * @Route("/create/{userName}/{userID}", requirements={"userID" = "\d+"}, defaults={"userName" = null, "userID" = 0}, name="address_create")
+     * @Route("/create/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="address_create")
      * @Method("POST")
      * @Template("SonataUserBundle:Address:new.html.twig")
      */
-    public function createAction($userName, $userID, Request $request) {
+    public function createAction($userID, $userName, Request $request) {
         $address = new Address();
         $form = $this->createForm(new AddressType(), $address);
         $form->bind($request);
@@ -52,11 +52,11 @@ class AddressController extends Controller {
     /**
      * Displays a form to create a new Address entity.
      *
-     * @Route("/new/{userName}/{userID}", requirements={"userID" = "\d+"}, defaults={"userName" = null, "userID" = 0}, name="address_new")
+     * @Route("/new/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="address_new")
      * @Method("GET")
      * @Template()
      */
-    public function newAction($userName, $userID) {
+    public function newAction($userID, $userName) {
         $entity = new Address();
         $form = $this->createForm(new AddressType(), $entity);
 
@@ -93,11 +93,11 @@ class AddressController extends Controller {
     /**
      * Displays a form to edit an existing Address entity.
      *
-     * @Route("/edit/{id}/{userName}", requirements={"id" = "\d+"}, defaults={"userName" = null}, name="address_edit")
+     * @Route("/edit/{id}/{userID}/{userName}", requirements={"userID" = "\d+", "id" = "\d+"}, defaults={"userID" = 0, "userName" = null}, name="address_edit")
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id, $userName) {
+    public function editAction($id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataUserBundle:Address')->find($id);
@@ -109,6 +109,7 @@ class AddressController extends Controller {
         $editForm = $this->createForm(new AddressType(), $entity);
 
         return array(
+            'userID' => $userID,
             'userName' => $userName,
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
