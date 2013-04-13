@@ -1,0 +1,7 @@
+parameters:
+
+services:
+    sonata.twig.extension:
+      class: Sonata\WebsiteBundle\Twig\Extensions\SonataWebsiteExtension
+      tags:
+        - { name: twig.extension }

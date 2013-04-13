@@ -7,34 +7,29 @@
 <table class="record_properties">
     <tbody>
         <tr>
-            <th>Address</th>
+            <th>Address:</th>
             <td>{{ entity.address }}</td>
         </tr>
         <tr>
-            <th>Address2</th>
+            <th>Address (line 2):</th>
             <td>{{ entity.address2 }}</td>
         </tr>
         <tr>
-            <th>City</th>
+            <th>City:</th>
             <td>{{ entity.city }}</td>
         </tr>
         <tr>
-            <th>Zipcode</th>
+            <th>Zipcode:</th>
             <td>{{ entity.zipcode }}</td>
         </tr>
         <tr>
-            <th>Phonenumber</th>
-            <td>{{ entity.phoneNumber }}</td>
+            <th>Phone Number:</th>
+            <td>{{ entity.phoneNumber|phone() }}</td>
         </tr>
     </tbody>
 </table>
 
 <ul class="record_actions">
-    <li>
-        <a href="{{ path('address') }}">
-            Back to the list
-        </a>
-    </li>
     <li>
         <a href="{{ path('address_edit', { 'id': entity.id }) }}">
             Edit
