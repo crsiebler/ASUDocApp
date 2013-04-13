@@ -20,31 +20,31 @@ class InsuranceController extends Controller {
     /**
      * Creates a new Insurance entity.
      *
-     * @Route("/create/{userID}", requirements={"userID" = "\d+"}, name="insurance_create")
+     * @Route("/create/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="insurance_create")
      * @Method("POST")
      * @Template("SonataUserBundle:Insurance:new.html.twig")
      */
-    public function createAction($userID, Request $request) {
+    public function createAction(Request $request, $userID, $userName) {
         $insurance = new Insurance();
         $form = $this->createForm(new InsuranceType(), $insurance);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            
+
             // Add Insurance to User
             $user = $em->getRepository('SonataUserBundle:User')->find($userID);
             $user->setInsuranceInfo($insurance);
-            
+
             $em->persist($insurance);
             $em->persist($user);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('insurance_show', array('userID' => $userID, 'id' => $insurance->getId())));
+            return $this->redirect($this->generateUrl('insurance_show', array('userID' => $userID, 'userName' => $userName, 'id' => $insurance->getId())));
         }
 
         return array(
-            'entity' => $entity,
+            'entity' => $insurance,
             'form' => $form->createView(),
         );
     }
@@ -52,11 +52,11 @@ class InsuranceController extends Controller {
     /**
      * Displays a form to create a new Insurance entity.
      *
-     * @Route("/new/{userName}/{userID}", requirements={"userID" = "\d+"}, name="insurance_new")
+     * @Route("/new/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="insurance_new")
      * @Method("GET")
      * @Template()
      */
-    public function newAction($userName, $userID) {
+    public function newAction($userID, $userName) {
         $entity = new Insurance();
         $form = $this->createForm(new InsuranceType(), $entity);
 
@@ -71,14 +71,14 @@ class InsuranceController extends Controller {
     /**
      * Finds and displays a Insurance entity.
      *
-     * @Route("/show/{userID}/{id}", name="insurance_show")
+     * @Route("/show/{id}/{userID}/{userName}", requirements={"id" = "\d+", "userID" = "\d+"}, defaults={"userName" = null}, name="insurance_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($userID, $id) {
+    public function showAction($id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataUserBundle:User')->find($userID)->getInsuranceInfo();
+        $entity = $em->getRepository('SonataUserBundle:Insurance')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Insurance entity.');
@@ -87,6 +87,8 @@ class InsuranceController extends Controller {
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
+            'userID' => $userID,
+            'userName' => $userName,
             'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
@@ -95,14 +97,14 @@ class InsuranceController extends Controller {
     /**
      * Displays a form to edit an existing Insurance entity.
      *
-     * @Route("/edit/{userID}/{id}", name="insurance_edit")
+     * @Route("/edit/{id}/{userID}/{userName}", requirements={"userID" = "\d+", "id" = "\d+"}, defaults={"userName" = null}, name="insurance_edit")
      * @Method("GET")
      * @Template()
      */
-    public function editAction($userID, $id) {
+    public function editAction($id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataUserBundle:User')->find($userID)->getInsuranceInfo();
+        $entity = $em->getRepository('SonataUserBundle:Insurance')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Insurance entity.');
@@ -112,6 +114,8 @@ class InsuranceController extends Controller {
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
+            'userID' => $userID,
+            'userName' => $userName,
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -121,11 +125,11 @@ class InsuranceController extends Controller {
     /**
      * Edits an existing Insurance entity.
      *
-     * @Route("/{id}", defaults={"userID" = 0}, name="insurance_update")
+     * @Route("/update/{id}/{userID}/{userName}", requirements={"userID" = "\d+", "id" = "\d+"}, defaults={"userName" = null}, name="insurance_update")
      * @Method("PUT")
      * @Template("SonataUserBundle:Insurance:edit.html.twig")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataUserBundle:Insurance')->find($id);
@@ -142,10 +146,12 @@ class InsuranceController extends Controller {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('insurance_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('insurance_edit', array('id' => $id, 'userID' => $userID, 'userName' => $userName)));
         }
 
         return array(
+            'userID' => $userID,
+            'userName' => $userName,
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -174,7 +180,9 @@ class InsuranceController extends Controller {
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('insurance'));
+        $referer = $request->headers->get('referer');
+
+        return new RedirectResponse($referer);
     }
 
     /**

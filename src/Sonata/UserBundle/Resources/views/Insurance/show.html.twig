@@ -1,17 +1,17 @@
 {% extends '::base.html.twig' %}
 
-{% block headline %}View Insurance Information{% endblock headline %}
+{% block headline %}Viewing Insurance Information{% if userName is not null %} for {{ userName }}{% endif %}{% endblock headline %}
 
 {% block content_content %}
 {{ parent() }}
 <table class="record_properties">
     <tbody>
         <tr>
-            <th>Name</th>
+            <th>Name:</th>
             <td>{{ entity.name }}</td>
         </tr>
         <tr>
-            <th>Grouppolicy</th>
+            <th>Group Policy:</th>
             <td>{{ entity.groupPolicy }}</td>
         </tr>
     </tbody>
@@ -19,14 +19,10 @@
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('insurance') }}">
-            Back to the list
-        </a>
+        <a href="{{ path('insurance_edit', { 'userID': userID, 'userName': userName, 'id': entity.id }) }}">Edit</a>
     </li>
     <li>
-        <a href="{{ path('insurance_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
+        <a href="{{ path('user_show', { 'userID': userID }) }}">View Patient Page</a>
     </li>
     <li>
         <form action="{{ path('insurance_delete', { 'id': entity.id }) }}" method="post">

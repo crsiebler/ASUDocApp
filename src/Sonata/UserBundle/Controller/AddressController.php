@@ -24,7 +24,7 @@ class AddressController extends Controller {
      * @Method("POST")
      * @Template("SonataUserBundle:Address:new.html.twig")
      */
-    public function createAction($userID, $userName, Request $request) {
+    public function createAction(Request $request, $userID, $userName) {
         $address = new Address();
         $form = $this->createForm(new AddressType(), $address);
         $form->bind($request);
@@ -40,7 +40,7 @@ class AddressController extends Controller {
             $em->persist($user);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('address_show', array('userName' => $userName, 'id' => $address->getId())));
+            return $this->redirect($this->generateUrl('address_show', array('userID' => $userID, 'userName' => $userName, 'id' => $address->getId())));
         }
 
         return array(
@@ -71,11 +71,11 @@ class AddressController extends Controller {
     /**
      * Finds and displays a Address entity.
      *
-     * @Route("/show/{id}/{userName}", requirements={"id" = "\d+"}, defaults={"userName" = null}, name="address_show")
+     * @Route("/show/{id}/{userID}/{userName}", requirements={"id" = "\d+", "userID" = "\d+"}, defaults={"userName" = null}, name="address_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id, $userName) {
+    public function showAction($id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataUserBundle:Address')->find($id);
@@ -85,6 +85,7 @@ class AddressController extends Controller {
         }
 
         return array(
+            'userID' => $userID,
             'userName' => $userName,
             'entity' => $entity,
         );
@@ -93,7 +94,7 @@ class AddressController extends Controller {
     /**
      * Displays a form to edit an existing Address entity.
      *
-     * @Route("/edit/{id}/{userID}/{userName}", requirements={"userID" = "\d+", "id" = "\d+"}, defaults={"userID" = 0, "userName" = null}, name="address_edit")
+     * @Route("/edit/{id}/{userID}/{userName}", requirements={"userID" = "\d+", "id" = "\d+"}, defaults={"userName" = null}, name="address_edit")
      * @Method("GET")
      * @Template()
      */
@@ -119,11 +120,11 @@ class AddressController extends Controller {
     /**
      * Edits an existing Address entity.
      *
-     * @Route("/update/{id}/{userName}", requirements={"id" = "\d+"}, defaults={"userName" = null}, name="address_update")
+     * @Route("/update/{id}/{userID}/{userName}", requirements={"userID" = "\d+", "id" = "\d+"}, defaults={"userName" = null}, name="address_update")
      * @Method("PUT")
      * @Template("SonataUserBundle:Address:edit.html.twig")
      */
-    public function updateAction(Request $request, $id, $userName) {
+    public function updateAction(Request $request, $id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataUserBundle:Address')->find($id);
@@ -139,10 +140,11 @@ class AddressController extends Controller {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('address_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('address_edit', array('id' => $id, 'userID' => $userID, 'userName' => $userName)));
         }
 
         return array(
+            'userID' => $userID,
             'userName' => $userName,
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
