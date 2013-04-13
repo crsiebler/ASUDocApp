@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 
-{% block headline %}View Address{% endblock headline %}
+{% block headline %}Viewing Address{% if userName is not null %} for {{ userName }}{% endif %}{% endblock headline %}
 
 {% block content_content %}
 {{ parent() }}
@@ -31,7 +31,7 @@
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('address_edit', { 'id': entity.id }) }}">
+        <a href="{{ path('address_edit', { 'userName': userName, 'id': entity.id }) }}">
             Edit
         </a>
     </li>

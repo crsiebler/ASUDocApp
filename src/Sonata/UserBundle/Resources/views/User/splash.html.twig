@@ -32,11 +32,27 @@
 
     {% if user.getAddress() is not null %}
         <h3>Address Information</h3>
-        <table class="record_proerties">
+        <table class="record_properties">
             <tbody>
                 <tr>
-                    <th></th>
-                    <td></td>
+                    <th>Address:</th>
+                    <td>{{ user.getAddress().address }}</td>
+                </tr>
+                <tr>
+                    <th>Address (line 2):</th>
+                    <td>{{ user.getAddress().address2 }}</td>
+                </tr>
+                <tr>
+                    <th>City:</th>
+                    <td>{{ user.getAddress().city }}</td>
+                </tr>
+                <tr>
+                    <th>Zipcode:</th>
+                    <td>{{ user.getAddress().zipcode }}</td>
+                </tr>
+                <tr>
+                    <th>Phone Number:</th>
+                    <td>{{ user.getAddress().phoneNumber|phone() }}</td>
                 </tr>
             </tbody>
         </table>
@@ -96,35 +112,35 @@
 {% elseif is_granted('ROLE_PATIENT') %}
     <li>
         {% if user.getAddress() is null %}
-            <a href="{{ path('address_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Address</a>
+            <a href="{{ path('address_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Address</a>
         {% else %}
-            <a href="{{ path('address_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Address</a>
+            <a href="{{ path('address_edit', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Address</a>
         {% endif %}
     </li>
     <li>
         {# Insurance is OneToOne so Add or Edit check #}
         {% if user.getInsuranceInfo() is null %}
-            <a href="{{ path('insurance_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Insurance</a>
+            <a href="{{ path('insurance_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Insurance</a>
         {% else %}
-            <a href="{{ path('insurance_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Insurance</a>
+            <a href="{{ path('insurance_edit', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Insurance</a>
         {% endif %}
     </li>
     <li>
         {% if user.getPrimaryDoctor() is null %}
-            <a href="{{ path('add_primary_doctor', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Primary Doctor</a>
+            <a href="{{ path('add_primary_doctor', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Primary Doctor</a>
         {% else %}
-            <a href="{{ path('edit_primary_doctor', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Primary Doctor</a>
+            <a href="{{ path('edit_primary_doctor', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Primary Doctor</a>
         {% endif %}
     </li>
     <li>
-        <a href="{{ path('allergy_new', {'userName': user.getName(), 'userID': user.getId()}) }}">Add Allergy</a>
+        <a href="{{ path('allergy_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Allergy</a>
     </li>
     {# check to see if user has any Allergies to edit #}
     {% if not user.getAllergies().empty() %}
         <li>
-            <a href="{{ path('allergy_show', {'userName': user.getName(), 'userID': user.getId()}) }}">Show Allergies</a>
+            <a href="{{ path('allergy_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Allergies</a>
         <li>
-            <a href="{{ path('allergy_edit', {'userName': user.getName(), 'userID': user.getId()}) }}">Edit Allergies</a>
+            <a href="{{ path('allergy_edit', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Allergies</a>
         </li>
     {% endif %}
     <li>
@@ -149,5 +165,5 @@
 {% elseif is_granted('ROLE_EMT') %}
 {% elseif is_granted('ROLE_ADMIN') %}
 {% endif %}
-</ul>    
+</ul>
 {% endblock content_sidebar %}
