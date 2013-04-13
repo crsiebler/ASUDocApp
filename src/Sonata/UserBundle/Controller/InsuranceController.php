@@ -3,6 +3,7 @@
 namespace Sonata\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -35,6 +36,7 @@ class InsuranceController extends Controller {
             // Add Insurance to User
             $user = $em->getRepository('SonataUserBundle:User')->find($userID);
             $user->setInsuranceInfo($insurance);
+            $insurance->setPatient($user);
 
             $em->persist($insurance);
             $em->persist($user);
@@ -167,11 +169,13 @@ class InsuranceController extends Controller {
     public function deleteAction(Request $request, $id) {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
-
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('SonataUserBundle:Insurance')->find($id);
 
+            $userID = $entity->getPatient()->getId();
+            
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Insurance entity.');
             }
@@ -180,9 +184,24 @@ class InsuranceController extends Controller {
             $em->flush();
         }
 
-        $referer = $request->headers->get('referer');
+        // Grab the currently Logged In User to determine where to send
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+        
+        if ($currentUser->hasRoleByName('ROLE_PATIENT')) {
+            // If the Logged In User is a Patient then send to Patient Splash Page
+            $url = $this->container->get('router')->generate('user_patient_splash');
+        } elseif (isset($userID)) {
+            // If the User ID is specified (Which is should) send to Patient Info Page
+            $url = $this->container->get('router')->generate('user_show', array('id' => $userID));
+        } elseif ($currentUser->hasRoleByName('ROLE_ADMIN')) {
+            // If the Logged In user is an Office Admin then send to Admin Splash Page
+            $url = $this->container->get('router')->generate('user_admin_splash');
+        } else {
+            // If the User cannot the determined then return to homepage
+            $url = $this->container->get('router')->generate('homepage');
+        }
 
-        return new RedirectResponse($referer);
+        return new RedirectResponse($url);
     }
 
     /**

@@ -35,6 +35,7 @@ class AddressController extends Controller {
             // Add Address to User
             $user = $em->getRepository('SonataUserBundle:User')->find($userID);
             $user->setAddress($address);
+            $address->setUser($user);
 
             $em->persist($address);
             $em->persist($user);

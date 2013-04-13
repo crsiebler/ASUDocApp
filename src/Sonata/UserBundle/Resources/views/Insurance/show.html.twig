@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 
-{% block headline %}Viewing Insurance Information{% if userName is not null %} for {{ userName }}{% endif %}{% endblock headline %}
+{% block headline %}Insurance{% if userName is not null %} for {{ userName }}{% endif %}{% endblock headline %}
 
 {% block content_content %}
 {{ parent() }}
@@ -17,19 +17,18 @@
     </tbody>
 </table>
 
+<form action="{{ path('insurance_delete', { 'id': entity.id }) }}" method="post" style="margin-top: 15px;">
+    <input type="hidden" name="_method" value="DELETE" />
+    {{ form_widget(delete_form) }}
+    <button type="submit">Delete</button>
+</form>
+
 <ul class="record_actions">
     <li>
         <a href="{{ path('insurance_edit', { 'userID': userID, 'userName': userName, 'id': entity.id }) }}">Edit</a>
     </li>
     <li>
         <a href="{{ path('user_show', { 'id': userID }) }}">View Patient Page</a>
-    </li>
-    <li>
-        <form action="{{ path('insurance_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
     </li>
 </ul>
 {% endblock content_content %}

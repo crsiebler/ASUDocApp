@@ -89,8 +89,8 @@ class Address {
     protected $phoneNumber;
 
     /**
-     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\User", mappedBy="address")
-     * @var type
+     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\User", mappedBy="address", fetch="LAZY")
+     * @ORM\JoinColumn(name="patient_id", referencedColumnName="id", nullable=false, unique=true)
      */
     private $user;
 
@@ -225,7 +225,7 @@ class Address {
         return $this->user;
     }
 
-    public function setUser(type $user) {
+    public function setUser($user) {
         $this->user = $user;
         return $this;
     }

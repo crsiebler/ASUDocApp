@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 
-{% block headline %}Editing Insurance Information{% if userName is not null %} for {{ userName }}{% endif %}{% endblock headline %}
+{% block headline %}Editing Insurance {% if userName is not null %} for {{ userName }}{% endif %}{% endblock headline %}
 
 {% block content_content %}
 {{ parent() }}
@@ -11,7 +11,8 @@
         <button type="submit">Edit</button>
     </p>
 </form>
-<form action="{{ path('insurance_delete', { 'id': entity.id }) }}" method="post" style="display: inline-block;">
+
+<form action="{{ path('insurance_delete', { 'id': entity.id }) }}" method="post">
     <input type="hidden" name="_method" value="DELETE" />
     {{ form_widget(delete_form) }}
     <button type="submit">Delete</button>
@@ -22,7 +23,7 @@
         <a href="{{ app.request.headers.get('referer') }}">Back</a>
     </li>
     <li>
-        <a href="{{ path("user_show", { 'id': userID }) }}">Back to Patient Page</a>
+        <a href="{{ path("user_show", { 'id': userID }) }}">View Patient Page</a>
     </li>
 </ul>
 {% endblock content_content %}

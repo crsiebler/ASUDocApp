@@ -33,9 +33,18 @@ class Insurance {
     private $groupPolicy;
 
     /**
-     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\User", mappedBy="insuranceInfo")
+     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\User", mappedBy="insuranceInfo", fetch="LAZY")
+     * @ORM\JoinColumn(name="patient_id", referencedColumnName="id", nullable=false, unique=true)
      */
     private $patient;
+    
+    /**
+     * @ORM\PreRemove
+     */
+    public function removePatient() {
+        $this->patient->setInsuranceInfo(null);
+        $this->patient = null;
+    }
 
     /**
      * Get id
@@ -68,7 +77,7 @@ class Insurance {
         return $this->patient;
     }
 
-    public function setPatient(type $patient) {
+    public function setPatient($patient) {
         $this->patient = $patient;
         return $this;
     }
