@@ -63,8 +63,12 @@
         <table class="record_proerties">
             <tbody>
                 <tr>
-                    <th></th>
-                    <td></td>
+                    <th>Name:</th>
+                    <td>{{ user.getInsuranceInfo().name }}</td>
+                </tr>
+                <tr>
+                    <th>Group Policy:</th>
+                    <td>{{ user.getInsuranceInfo().groupPolicy }}</td>
                 </tr>
             </tbody>
         </table>
@@ -122,7 +126,7 @@
         {% if user.getInsuranceInfo() is null %}
             <a href="{{ path('insurance_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Insurance</a>
         {% else %}
-            <a href="{{ path('insurance_edit', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Insurance</a>
+            <a href="{{ path('insurance_edit', { 'id': user.getInsuranceInfo().getId(), 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Insurance</a>
         {% endif %}
     </li>
     <li>

@@ -22,7 +22,7 @@
         <a href="{{ path('insurance_edit', { 'userID': userID, 'userName': userName, 'id': entity.id }) }}">Edit</a>
     </li>
     <li>
-        <a href="{{ path('user_show', { 'userID': userID }) }}">View Patient Page</a>
+        <a href="{{ path('user_show', { 'id': userID }) }}">View Patient Page</a>
     </li>
     <li>
         <form action="{{ path('insurance_delete', { 'id': entity.id }) }}" method="post">

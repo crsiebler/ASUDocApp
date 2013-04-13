@@ -45,12 +45,13 @@ class User extends BaseUser {
     private $primaryDoctor;
 
     /**
-     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\Address")
+     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\Address", inversedBy="user")
      */
     private $address;
 
     /**
-     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\Insurance")
+     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\Insurance", inversedBy="patient", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="insurance_id", referencedColumnName="id")
      */
     private $insuranceInfo;
 

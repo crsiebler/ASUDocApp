@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="insurance")
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks
  */
 class Insurance {
 
@@ -30,6 +31,11 @@ class Insurance {
      * @ORM\Column(name="groupPolicy", type="string", length=12)
      */
     private $groupPolicy;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\User", mappedBy="insuranceInfo")
+     */
+    private $patient;
 
     /**
      * Get id
@@ -55,6 +61,15 @@ class Insurance {
 
     public function setGroupPolicy($groupPolicy) {
         $this->groupPolicy = $groupPolicy;
+        return $this;
+    }
+
+    public function getPatient() {
+        return $this->patient;
+    }
+
+    public function setPatient(type $patient) {
+        $this->patient = $patient;
         return $this;
     }
 }

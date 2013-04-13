@@ -88,6 +88,12 @@ class Address {
      */
     protected $phoneNumber;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\User", mappedBy="address")
+     * @var type
+     */
+    private $user;
+
     public function getId() {
         return $this->id;
     }
@@ -212,6 +218,15 @@ class Address {
 
     public function setPhoneNumber($phoneNumber) {
         $this->phoneNumber = $phoneNumber;
+        return $this;
+    }
+
+    public function getUser() {
+        return $this->user;
+    }
+
+    public function setUser(type $user) {
+        $this->user = $user;
         return $this;
     }
 

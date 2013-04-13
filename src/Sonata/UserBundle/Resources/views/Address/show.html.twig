@@ -34,7 +34,7 @@
         <a href="{{ path('address_edit', { 'userID': userID, 'userName': userName, 'id': entity.id }) }}">Edit</a>
     </li>
     <li>
-        <a href="{{ path('user_show', { 'userID': userID }) }}">View Patient Page</a>
+        <a href="{{ path('user_show', { 'id': userID }) }}">View Patient Page</a>
     </li>
 </ul>
 {% endblock content_content %}
