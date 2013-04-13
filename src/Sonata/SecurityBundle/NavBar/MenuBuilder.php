@@ -1,4 +1,4 @@
-<?php
+d<?php
 
 namespace Sonata\SecurityBundle\NavBar;
 
@@ -26,37 +26,33 @@ class MenuBuilder extends AbstractNavbarMenuBuilder {
         $menu->setChildrenAttribute('class', 'nav');
 
         if ($this->isLoggedIn) {
+            $menu->addChild('Splash', array(
+                'route' => 'user_splash',
+            ));
+            
             if ($this->user->hasRoleByName("ROLE_PATIENT")) {
                 // If the User is a Patient display the Patient Top Navbar Menu
-                $menu->addChild('Patient', array(
-                    'route' => 'user_patient_splash',
+                $dropdown = $this->createDropdownMenuItem($menu, "Patient", false, array('caret' => true));
+
+                $dropdown->addChild('Patient', array(
+                    'route' => 'user_show',
+                    'routeParameters' => array('id' => $this->user->getId())
                 ));
             } elseif ($this->user->hasRoleByName("ROLE_DOCTOR")) {
-                $menu->addChild('Doctor', array(
-                    'route' => 'user_show',
-                    'routeParameters' => array('id' => $this->user->getId())
-                ));
+                // If the User is a Doctor display the Doctor Top Navbar Menu
+                $dropdown = $this->createDropdownMenuItem($menu, "Doctor", false, array('caret' => true));
             } elseif ($this->user->hasRoleByName("ROLE_NURSE")) {
                 // If the User is a Nurse display the Nurse Top Navbar Menu
-                $menu->addChild('Nurse', array(
-                    'route' => 'user_show',
-                    'routeParameters' => array('id' => $this->user->getId())
-                ));
+                $dropdown = $this->createDropdownMenuItem($menu, "Nurse", false, array('caret' => true));
             } elseif ($this->user->hasRoleByName("ROLE_ADMIN")) {
-                $menu->addChild('Admin', array(
-                    'route' => 'user_show',
-                    'routeParameters' => array('id' => $this->user->getId())
-                ));
+                // If the User is an Office-Admin display the Admin Top Navbar Menu
+                $dropdown = $this->createDropdownMenuItem($menu, "Admin", false, array('caret' => true));
             } elseif ($this->user->hasRoleByName("ROLE_EMT")) {
-                $menu->addChild('EMT', array(
-                    'route' => 'user_show',
-                    'routeParameters' => array('id' => $this->user->getId())
-                ));
+                // If the User is an EMT display the EMT Top Navbar Menu
+                $dropdown = $this->createDropdownMenuItem($menu, "EMT", false, array('caret' => true));
             } elseif ($this->user->hasRoleByName("ROLE_SITE-ADMIN")) {
-                $menu->addChild('Site-Admin', array(
-                    'route' => 'user_show',
-                    'routeParameters' => array('id' => $this->user->getId())
-                ));
+                // If the User is a Site-Admin display the Site-Admin Top Navbar Menu
+                $dropdown = $this->createDropdownMenuItem($menu, "Site-Admin", false, array('caret' => true));
             }
         } else {
             $dropdown = $this->createDropdownMenuItem($menu, "Developers", false, array('caret' => true));

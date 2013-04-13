@@ -118,61 +118,16 @@ class UserController extends Controller {
     }
 
     /**
-     * @Route("/site-admin/splash", name="user_site-admin_splash")
+     * @Route("/splash", name="user_splash")
      * @Method({"GET"})
      * @Template("SonataUserBundle:User:splash.html.twig")
      */
-    public function splashSiteAdminAction() {
-        return array();
-    }
-
-    /**
-     * @Route("/patient/splash", name="user_patient_splash")
-     * @Method({"GET"})
-     * @Template("SonataUserBundle:User:splash.html.twig")
-     */
-    public function splashPatientAction() {
+    public function splashAction() {
         $user = $this->get('security.context')->getToken()->getUser();
 
         return array(
             'user' => $user,
         );
-    }
-
-    /**
-     * @Route("/doctor/splash", name="user_doctor_splash")
-     * @Method({"GET"})
-     * @Template("SonataUserBundle:User:splash.html.twig")
-     */
-    public function splashDoctorAction() {
-        return array();
-    }
-
-    /**
-     * @Route("/nurse/splash", name="user_nurse_splash")
-     * @Method({"GET"})
-     * @Template("SonataUserBundle:User:splash.html.twig")
-     */
-    public function splashNurseAction() {
-        return array();
-    }
-
-    /**
-     * @Route("/emt/splash", name="user_emt_splash")
-     * @Method({"GET"})
-     * @Template("SonataUserBundle:User:splash.html.twig")
-     */
-    public function splashEMTAction() {
-        return array();
-    }
-
-    /**
-     * @Route("/office-admin/splash", name="user_office-admin_splash")
-     * @Method({"GET"})
-     * @Template("SonataUserBundle:User:splash.html.twig")
-     */
-    public function splashOfficeAdminAction() {
-        return array();
     }
 
     /**
