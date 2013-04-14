@@ -25,13 +25,17 @@ class AddressController extends Controller {
      * @Template("SonataUserBundle:Address:new.html.twig")
      */
     public function createAction(Request $request, $userID, $userName) {
+        $em = $this->getDoctrine()->getManager();
+        
         $address = new Address();
-        $form = $this->createForm(new AddressType(), $address);
+        
+        $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
+        $state = $em->getRepository('SonataUserBundle:State')->findOneByCode('AZ');
+
+        $form = $this->createForm(new AddressType(), $entity, array('country' => $country, 'state' => $state));
         $form->bind($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
             // Add Address to User
             $user = $em->getRepository('SonataUserBundle:User')->find($userID);
             $user->setAddress($address);
@@ -58,9 +62,15 @@ class AddressController extends Controller {
      * @Template()
      */
     public function newAction($userID, $userName) {
+        $em = $this->getDoctrine()->getManager();
+        
         $entity = new Address();
-        $form = $this->createForm(new AddressType(), $entity);
+        
+        $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
+        $state = $em->getRepository('SonataUserBundle:State')->findOneByCode('AZ');
 
+        $form = $this->createForm(new AddressType(), $entity, array('country' => $country, 'state' => $state));
+        
         return array(
             'userName' => $userName,
             'userID' => $userID,

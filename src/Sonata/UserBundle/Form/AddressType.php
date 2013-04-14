@@ -9,12 +9,20 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class AddressType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        // initialize country to null if the order is unable to pull the address information
-        // key relationship may be damaged from cloning the original database
-        if ($options['data'] != null) {
+        // Check to see if Patient already has Address Information
+        // If not use Country and State from Controller for Preferred Choices
+        if ($options['data']->getId() != null) {
             $country = $options['data']->getCountry();
+            $state = $options['state'];
+        } elseif (isset($options['country']) && isset($options['state'])) {
+            $country = $options['country'];
+            $state = $options['state'];
+        } elseif (isset($options['country']) && !isset($options['state'])) {
+            $country = $options['country'];
+            $state = null;
         } else {
             $country = null;
+            $state = null;
         }
 
         $builder->add('address', null, array(
@@ -31,6 +39,7 @@ class AddressType extends AbstractType {
                     'label' => 'Country',
                     'required' => true,
                     'empty_value' => 'Please select a country',
+                    'preferred_choices' => (isset($country)) ? array($country):array(),
                 ))
                 ->add('state', 'entity', array(
                     'class' => 'SonataUserBundle:State',
@@ -39,7 +48,7 @@ class AddressType extends AbstractType {
                     'query_builder' => function ($repository) use ($country) {
                         $queryBuilder = $repository->createQueryBuilder('s')->select('s');
 
-                        if ($country != null) {
+                        if (isset($country)) {
                             $queryBuilder->where('s.country = :country')
                                          ->setParameter('country', $country);
                         }
@@ -48,6 +57,7 @@ class AddressType extends AbstractType {
                     },
                     'read_only' => false,
                     'label' => 'State/Providence:',
+                    'preferred_choices' => (isset($state)) ? array($state):array(),
                 ))
                 ->add('zipcode', null, array(
                     'label' => 'Zipcode:'
@@ -59,12 +69,14 @@ class AddressType extends AbstractType {
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Sonata\UserBundle\Entity\Address'
+            'data_class' => 'Sonata\UserBundle\Entity\Address',
+            'country' => null,
+            'state' => null,
         ));
     }
 
     public function getName() {
         return 'addressForm';
     }
-
+    
 }
