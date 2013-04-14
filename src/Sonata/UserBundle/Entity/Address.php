@@ -17,8 +17,6 @@ use Symfony\Component\Validator\ExecutionContext;
 class Address {
 
     /**
-     * @var integer $id
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -26,8 +24,6 @@ class Address {
     protected $id;
 
     /**
-     * @var string $address
-     *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Please enter a street address")
      * @Assert\Length(
@@ -39,52 +35,42 @@ class Address {
     protected $address;
 
     /**
-     * @var string $address2
-     *
      * @ORM\Column(name="address2", type="string", length=255, nullable=true)
      */
     protected $address2;
 
     /**
-     * @var string $city
-     *
      * @ORM\Column(name="city", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Please enter a city")
      */
     protected $city;
 
     /**
-     * @var string $state
-     *
      * @ORM\ManyToOne(targetEntity="State", fetch="EAGER")
      * @ORM\JoinColumn(name="stateID", referencedColumnName="id", nullable=true)
      */
     protected $state;
 
     /**
-     * @var string $country
-     *
      * @ORM\ManyToOne(targetEntity="Country",  fetch="EAGER")
-     * @ORM\JoinColumn(name="countryID", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="countryID", referencedColumnName="id", nullable=false)
      * @Assert\NotBlank(message="Please select a country")
      */
     protected $country;
 
     /**
-     * @var string $zipcode
-     *
      * @ORM\Column(name="zipcode", type="string", length=12, nullable=true)
      */
     protected $zipcode;
 
     /**
-     * @ORM\Column(name="phoneNumber", type="string", length=15, nullable=true)
+     * @ORM\Column(name="phoneNumber", type="string", length=15, nullable=false)
      * @Assert\Length(
      *      min = "7",
      *      max = "15",
      *      minMessage = "Phone number must be at least {{ limit }} characters long",
      *      maxMessage = "Phone number cannot be longer than than {{ limit }} characters long")
-     * @var string $phoneNumber
+     * @Assert\NotBlank(message="Please enter a phone number")
      */
     protected $phoneNumber;
 
@@ -259,20 +245,23 @@ class Address {
 
         if ($this->getCountry() != null) {
             if (($this->getCountry()->getCode() == "US" || $this->getCountry()->getCode() == "CA") && $this->getState() == null) {
-                $context->setPropertyPath($propertyPath);
-                $context->addViolation('Please select a state', array(), null);
-                return FALSE;
+                $context->addViolationAt($propertyPath, 'Please select a State', array(), null);
+                return false;
+            } else {
+                return true;
             }
         }
     }
 
     public function isZipcodeValid(ExecutionContext $context) {
+        $propertyPath = $context->getPropertyPath() . '.zipcode';
+        
         if ($this->getCountry() != null) {
             if ($this->getCountry()->getZipCodeRequired() && $this->getZipcode() == null) {
-                $propertyPath = $context->getPropertyPath() . '.zipcode';
-                $context->setPropertyPath($propertyPath);
-                $context->addViolation('Please enter a zipcode', array(), null);
-                return FALSE;
+                $context->addViolationAt($propertyPath, 'Please enter a Zipcode', array(), null);
+                return false;
+            } else {
+                return true;
             }
         }
     }

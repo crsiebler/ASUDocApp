@@ -38,22 +38,38 @@
                     <th>Address:</th>
                     <td>{{ user.getAddress().address }}</td>
                 </tr>
+                {% if user.getAddress().address2 is not null %}
+                    <tr>
+                        <th>Address (line 2):</th>
+                        <td>{{ user.getAddress().address2 }}</td>
+                    </tr>
+                {% endif %}
                 <tr>
-                    <th>Address (line 2):</th>
-                    <td>{{ user.getAddress().address2 }}</td>
+                    <th>Country:</th>
+                    <td>{{ user.getAddress().getCountry().name }}</td>
                 </tr>
+                {% if user.getAddress().getState() is not null %}
+                    <tr>
+                        <th>State:</th>
+                        <td>{{ user.getAddress().getState().name }}</td>
+                    </tr>
+                {% endif %}
                 <tr>
                     <th>City:</th>
                     <td>{{ user.getAddress().city }}</td>
                 </tr>
-                <tr>
-                    <th>Zipcode:</th>
-                    <td>{{ user.getAddress().zipcode }}</td>
-                </tr>
-                <tr>
-                    <th>Phone Number:</th>
-                    <td>{{ user.getAddress().phoneNumber|phone() }}</td>
-                </tr>
+                {% if user.getAddress().zipcode is not null %}
+                    <tr>
+                        <th>Zipcode:</th>
+                        <td>{{ user.getAddress().zipcode }}</td>
+                    </tr>
+                {% endif %}
+                {% if user.getAddress().phoneNumber is not null %}
+                    <tr>
+                        <th>Phone Number:</th>
+                        <td>{{ user.getAddress().phoneNumber|phone() }}</td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
     {% endif %}

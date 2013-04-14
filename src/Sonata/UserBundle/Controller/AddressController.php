@@ -30,9 +30,8 @@ class AddressController extends Controller {
         $address = new Address();
         
         $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
-        $state = $em->getRepository('SonataUserBundle:State')->findOneByCode('AZ');
 
-        $form = $this->createForm(new AddressType(), $entity, array('country' => $country, 'state' => $state));
+        $form = $this->createForm(new AddressType(), $address, array('prefCountry' => $country));
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -49,6 +48,8 @@ class AddressController extends Controller {
         }
 
         return array(
+            'userName' => $userName,
+            'userID' => $userID,
             'entity' => $address,
             'form' => $form->createView(),
         );
@@ -67,9 +68,8 @@ class AddressController extends Controller {
         $entity = new Address();
         
         $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
-        $state = $em->getRepository('SonataUserBundle:State')->findOneByCode('AZ');
 
-        $form = $this->createForm(new AddressType(), $entity, array('country' => $country, 'state' => $state));
+        $form = $this->createForm(new AddressType(), $entity, array('prefCountry' => $country));
         
         return array(
             'userName' => $userName,
@@ -118,7 +118,9 @@ class AddressController extends Controller {
             throw $this->createNotFoundException('Unable to find Address entity.');
         }
 
-        $editForm = $this->createForm(new AddressType(), $entity);
+        $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
+        
+        $editForm = $this->createForm(new AddressType(), $entity, array('prefCountry' => $country));
 
         return array(
             'userID' => $userID,
@@ -144,14 +146,16 @@ class AddressController extends Controller {
             throw $this->createNotFoundException('Unable to find Address entity.');
         }
 
-        $editForm = $this->createForm(new AddressType(), $entity);
+        $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
+        
+        $editForm = $this->createForm(new AddressType(), $entity, array('prefCountry' => $country));
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('address_edit', array('id' => $id, 'userID' => $userID, 'userName' => $userName)));
+            return $this->redirect($this->generateUrl('address_show', array('userID' => $userID, 'userName' => $userName, 'id' => $entity->getId())));
         }
 
         return array(

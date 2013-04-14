@@ -4,12 +4,14 @@ namespace Sonata\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
 
 class CountryController extends Controller {
 
     /**
      * @Route("/state", name="countryurl")
+     * @Method("POST")
      */
     public function stateChangeAction() {
         $request = $this->getRequest();
@@ -17,10 +19,9 @@ class CountryController extends Controller {
 
         if (is_numeric($countryID)) {
             $em = $this->getDoctrine()->getManager();
-            $country = $em->find('GhostArmorUserBundle:Country', $countryID);
+            $country = $em->find('SonataUserBundle:Country', $countryID);
 
-
-            $state = new \GhostArmor\UserBundle\Entity\State();
+            $state = new \Sonata\UserBundle\Entity\State();
 
             $jsonArray = array();
 
@@ -37,6 +38,7 @@ class CountryController extends Controller {
         }
 
         $response->headers->set('Content-Type', 'application/json');
+        
         return $response;
     }
 
