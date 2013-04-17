@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('select[id*="addressForm_country"]').change(function () {
+    $('select[id*="addressForm_country"]').click(function () {
         url = $(this).parent().parent().parent().parent().data('countryurl');
 
         $.ajax({

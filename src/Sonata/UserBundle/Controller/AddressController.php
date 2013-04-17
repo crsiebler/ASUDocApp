@@ -21,7 +21,7 @@ class AddressController extends Controller {
      * Creates a new Address entity.
      *
      * @Route("/create/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="address_create")
-     * @Method("POST")
+     * @Method({"GET", "POST"})
      * @Template("SonataUserBundle:Address:new.html.twig")
      */
     public function createAction(Request $request, $userID, $userName) {
@@ -30,7 +30,7 @@ class AddressController extends Controller {
         $address = new Address();
         
         $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
-
+        
         $form = $this->createForm(new AddressType(), $address, array('prefCountry' => $country));
         $form->bind($request);
 
@@ -140,28 +140,34 @@ class AddressController extends Controller {
     public function updateAction(Request $request, $id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataUserBundle:Address')->find($id);
+        $address = $em->getRepository('SonataUserBundle:Address')->find($id);
 
-        if (!$entity) {
+        if (!$address) {
             throw $this->createNotFoundException('Unable to find Address entity.');
         }
 
         $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
         
-        $editForm = $this->createForm(new AddressType(), $entity, array('prefCountry' => $country));
+        $editForm = $this->createForm(new AddressType(), $address, array('prefCountry' => $country));
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
-            $em->persist($entity);
+            // Add Address to User
+            $user = $em->getRepository('SonataUserBundle:User')->find($userID);
+            $user->setAddress($address);
+            $address->setUser($user);
+
+            $em->persist($address);
+            $em->persist($user);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('address_show', array('userID' => $userID, 'userName' => $userName, 'id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('address_show', array('userID' => $userID, 'userName' => $userName, 'id' => $address->getId())));
         }
 
         return array(
             'userID' => $userID,
             'userName' => $userName,
-            'entity' => $entity,
+            'entity' => $address,
             'edit_form' => $editForm->createView(),
         );
     }

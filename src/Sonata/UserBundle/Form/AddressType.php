@@ -41,7 +41,6 @@ class AddressType extends AbstractType {
                     'property' => 'name',
                     'empty_value' => 'Please select a state',
                     'required' => false,
-                    'disabled' => (isset($country) && $country->getStates()->isEmpty()) ? false:true,
                     'query_builder' => function ($repository) use ($country) {
                         $queryBuilder = $repository->createQueryBuilder('s')->select('s');
 
