@@ -9,8 +9,14 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class InsuranceType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('name')
-                ->add('groupPolicy');
+        $builder->add('name', null, array(
+                    'label' => "Name:",
+                    'required' => true,
+                ))
+                ->add('groupPolicy', null, array(
+                    'label' => "Group Policy:",
+                    'required' => true,
+                ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {

@@ -131,6 +131,7 @@
 {% elseif is_granted('ROLE_DOCTOR') %}
 {% elseif is_granted('ROLE_PATIENT') %}
     <li>
+        {# Address is OneToOne so Add or Edit check #}
         {% if user.getAddress() is null %}
             <a href="{{ path('address_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Address</a>
         {% else %}
@@ -146,6 +147,7 @@
         {% endif %}
     </li>
     <li>
+        {# Primary Doctor check to Add or Edit #}
         {% if user.getPrimaryDoctor() is null %}
             <a href="{{ path('add_primary_doctor', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Primary Doctor</a>
         {% else %}

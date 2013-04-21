@@ -26,11 +26,11 @@ class AddressController extends Controller {
      */
     public function createAction(Request $request, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
-        
+
         $address = new Address();
-        
+
         $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
-        
+
         $form = $this->createForm(new AddressType(), $address, array('prefCountry' => $country));
         $form->bind($request);
 
@@ -64,13 +64,15 @@ class AddressController extends Controller {
      */
     public function newAction($userID, $userName) {
         $em = $this->getDoctrine()->getManager();
-        
-        $entity = new Address();
-        
-        $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
 
-        $form = $this->createForm(new AddressType(), $entity, array('prefCountry' => $country));
+        $entity = new Address();  
+
+        // Set default country to United States
+        $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');      
+        $addres->setCountry($country);
         
+        $form = $this->createForm(new AddressType(), $entity, array());
+
         return array(
             'userName' => $userName,
             'userID' => $userID,
@@ -119,7 +121,7 @@ class AddressController extends Controller {
         }
 
         $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
-        
+
         $editForm = $this->createForm(new AddressType(), $entity, array('prefCountry' => $country));
 
         return array(
@@ -147,7 +149,7 @@ class AddressController extends Controller {
         }
 
         $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
-        
+
         $editForm = $this->createForm(new AddressType(), $address, array('prefCountry' => $country));
         $editForm->bind($request);
 
@@ -171,4 +173,5 @@ class AddressController extends Controller {
             'edit_form' => $editForm->createView(),
         );
     }
+
 }

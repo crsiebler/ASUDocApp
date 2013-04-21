@@ -187,15 +187,12 @@ class InsuranceController extends Controller {
         // Grab the currently Logged In User to determine where to send
         $currentUser = $this->get('security.context')->getToken()->getUser();
         
-        if ($currentUser->hasRoleByName('ROLE_PATIENT')) {
-            // If the Logged In User is a Patient then send to Patient Splash Page
-            $url = $this->container->get('router')->generate('user_patient_splash');
+        if (!$currentUser->hasRoleByName('ROLE_USER')) {
+            // If the User is logged in
+            $url = $this->container->get('router')->generate('user_splash');
         } elseif (isset($userID)) {
             // If the User ID is specified (Which is should) send to Patient Info Page
             $url = $this->container->get('router')->generate('user_show', array('id' => $userID));
-        } elseif ($currentUser->hasRoleByName('ROLE_ADMIN')) {
-            // If the Logged In user is an Office Admin then send to Admin Splash Page
-            $url = $this->container->get('router')->generate('user_admin_splash');
         } else {
             // If the User cannot the determined then return to homepage
             $url = $this->container->get('router')->generate('homepage');
