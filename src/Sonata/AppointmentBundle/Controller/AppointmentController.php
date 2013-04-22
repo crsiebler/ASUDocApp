@@ -163,7 +163,7 @@ class AppointmentController extends Controller {
 
     /**
      * Deletes a Appointment entity.
-     *
+     *  
      * @Route("/{id}", name="appointment_delete")
      * @Method("DELETE")
      */
@@ -196,8 +196,94 @@ class AppointmentController extends Controller {
     private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
                         ->add('id', 'hidden')
-                        ->getForm()
-        ;
+                        ->getForm();
+    }
+    
+    /**
+     * @Route("/bloodGlucose/new/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="blood_glucose_new")
+     * @Method({"GET", "POST"})
+     * @Template()
+     */
+    private function newGlucoseAction($userID, $userName) {
+        $request = $this->getRequest();
+        
+        $appointment = new Appointment();
+        $form = $this->createForm(new GlucoseType(), $appointment);
+        
+        if ("POST" === $request->getMethod()) {
+            $form->bind($request);
+            
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+
+                $user = $em->getRepository('SonataUserBundle:User')->findOneById($userID);
+
+                if (!$user) {
+                    throw $this->createNotFoundException('Unable to find User entity.');
+                }
+                
+                $user->getAppointments->add($appointment);
+                $appointment->setPatient($user);
+                
+                $em->persist($appointment);
+                $em->persist($user);
+                $em->flush();
+                
+                return $this->redirect($this->generateUrl('user_splash'));
+            }
+        }
+        
+        return array(
+            'userName' => $userName,
+            'userID' => $userID,
+            'entity' => $appointment,
+            'form' => $form->createView(),
+        );
+    }
+    
+    /**
+     * @Route("/bloodGlucose/show/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="blood_glucose_show")
+     * @Method("GET")
+     * @Template()
+     */
+    private function showGlucoseAction($userID, $userName) {
+        
+    }
+    
+    /**
+     * @Route("/weight/new/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="weight_new")
+     * @Method({"GET", "POST"})
+     * @Template()
+     */
+    private function newWeightAction($userID, $userName) {
+        
+    }
+    
+    /**
+     * @Route("/weight/show/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="weight_show")
+     * @Method({"GET", "POST"})
+     * @Template()
+     */
+    private function showWeightAction($userID, $userName) {
+        
+    }
+    
+    /**
+     * @Route("/bloodPressure/new/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="blood_pressure_new")
+     * @Method({"GET", "POST"})
+     * @Template()
+     */
+    private function newPressureAction($userID, $userName) {
+        
+    }
+    
+    /**
+     * @Route("/bloodPressure/show/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="blood_pressure_show")
+     * @Method({"GET", "POST"})
+     * @Template()
+     */
+    private function showPressureAction($userID, $userName) {
+        
     }
 
 }

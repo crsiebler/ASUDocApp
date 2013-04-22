@@ -4,49 +4,50 @@
 
 {% block content_content %}
 {{ parent() }}
-<table class="record_properties">
-    <tbody>
-        <tr>
-            <th>Date Expires:</th>
-            <td>{{ entity.dateExpires|date('Y-m-d H:i:s') }}</td>
-        </tr>
-        <tr>
-            <th>Date Prescribed:</th>
-            <td>{{ entity.datePrescribed|date('Y-m-d H:i:s') }}</td>
-        </tr>
-        <tr>
-            <th>Frequency:</th>
-            <td>{{ entity.frequency }}</td>
-        </tr>
-        <tr>
-            <th>Dosage:</th>
-            <td>{{ entity.dosage }}</td>
-        </tr>
-        <tr>
-            <th>Name:</th>
-            <td>{{ entity.name }}</td>
-        </tr>
-        <tr>
-            <th>Reason:</th>
-            <td>{{ entity.reason }}</td>
-        </tr>
-    </tbody>
-</table>
+{% for prescription in prescriptions %}
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Date Expires:</th>
+                <td>{{ prescription.dateExpires|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Date Prescribed:</th>
+                <td>{{ prescription.datePrescribed|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Frequency:</th>
+                <td>{{ prescription.frequency }}</td>
+            </tr>
+            <tr>
+                <th>Dosage:</th>
+                <td>{{ prescription.dosage }}</td>
+            </tr>
+            <tr>
+                <th>Name:</th>
+                <td>{{ prescription.name }}</td>
+            </tr>
+            <tr>
+                <th>Reason:</th>
+                <td>{{ prescription.reason }}</td>
+            </tr>
+        </tbody>
+    </table>
 
-<form action="{{ path('prescription_delete', { 'id': entity.id }) }}" method="post">
-    <input type="hidden" name="_method" value="DELETE" />
-    {{ form_widget(delete_form) }}
-    <button type="submit">Delete</button>
-</form>
+    <a href="{{ path('prescription_edit', { 'userID': userID, 'userName': userName, 'id': prescription.id }) }}" style="margin-left: 10px;">
+        <button type="submit">Edit</button>
+    </a>
+
+    <form action="{{ path('prescription_delete', { 'id': prescription.id }) }}" method="post" style="margin-top: 5px; margin-bottom: 10px;">
+        <input type="hidden" name="_method" value="DELETE" />
+        {{ form_widget(delete_form) }}
+        <button type="submit">Delete</button>
+    </form>
+{% endfor %}
 
 <ul class="record_actions">
     <li>
         <a href="{{ app.request.headers.get('referer') }}">Back</a>
-    </li>
-    <li>
-        <a href="{{ path('prescription_edit', { 'userID': userID, 'userName': userName, 'id': entity.id }) }}">
-            Edit
-        </a>
     </li>
     <li>
         <a href="{{ path('user_show', { 'id': userID }) }}">View Patient Page</a>

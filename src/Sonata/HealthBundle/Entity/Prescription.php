@@ -24,7 +24,7 @@ class Prescription {
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateExpires", type="date")
+     * @ORM\Column(name="dateExpires", type="date", nullable=true)
      */
     private $dateExpires;
 
@@ -69,10 +69,6 @@ class Prescription {
      */
     private $patient;
 
-    public function __constructor() {
-        $this->datePrescribed = \DateTime("today");
-    }
-    
     /**
      * Get id
      *

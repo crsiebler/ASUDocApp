@@ -35,11 +35,13 @@ class PrescriptionController extends Controller {
             
             // Add Prescription to User
             $user = $em->getRepository('SonataUserBundle:User')->find($userID);
-            $user->getAllergies()->add($prescription);
+            $user->getPrescriptions()->add($prescription);
             $prescription->setPatient($user);
             
+            $prescription->setDatePrescribed(new \DateTime("now"));
+            
             $em->persist($prescription);
-            $em->presist($user);
+            $em->persist($user);
             $em->flush();
 
             return $this->redirect($this->generateUrl('prescription_show', array('userID' => $userID, 'userName' => $userName, 'id' => $prescription->getId())));
@@ -211,8 +213,7 @@ class PrescriptionController extends Controller {
     private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
                         ->add('id', 'hidden')
-                        ->getForm()
-        ;
+                        ->getForm();
     }
 
 }

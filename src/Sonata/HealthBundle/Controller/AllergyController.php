@@ -212,8 +212,7 @@ class AllergyController extends Controller {
     private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
                         ->add('id', 'hidden')
-                        ->getForm()
-        ;
+                        ->getForm();
     }
 
 }

@@ -95,8 +95,8 @@
             <tbody>
                 {% for allergy in user.getAllergies().empty() %}
                     <tr>
-                        <th></th>
-                        <td></td>
+                        <th>Type:</th>
+                        <td>{{ allergy.getType() }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -105,16 +105,37 @@
 
     {% if not user.getPrescriptions().empty() %}
         <h3>Prescription Information</h3>
-        <table class="record_proerties">
-            <tbody>
-                {% for prescription in user.getPrescriptions() %}
+        {% for prescription in user.getPrescriptions() %}
+            <table class="record_proerties">
+                <tbody>
                     <tr>
-                        <th></th>
-                        <td></td>
+                        <th>Name:</th>
+                        <td>{{ prescription.name }}</td>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    <tr>
+                        <th>Frequency:</th>
+                        <td>{{ prescription.frequency }}</td>
+                    </tr>
+                    <tr>
+                        <th>Dosage:</th>
+                        <td>{{ prescription.dosage }}</td>
+                    </tr>
+                    <tr>
+                        <th>Reason:</th>
+                        <td>{{ prescription.reason }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date Prescribed</th>
+                        <td>{{ prescription.datePrescribed|date('Y-m-d H:i:s') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date Expires</th>
+                        <td>{{ prescription.dateExpires|date('Y-m-d H:i:s') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+        {% endfor %}
     {% endif %}
 
 {% endif %}
@@ -169,14 +190,29 @@
         </li>
     {% endif %}
     <li>
-        Add Blood Pressure Reading
+        <a href="{{ path('blood_pressure_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Blood Pressure Reading</a>
     </li>
+    {% if not user.getAppointments().empty() %}
+        <li>
+            <a href="{{ path('blood_pressure_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Blood Pressure Readings</a>
+        </li>
+    {% endif %}
     <li>
-        Add Blood Glucose Levels
+        <a href="{{ path('blood_glucose_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Blood Glucose Levels</a>
     </li>
+    {% if not user.getAppointments().empty() %}
+        <li>
+            <a href="{{ path('blood_glucose_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Blood Glucose Levels</a>
+        </li>
+    {% endif %}
     <li>
-        Add Weight
+        <a href="{{ path('weight_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Weight</a>
     </li>
+    {% if not user.getAppointments().empty() %}
+        <li>
+            <a href="{{ path('weight_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Weight Trends</a>
+        </li>
+    {% endif %}
 {% endif %}
 </ul>
 {% endblock content_sidebar %}
