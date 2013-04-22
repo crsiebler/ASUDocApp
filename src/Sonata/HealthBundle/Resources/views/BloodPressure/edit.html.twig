@@ -12,19 +12,18 @@
     </p>
 </form>
 
+<form action="{{ path('bloodpressure_delete', { 'id': entity.id }) }}" method="post">
+    <input type="hidden" name="_method" value="DELETE" />
+    {{ form_widget(delete_form) }}
+    <button type="submit">Delete</button>
+</form>
+
 <ul class="record_actions">
-    <li>
-        <a href="{{ path('bloodpressure') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('bloodpressure_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
+    {% if is_granted('ROLE_USER') %}
+        <li>
+            <a href="{{ path('user_splash') }}">View Splash Page</a>
+        </li>
+    {% endif %}
 </ul>
 {% endblock content_content %}
 

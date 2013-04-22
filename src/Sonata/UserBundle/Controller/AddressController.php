@@ -65,18 +65,18 @@ class AddressController extends Controller {
     public function newAction($userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = new Address();  
+        $address = new Address();  
 
         // Set default country to United States
         $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');      
-        $addres->setCountry($country);
+        $address->setCountry($country);
         
-        $form = $this->createForm(new AddressType(), $entity, array());
+        $form = $this->createForm(new AddressType(), $address, array());
 
         return array(
             'userName' => $userName,
             'userID' => $userID,
-            'entity' => $entity,
+            'entity' => $address,
             'form' => $form->createView(),
         );
     }
