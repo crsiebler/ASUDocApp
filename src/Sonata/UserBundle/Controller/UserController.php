@@ -98,21 +98,104 @@ class UserController extends Controller {
     }
     
     /**
-     * @Route("/add/PrimaryDoctor/{userName}/{userID}", requirements={"userID" = "\d+"}, defaults={"userName" = null, "userID" = 0}, name="add_primary_doctor")
+     * @Route("/add/PrimaryDoctor/{userName}/{userID}", requirements={"userID" = "\d+"}, defaults={"userName" = null, "userID" = 0}, name="new_primary_doctor")
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function addPrimaryDoctorAction() {
-        return array();
+    public function newPrimaryDoctorAction($userName, $userID) {
+        $request = $this->getRequest();
+        
+        if ('POST' === $request->getMethod()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $user = $em->getRepository('SonataUserBundle:User')->findOneById($userID);
+
+            if (!$user) {
+                throw $this->createNotFoundException('Unable to find User entity.');
+            }
+            
+            $primaryDoctor = $request->request->get('name');
+
+            // If Primary Doctor is set then sanitize input and persist to database
+            // Need to sanitize since Symfony is not processing the data.
+            if (isset($primaryDoctor) && is_string($primaryDoctor)) {
+                $primaryDoctor = filter_var($primaryDoctor, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+                
+                if (false !== $primaryDoctor) {
+                    $user->setPrimaryDoctor($primaryDoctor);
+
+                    $em->persist($user);
+                    $em->flush();
+                } else {
+                    // User entered invalid data, return to form submission
+                    return array(
+                        'userName' => $userName,
+                        'userID' => $userID,
+                    );
+                }
+                
+                // Redirect to User splash
+                $url = $this->container->get('router')->generate('user_splash');
+
+                return new RedirectResponse($url);
+            }
+        }
+        
+        return array(
+            'userName' => $userName,
+            'userID' => $userID,
+        );
     }
     
     /**
-     * @Route("/edit/PrimaryDoctor/{userName}/{userID}", requirements={"userID" = "\d+"}, defaults={"userName" = null, "userID" = 0}, name="edit_primary_doctor")
+     * @Route("/edit/PrimaryDoctor/{primaryDoctor}/{userName}/{userID}",requirements={"userID" = "\d+"}, defaults={"primaryDoctor" = null, "userName" = null, "userID" = 0}, name="edit_primary_doctor")
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function editPrimaryDoctorAction() {
-        return array();
+    public function editPrimaryDoctorAction($primaryDoctor, $userName, $userID) {
+        $request = $this->getRequest();
+        
+        if ('POST' === $request->getMethod()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $user = $em->getRepository('SonataUserBundle:User')->findOneById($userID);
+
+            if (!$user) {
+                throw $this->createNotFoundException('Unable to find User entity.');
+            }
+            
+            $primaryDoctor = $request->request->get('name');
+
+            // If Primary Doctor is set then sanitize input and persist to database
+            // Need to sanitize since Symfony is not processing the data.
+            if (isset($primaryDoctor) && is_string($primaryDoctor)) {
+                $primaryDoctor = filter_var($primaryDoctor, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+                
+                if (false !== $primaryDoctor) {
+                    $user->setPrimaryDoctor($primaryDoctor);
+
+                    $em->persist($user);
+                    $em->flush();
+                } else {
+                    // User entered invalid data, return to form submission
+                    return array(
+                        'userName' => $userName,
+                        'userID' => $userID,
+                    );
+                }
+                
+                // Redirect to User splash
+                $url = $this->container->get('router')->generate('user_splash');
+            
+                return new RedirectResponse($url);
+            }
+        }
+        
+        return array(
+            'primaryDoctor' => $primaryDoctor,
+            'userName' => $userName,
+            'userID' => $userID,
+        );
     }
 
     /**
@@ -122,9 +205,10 @@ class UserController extends Controller {
      */
     public function splashAction() {
         $user = $this->get('security.context')->getToken()->getUser();
-
+        
         return array(
             'user' => $user,
+            'primaryDoctor' => $user->getPrimaryDoctor(),
         );
     }
 

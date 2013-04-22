@@ -3,6 +3,7 @@
 namespace Sonata\HealthBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -18,44 +19,35 @@ use Sonata\HealthBundle\Form\AllergyType;
 class AllergyController extends Controller {
 
     /**
-     * Lists all Allergy entities.
-     *
-     * @Route("/", name="allergy")
-     * @Method("GET")
-     * @Template()
-     */
-    public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('SonataHealthBundle:Allergy')->findAll();
-
-        return array(
-            'entities' => $entities,
-        );
-    }
-
-    /**
      * Creates a new Allergy entity.
      *
-     * @Route("/", name="allergy_create")
+     * @Route("/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="allergy_create")
      * @Method("POST")
      * @Template("SonataHealthBundle:Allergy:new.html.twig")
      */
-    public function createAction(Request $request) {
-        $entity = new Allergy();
-        $form = $this->createForm(new AllergyType(), $entity);
+    public function createAction(Request $request, $userID, $userName) {
+        $allergy = new Allergy();
+        $form = $this->createForm(new AllergyType(), $allergy);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            
+            // Add Allergy to User
+            $user = $em->getRepository('SonataUserBundle:User')->find($userID);
+            $user->getAllergies()->add($allergy);
+            
+            $em->persist($allergy);
+            $em->persist($user);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('allergy_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('allergy_show', array('userID' => $userID, 'userName' => $userName, 'id' => $allergy->getId())));
         }
 
         return array(
-            'entity' => $entity,
+            'userName' => $userName,
+            'userID' => $userID,
+            'entity' => $allergy,
             'form' => $form->createView(),
         );
     }
@@ -63,15 +55,17 @@ class AllergyController extends Controller {
     /**
      * Displays a form to create a new Allergy entity.
      *
-     * @Route("/new", name="allergy_new")
+     * @Route("/new/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="allergy_new")
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction($userID, $userName) {
         $entity = new Allergy();
         $form = $this->createForm(new AllergyType(), $entity);
 
         return array(
+            'userName' => $userName,
+            'userID' => $userID,
             'entity' => $entity,
             'form' => $form->createView(),
         );
@@ -80,11 +74,11 @@ class AllergyController extends Controller {
     /**
      * Finds and displays a Allergy entity.
      *
-     * @Route("/{id}", name="allergy_show")
+     * @Route("/show/{id}/{userID}/{userName}", requirements={"id" = "\d+", "userID" = "\d+"}, defaults={"userName" = null}, name="allergy_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id) {
+    public function showAction($id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataHealthBundle:Allergy')->find($id);
@@ -96,6 +90,8 @@ class AllergyController extends Controller {
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
+            'userID' => $userID,
+            'userName' => $userName,
             'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
@@ -104,11 +100,11 @@ class AllergyController extends Controller {
     /**
      * Displays a form to edit an existing Allergy entity.
      *
-     * @Route("/{id}/edit", name="allergy_edit")
+     * @Route("/edit/{id}/{userID}/{userName}", requirements={"userID" = "\d+", "id" = "\d+"}, defaults={"userName" = null}, name="allergy_edit")
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id) {
+    public function editAction($id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataHealthBundle:Allergy')->find($id);
@@ -121,6 +117,8 @@ class AllergyController extends Controller {
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
+            'userID' => $userID,
+            'userName' => $userName,
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -130,11 +128,11 @@ class AllergyController extends Controller {
     /**
      * Edits an existing Allergy entity.
      *
-     * @Route("/{id}", name="allergy_update")
+     * @Route("/update/{id}/{userID}/{userName}", requirements={"userID" = "\d+", "id" = "\d+"}, defaults={"userName" = null}, name="allergy_update")
      * @Method("PUT")
      * @Template("SonataHealthBundle:Allergy:edit.html.twig")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataHealthBundle:Allergy')->find($id);
@@ -151,10 +149,12 @@ class AllergyController extends Controller {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('allergy_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('allergy_edit', array('id' => $id, 'userID' => $userID, 'userName' => $userName)));
         }
 
         return array(
+            'userID' => $userID,
+            'userName' => $userName,
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -183,7 +183,18 @@ class AllergyController extends Controller {
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('allergy'));
+        // Grab the currently Logged In User to determine where to send
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+        
+        if (!$currentUser->hasRoleByName('ROLE_USER')) {
+            // If the User is logged in
+            $url = $this->container->get('router')->generate('user_splash');
+        } else {
+            // If the User cannot the determined then return to homepage
+            $url = $this->container->get('router')->generate('homepage');
+        }
+
+        return new RedirectResponse($url);
     }
 
     /**

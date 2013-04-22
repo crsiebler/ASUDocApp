@@ -190,9 +190,6 @@ class InsuranceController extends Controller {
         if (!$currentUser->hasRoleByName('ROLE_USER')) {
             // If the User is logged in
             $url = $this->container->get('router')->generate('user_splash');
-        } elseif (isset($userID)) {
-            // If the User ID is specified (Which is should) send to Patient Info Page
-            $url = $this->container->get('router')->generate('user_show', array('id' => $userID));
         } else {
             // If the User cannot the determined then return to homepage
             $url = $this->container->get('router')->generate('homepage');

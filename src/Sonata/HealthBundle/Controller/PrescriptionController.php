@@ -3,6 +3,7 @@
 namespace Sonata\HealthBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -18,44 +19,35 @@ use Sonata\HealthBundle\Form\PrescriptionType;
 class PrescriptionController extends Controller {
 
     /**
-     * Lists all Prescription entities.
-     *
-     * @Route("/", name="prescription")
-     * @Method("GET")
-     * @Template()
-     */
-    public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('SonataHealthBundle:Prescription')->findAll();
-
-        return array(
-            'entities' => $entities,
-        );
-    }
-
-    /**
      * Creates a new Prescription entity.
      *
-     * @Route("/", name="prescription_create")
+     * @Route("/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="prescription_create")
      * @Method("POST")
      * @Template("SonataHealthBundle:Prescription:new.html.twig")
      */
-    public function createAction(Request $request) {
-        $entity = new Prescription();
-        $form = $this->createForm(new PrescriptionType(), $entity);
+    public function createAction(Request $request, $userID, $userName) {
+        $prescription = new Prescription();
+        $form = $this->createForm(new PrescriptionType(), $prescription);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            
+            // Add Prescription to User
+            $user = $em->getRepository('SonataUserBundle:User')->find($userID);
+            $user->getAllergies()->add($prescription);
+            
+            $em->persist($prescription);
+            $em->presist($user);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('prescription_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('prescription_show', array('userID' => $userID, 'userName' => $userName, 'id' => $prescription->getId())));
         }
 
         return array(
-            'entity' => $entity,
+            'userName' => $userName,
+            'userID' => $userID,
+            'entity' => $prescription,
             'form' => $form->createView(),
         );
     }
@@ -63,7 +55,7 @@ class PrescriptionController extends Controller {
     /**
      * Displays a form to create a new Prescription entity.
      *
-     * @Route("/new", name="prescription_new")
+     * @Route("/new/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="prescription_new")
      * @Method("GET")
      * @Template()
      */
@@ -72,6 +64,8 @@ class PrescriptionController extends Controller {
         $form = $this->createForm(new PrescriptionType(), $entity);
 
         return array(
+            'userName' => $userName,
+            'userID' => $userID,
             'entity' => $entity,
             'form' => $form->createView(),
         );
@@ -80,11 +74,11 @@ class PrescriptionController extends Controller {
     /**
      * Finds and displays a Prescription entity.
      *
-     * @Route("/{id}", name="prescription_show")
+     * @Route("/show/{id}/{userID}/{userName}", requirements={"id" = "\d+", "userID" = "\d+"}, defaults={"userName" = null}, name="prescription_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id) {
+    public function showAction($id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataHealthBundle:Prescription')->find($id);
@@ -96,6 +90,8 @@ class PrescriptionController extends Controller {
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
+            'userID' => $userID,
+            'userName' => $userName,
             'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
@@ -104,11 +100,11 @@ class PrescriptionController extends Controller {
     /**
      * Displays a form to edit an existing Prescription entity.
      *
-     * @Route("/{id}/edit", name="prescription_edit")
+     * @Route("/edit/{id}/{userID}/{userName}", requirements={"userID" = "\d+", "id" = "\d+"}, defaults={"userName" = null}, name="prescription_edit")
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id) {
+    public function editAction($id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataHealthBundle:Prescription')->find($id);
@@ -121,6 +117,8 @@ class PrescriptionController extends Controller {
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
+            'userID' => $userID,
+            'userName' => $userName,
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -130,11 +128,11 @@ class PrescriptionController extends Controller {
     /**
      * Edits an existing Prescription entity.
      *
-     * @Route("/{id}", name="prescription_update")
+     * @Route("/update/{id}/{userID}/{userName}", requirements={"userID" = "\d+", "id" = "\d+"}, defaults={"userName" = null}, name="prescription_update")
      * @Method("PUT")
      * @Template("SonataHealthBundle:Prescription:edit.html.twig")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id, $userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataHealthBundle:Prescription')->find($id);
@@ -151,10 +149,12 @@ class PrescriptionController extends Controller {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('prescription_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('prescription_edit', array('id' => $id, 'userID' => $userID, 'userName' => $userName)));
         }
 
         return array(
+            'userID' => $userID,
+            'userName' => $userName,
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -183,7 +183,18 @@ class PrescriptionController extends Controller {
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('prescription'));
+        // Grab the currently Logged In User to determine where to send
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+        
+        if (!$currentUser->hasRoleByName('ROLE_USER')) {
+            // If the User is logged in
+            $url = $this->container->get('router')->generate('user_splash');
+        } else {
+            // If the User cannot the determined then return to homepage
+            $url = $this->container->get('router')->generate('homepage');
+        }
+
+        return new RedirectResponse($url);
     }
 
     /**

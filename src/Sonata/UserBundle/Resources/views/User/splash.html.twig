@@ -149,9 +149,9 @@
     <li>
         {# Primary Doctor check to Add or Edit #}
         {% if user.getPrimaryDoctor() is null %}
-            <a href="{{ path('add_primary_doctor', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Primary Doctor</a>
+            <a href="{{ path('new_primary_doctor', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Primary Doctor</a>
         {% else %}
-            <a href="{{ path('edit_primary_doctor', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Primary Doctor</a>
+            <a href="{{ path('edit_primary_doctor', { 'primaryDoctor': primaryDoctor, 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Primary Doctor</a>
         {% endif %}
     </li>
     <li>
