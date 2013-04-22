@@ -93,10 +93,10 @@
         <h3>Allergy Information</h3>
         <table class="record_proerties">
             <tbody>
-                {% for allergy in user.getAllergies().empty() %}
+                {% for allergy in user.getAllergies() %}
                     <tr>
                         <th>Type:</th>
-                        <td>{{ allergy.getType() }}</td>
+                        <td>{{ allergy.type }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -137,7 +137,6 @@
             <br>
         {% endfor %}
     {% endif %}
-
 {% endif %}
 {% endblock content_content %}
 
