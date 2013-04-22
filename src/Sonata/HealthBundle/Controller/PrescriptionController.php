@@ -60,7 +60,7 @@ class PrescriptionController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction($userName, $userID) {
         $entity = new Prescription();
         $form = $this->createForm(new PrescriptionType(), $entity);
 
@@ -75,25 +75,26 @@ class PrescriptionController extends Controller {
     /**
      * Finds and displays a Prescription entity.
      *
-     * @Route("/show/{id}/{userID}/{userName}", requirements={"id" = "\d+", "userID" = "\d+"}, defaults={"userName" = null}, name="prescription_show")
+     * @Route("/show/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="prescription_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id, $userID, $userName) {
+    public function showAction($userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataHealthBundle:Prescription')->find($id);
+        $prescriptions = $em->getRepository('SonataHealthBundle:Prescription')->findAll();
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Prescription entity.');
+        if (!$prescriptions) {
+            throw $this->createNotFoundException('Unable to find Prescriptions.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        foreach ($prescriptions as $prescription)
+        $deleteForm = $this->createDeleteForm($prescription->getId());
 
         return array(
             'userID' => $userID,
             'userName' => $userName,
-            'entity' => $entity,
+            'prescriptions' => $prescriptions,
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -187,9 +188,11 @@ class PrescriptionController extends Controller {
         // Grab the currently Logged In User to determine where to send
         $currentUser = $this->get('security.context')->getToken()->getUser();
         
-        if (!$currentUser->hasRoleByName('ROLE_USER')) {
+        if ($currentUser->hasRoleByName('ROLE_PATIENT')) {
             // If the User is logged in
             $url = $this->container->get('router')->generate('user_splash');
+        } elseif ($currentUser->hasRoleByName('ROLE_USER')) {
+            $url = $this->container->get('router')->generate('user_show', $entity->getPatient()->getId());
         } else {
             // If the User cannot the determined then return to homepage
             $url = $this->container->get('router')->generate('homepage');

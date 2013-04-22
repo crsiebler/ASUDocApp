@@ -41,6 +41,9 @@
 
 <ul class="record_actions">
     <li>
+        <a href="{{ app.request.headers.get('referer') }}">Back</a>
+    </li>
+    <li>
         <a href="{{ path('prescription_edit', { 'userID': userID, 'userName': userName, 'id': entity.id }) }}">
             Edit
         </a>

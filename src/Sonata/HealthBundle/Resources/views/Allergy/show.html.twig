@@ -1,29 +1,31 @@
 {% extends '::base.html.twig' %}
 
-{% block headline %}Allergy{% if userName is not null %} for {{ userName }}{% endif %}{% endblock headline %}
+{% block headline %}Allergies {% if userName is not null %} for {{ userName }}{% endif %}{% endblock headline %}
 
 {% block content_content %}
 {{ parent() }}
 <table class="record_properties">
     <tbody>
-        <tr>
-            <th>Type:</th>
-            <td>{{ entity.type }}</td>
-        </tr>
+        {% for allergy in allergies %}
+            <tr>
+                <th>Type:</th>
+                <td>{{ allergy.type }}</td>
+                <td><a href="{{ path('allergy_edit', { 'userID': userID, 'userName': userName, 'id': allergy.id }) }}"><button type="submit">Edit</button></a></td>
+                <td>
+                    <form action="{{ path('allergy_delete', { 'id': allergy.id }) }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE" />
+                        {{ form_widget(delete_forms[loop.index0].createView()) }}
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
     </tbody>
 </table>
 
-<form action="{{ path('allergy_delete', { 'id': entity.id }) }}" method="post">
-    <input type="hidden" name="_method" value="DELETE" />
-    {{ form_widget(delete_form) }}
-    <button type="submit">Delete</button>
-</form>
-
 <ul class="record_actions">
     <li>
-        <a href="{{ path('allergy_edit', { 'userID': userID, 'userName': userName, 'id': entity.id }) }}">
-            Edit
-        </a>
+        <a href="{{ app.request.headers.get('referer') }}">Back</a>
     </li>
     <li>
         <a href="{{ path('user_show', { 'id': userID }) }}">View Patient Page</a>

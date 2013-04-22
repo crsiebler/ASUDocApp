@@ -5,8 +5,7 @@
 {# !!! BODY CONTENT !!! #}
 {% block content_content %}
 {{ parent() }}
-{% if is_granted('ROLE_SITE-ADMIN') %}
-{% elseif is_granted('ROLE_DOCTOR') %}
+{% if is_granted('ROLE_DOCTOR') or is_granted('ROLE_NURSE') or is_granted('ROLE_EMT') or is_granted('ROLE_ADMIN') %}
 {% elseif is_granted('ROLE_PATIENT') %}
     <h3>Patient Information</h3>
     <table class="record_properties">
@@ -117,9 +116,7 @@
             </tbody>
         </table>
     {% endif %}
-{% elseif is_granted('ROLE_NURSE') %}
-{% elseif is_granted('ROLE_EMT') %}
-{% elseif is_granted('ROLE_ADMIN') %}
+
 {% endif %}
 {% endblock content_content %}
 
@@ -127,8 +124,7 @@
 {% block content_sidebar %}
 <h2>Actions</h2>
 <ul>
-{% if is_granted('ROLE_SITE-ADMIN') %}
-{% elseif is_granted('ROLE_DOCTOR') %}
+{% if is_granted('ROLE_DOCTOR') or is_granted('ROLE_NURSE') or is_granted('ROLE_EMT') or is_granted('ROLE_ADMIN') %}
 {% elseif is_granted('ROLE_PATIENT') %}
     <li>
         {# Address is OneToOne so Add or Edit check #}
@@ -161,8 +157,6 @@
     {% if not user.getAllergies().empty() %}
         <li>
             <a href="{{ path('allergy_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Allergies</a>
-        <li>
-            <a href="{{ path('allergy_edit', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Allergies</a>
         </li>
     {% endif %}
     <li>
@@ -172,8 +166,6 @@
     {% if not user.getPrescriptions().empty() %}
         <li>
             <a href="{{ path('prescription_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Prescriptions</a>
-        <li>
-            <a href="{{ path('prescription_edit', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Prescriptions</a>
         </li>
     {% endif %}
     <li>
@@ -185,9 +177,6 @@
     <li>
         Add Weight
     </li>
-{% elseif is_granted('ROLE_NURSE') %}
-{% elseif is_granted('ROLE_EMT') %}
-{% elseif is_granted('ROLE_ADMIN') %}
 {% endif %}
 </ul>
 {% endblock content_sidebar %}

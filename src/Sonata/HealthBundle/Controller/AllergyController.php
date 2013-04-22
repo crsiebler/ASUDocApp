@@ -75,26 +75,28 @@ class AllergyController extends Controller {
     /**
      * Finds and displays a Allergy entity.
      *
-     * @Route("/show/{id}/{userID}/{userName}", requirements={"id" = "\d+", "userID" = "\d+"}, defaults={"userName" = null}, name="allergy_show")
+     * @Route("/show/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="allergy_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id, $userID, $userName) {
+    public function showAction($userID, $userName) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataHealthBundle:Allergy')->find($id);
+        $allergies = $em->getRepository('SonataHealthBundle:Allergy')->findAll();
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Allergy entity.');
+        if (!$allergies) {
+            throw $this->createNotFoundException('Unable to find Allergies.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        foreach ($allergies as $allergy) {
+            $deleteForms[] = $this->createDeleteForm($allergy->getId());
+        }
 
         return array(
             'userID' => $userID,
             'userName' => $userName,
-            'entity' => $entity,
-            'delete_form' => $deleteForm->createView(),
+            'allergies' => $allergies,
+            'delete_forms' => $deleteForms,
         );
     }
 
@@ -187,9 +189,11 @@ class AllergyController extends Controller {
         // Grab the currently Logged In User to determine where to send
         $currentUser = $this->get('security.context')->getToken()->getUser();
         
-        if (!$currentUser->hasRoleByName('ROLE_USER')) {
+        if ($currentUser->hasRoleByName('ROLE_PATIENT')) {
             // If the User is logged in
             $url = $this->container->get('router')->generate('user_splash');
+        } elseif ($currentUser->hasRoleByName('ROLE_USER')) {
+            $url = $this->container->get('router')->generate('user_show', $entity->getPatient()->getId());
         } else {
             // If the User cannot the determined then return to homepage
             $url = $this->container->get('router')->generate('homepage');

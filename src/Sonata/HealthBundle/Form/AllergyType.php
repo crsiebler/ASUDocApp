@@ -9,9 +9,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class AllergyType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder
-                ->add('type')
-        ;
+        $builder->add('type', null, array(
+                    'label' => "Type:",
+                    'required' => true,
+                ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {

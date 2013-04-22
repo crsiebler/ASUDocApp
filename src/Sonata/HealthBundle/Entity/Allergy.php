@@ -33,7 +33,7 @@ class Allergy {
      * @ORM\JoinColumn(name="patientID", referencedColumnName="id", nullable=false)
      */
     private $patient;
-
+    
     /**
      * Get id
      *
