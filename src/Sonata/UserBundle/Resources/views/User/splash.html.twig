@@ -166,12 +166,14 @@
         </li>
     {% endif %}
     <li>
-        Add Prescription
+        <a href="{{ path('prescription_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Prescription</a>
     </li>
     {# check to see if user has any Prescriptions to edit #}
     {% if not user.getPrescriptions().empty() %}
         <li>
-            Edit Prescriptions
+            <a href="{{ path('prescription_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Prescriptions</a>
+        <li>
+            <a href="{{ path('prescription_edit', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Prescriptions</a>
         </li>
     {% endif %}
     <li>

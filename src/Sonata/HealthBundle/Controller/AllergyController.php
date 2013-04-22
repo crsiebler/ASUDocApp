@@ -36,6 +36,7 @@ class AllergyController extends Controller {
             // Add Allergy to User
             $user = $em->getRepository('SonataUserBundle:User')->find($userID);
             $user->getAllergies()->add($allergy);
+            $allergy->setPatient($user);
             
             $em->persist($allergy);
             $em->persist($user);

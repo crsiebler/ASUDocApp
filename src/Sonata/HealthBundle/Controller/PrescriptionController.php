@@ -36,6 +36,7 @@ class PrescriptionController extends Controller {
             // Add Prescription to User
             $user = $em->getRepository('SonataUserBundle:User')->find($userID);
             $user->getAllergies()->add($prescription);
+            $prescription->setPatient($user);
             
             $em->persist($prescription);
             $em->presist($user);
