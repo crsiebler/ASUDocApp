@@ -1,10 +1,10 @@
 {% extends '::base.html.twig' %}
 
-{% block headline %}Add Prescription{% endblock headline %}
+{% block headline %}Adding Prescription{% if userName is not null %} for {{ userName }}{% endif %}{% endblock headline %}
 
 {% block content_content %}
 {{ parent() }}
-<form action="{{ path('prescription_create') }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('prescription_create', { 'userName': userName, 'userID': userID }) }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
         <button type="submit">Create</button>
@@ -12,6 +12,12 @@
 </form>
 
 <ul class="record_actions">
+    <li>
+        <a href="{{ app.request.headers.get('referer') }}">Back</a>
+    </li>
+    <li>
+        <a href="{{ path('user_show', { 'id': userID }) }}">View Patient Page</a>
+    </li>
     {% if is_granted('ROLE_USER') %}
         <li>
             <a href="{{ path('user_splash') }}">View Splash Page</a>

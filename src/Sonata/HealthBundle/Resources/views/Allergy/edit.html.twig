@@ -1,10 +1,10 @@
 {% extends '::base.html.twig' %}
 
-{% block headline %}Edit Allergy #{{ entity.id }}{% endblock headline %}
+{% block headline %}Editing Allergy{% if userName is not null %} for {{ userName }}{% endif %}{% endblock headline %}
 
 {% block content_content %}
 {{ parent() }}
-<form action="{{ path('allergy_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+<form action="{{ path('allergy_update', { 'id': entity.id, 'userID': userID, 'userName': userName }) }}" method="post" {{ form_enctype(edit_form) }}>
     <input type="hidden" name="_method" value="PUT" />
     {{ form_widget(edit_form) }}
     <p>
@@ -19,6 +19,12 @@
 </form>
 
 <ul class="record_actions">
+    <li>
+        <a href="{{ app.request.headers.get('referer') }}">Back</a>
+    </li>
+    <li>
+        <a href="{{ path("user_show", { 'id': userID }) }}">View Patient Page</a>
+    </li>
     {% if is_granted('ROLE_USER') %}
         <li>
             <a href="{{ path('user_splash') }}">View Splash Page</a>
