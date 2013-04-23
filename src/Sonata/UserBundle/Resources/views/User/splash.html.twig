@@ -125,11 +125,11 @@
                         <td>{{ prescription.reason }}</td>
                     </tr>
                     <tr>
-                        <th>Date Prescribed</th>
+                        <th>Date Prescribed:</th>
                         <td>{{ prescription.datePrescribed|date('Y-m-d H:i:s') }}</td>
                     </tr>
                     <tr>
-                        <th>Date Expires</th>
+                        <th>Date Expires:</th>
                         <td>{{ prescription.dateExpires|date('Y-m-d H:i:s') }}</td>
                     </tr>
                 </tbody>
@@ -176,7 +176,7 @@
     {# check to see if user has any Allergies to edit #}
     {% if not user.getAllergies().empty() %}
         <li>
-            <a href="{{ path('allergy_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Allergies</a>
+            <a href="{{ path('allergy_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show/Edit Allergies</a>
         </li>
     {% endif %}
     <li>
@@ -185,7 +185,7 @@
     {# check to see if user has any Prescriptions to edit #}
     {% if not user.getPrescriptions().empty() %}
         <li>
-            <a href="{{ path('prescription_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Prescriptions</a>
+            <a href="{{ path('prescription_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show/Edit Prescriptions</a>
         </li>
     {% endif %}
     <li>

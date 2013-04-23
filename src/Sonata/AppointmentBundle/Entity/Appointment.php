@@ -27,6 +27,13 @@ class Appointment {
      * @ORM\Column(name="dateOf", type="datetime")
      */
     private $dateOf;
+    
+    /**
+     * @var boolean
+     * 
+     * @ORM\Column(name="inOffice", type="boolean")
+     */
+    private $inOffice;
 
     /**
      * @var float
@@ -95,6 +102,15 @@ class Appointment {
         return $this->dateOf;
     }
 
+    public function getInOffice() {
+        return $this->inOffice;
+    }
+
+    public function setInOffice($inOffice) {
+        $this->inOffice = $inOffice;
+        return $this;
+    }
+    
     /**
      * Set weight
      *
