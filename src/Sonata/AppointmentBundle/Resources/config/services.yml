@@ -1,0 +1,8 @@
+parameters:
+
+services:
+    form.type.user:
+        class: Sonata\AppointmentBundle\Form\AppointmentType
+        arguments: [ '@security.context' ]
+        tags:
+            - { name: form.type, alias: user_type }

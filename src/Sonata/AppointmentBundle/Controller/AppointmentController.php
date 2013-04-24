@@ -18,23 +18,6 @@ use Sonata\AppointmentBundle\Form\AppointmentType;
 class AppointmentController extends Controller {
 
     /**
-     * Lists all Appointment entities.
-     *
-     * @Route("/", name="appointment")
-     * @Method("GET")
-     * @Template()
-     */
-    public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('SonataAppointmentBundle:Appointment')->findAll();
-
-        return array(
-            'entities' => $entities,
-        );
-    }
-
-    /**
      * Creates a new Appointment entity.
      *
      * @Route("/", name="appointment_create")
@@ -42,20 +25,23 @@ class AppointmentController extends Controller {
      * @Template("SonataAppointmentBundle:Appointment:new.html.twig")
      */
     public function createAction(Request $request) {
-        $entity = new Appointment();
-        $form = $this->createForm(new AppointmentType(), $entity);
+        $appointment = new Appointment();
+        $form = $this->createForm(new AppointmentType(), $appointment);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            
+            $appointment->setInOffice(true);
+            
+            $em->persist($appointment);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('appointment_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('appointment_show', array('id' => $appointment->getId())));
         }
 
         return array(
-            'entity' => $entity,
+            'entity' => $appointment,
             'form' => $form->createView(),
         );
     }
@@ -93,11 +79,8 @@ class AppointmentController extends Controller {
             throw $this->createNotFoundException('Unable to find Appointment entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
         return array(
             'entity' => $entity,
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
@@ -143,7 +126,6 @@ class AppointmentController extends Controller {
             throw $this->createNotFoundException('Unable to find Appointment entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new AppointmentType(), $entity);
         $editForm->bind($request);
 
@@ -157,58 +139,19 @@ class AppointmentController extends Controller {
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
-     * Deletes a Appointment entity.
-     *  
-     * @Route("/{id}", name="appointment_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, $id) {
-        $form = $this->createDeleteForm($id);
-        $form->bind($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SonataAppointmentBundle:Appointment')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Appointment entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('appointment'));
-    }
-
-    /**
-     * Creates a form to delete a Appointment entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id) {
-        return $this->createFormBuilder(array('id' => $id))
-                        ->add('id', 'hidden')
-                        ->getForm();
-    }
-    
-    /**
      * @Route("/bloodGlucose/new/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="blood_glucose_new")
      * @Method({"GET", "POST"})
-     * @Template()
+     * @Template("SonataAppointmentBundle:Appointment:newGlucose.html.twig")
      */
     private function newGlucoseAction($userID, $userName) {
         $request = $this->getRequest();
         
         $appointment = new Appointment();
-        $form = $this->createForm(new GlucoseType(), $appointment);
+        $form = $this->createForm(new BloodGlucoseType(), $appointment);
         
         if ("POST" === $request->getMethod()) {
             $form->bind($request);
@@ -222,8 +165,9 @@ class AppointmentController extends Controller {
                     throw $this->createNotFoundException('Unable to find User entity.');
                 }
                 
-                $user->getAppointments->add($appointment);
+                $user->getAppointments()->add($appointment);
                 $appointment->setPatient($user);
+                $appointment->setInOffice(false);
                 
                 $em->persist($appointment);
                 $em->persist($user);
@@ -256,7 +200,41 @@ class AppointmentController extends Controller {
      * @Template()
      */
     private function newWeightAction($userID, $userName) {
+        $request = $this->getRequest();
         
+        $appointment = new Appointment();
+        $form = $this->createForm(new WeightType(), $appointment);
+        
+        if ("POST" === $request->getMethod()) {
+            $form->bind($request);
+            
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+
+                $user = $em->getRepository('SonataUserBundle:User')->findOneById($userID);
+
+                if (!$user) {
+                    throw $this->createNotFoundException('Unable to find User entity.');
+                }
+                
+                $user->getAppointments()->add($appointment);
+                $appointment->setPatient($user);
+                $appointment->setInOffice(false);
+                
+                $em->persist($appointment);
+                $em->persist($user);
+                $em->flush();
+                
+                return $this->redirect($this->generateUrl('user_splash'));
+            }
+        }
+        
+        return array(
+            'userName' => $userName,
+            'userID' => $userID,
+            'entity' => $appointment,
+            'form' => $form->createView(),
+        );
     }
     
     /**
@@ -274,7 +252,41 @@ class AppointmentController extends Controller {
      * @Template()
      */
     private function newPressureAction($userID, $userName) {
+        $request = $this->getRequest();
         
+        $appointment = new Appointment();
+        $form = $this->createForm(new BloodPressureType(), $appointment);
+        
+        if ("POST" === $request->getMethod()) {
+            $form->bind($request);
+            
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+
+                $user = $em->getRepository('SonataUserBundle:User')->findOneById($userID);
+
+                if (!$user) {
+                    throw $this->createNotFoundException('Unable to find User entity.');
+                }
+                
+                $user->getAppointments()->add($appointment);
+                $appointment->setPatient($user);
+                $appointment->setInOffice(false);
+                
+                $em->persist($appointment);
+                $em->persist($user);
+                $em->flush();
+                
+                return $this->redirect($this->generateUrl('user_splash'));
+            }
+        }
+        
+        return array(
+            'userName' => $userName,
+            'userID' => $userID,
+            'entity' => $appointment,
+            'form' => $form->createView(),
+        );
     }
     
     /**
