@@ -31,7 +31,7 @@ class Appointment {
     /**
      * @var boolean
      * 
-     * @ORM\Column(name="inOffice", type="boolean")
+     * @ORM\Column(name="inOffice", type="boolean", nullable=false)
      */
     private $inOffice;
 
@@ -89,7 +89,6 @@ class Appointment {
      */
     public function setDateOf($dateOf) {
         $this->dateOf = $dateOf;
-
         return $this;
     }
 

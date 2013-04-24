@@ -8,19 +8,12 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AppointmentType extends AbstractType {
 
-    public function __construct(SecurityContext $securityContext) {
-        $this->securityContext = $securityContext;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        // Current logged user
-        $user = $this->securityContext->getToken()->getUser();
-        
-        $builder->add('weight')
+        $builder->add('weight', null, array(
+                    'required' => false,
+                ))
                 ->add('height')
-                ->add('glucose')
-                ->add('bloodPressure')
-                ->add('note');
+                ->add('glucose');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
