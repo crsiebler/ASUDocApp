@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 
-{% block headline %}Editting Appointment #{{ entity.id }}{% endblock headline %}
+{% block headline %}Editing Appointment{% endblock headline %}
 
 {% block content_content %}
 {{ parent() }}
@@ -12,16 +12,16 @@
     </p>
 </form>
 
-<form action="{{ path('appointment_delete', { 'id': entity.id }) }}" method="post">
-    <input type="hidden" name="_method" value="DELETE" />
-    {{ form_widget(delete_form) }}
-    <button type="submit">Delete</button>
-</form>
-
 <ul class="record_actions">
+    <li>
+        <a href="{{ app.request.headers.get('referer') }}">Back</a>
+    </li>
     {% if is_granted('ROLE_USER') %}
         <li>
             <a href="{{ path('user_splash') }}">View Splash Page</a>
+        </li>
+        <li>
+            <a href="{{ path('user_show', { 'id': patientID }) }}">View Patient Page</a>
         </li>
     {% endif %}
 </ul>

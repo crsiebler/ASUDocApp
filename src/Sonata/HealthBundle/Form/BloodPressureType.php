@@ -9,10 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class BloodPressureType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder
-                ->add('max')
-                ->add('min')
-        ;
+        $builder->add('max')
+                ->add('min');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {

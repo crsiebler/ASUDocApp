@@ -206,9 +206,21 @@ class UserController extends Controller {
     public function splashAction() {
         $user = $this->get('security.context')->getToken()->getUser();
         
+        if ($user->hasRoleByName('ROLE_ADMIN') || $user->hasRoleByName('ROLE_NURSE') || $user->hasRoleByName('ROLE_DOCTOR')) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $patientRole = $em->getRepository('SonataUserBundle:Role')->findOneByName('ROLE_PATIENT');
+            
+            $patients = $em->getRepository('SonataUserBundle:User')->getAllByRole($patientRole);
+            
+            return array(
+                'patients' => $patients,
+                'user' => $user,
+            );
+        }
+        
         return array(
             'user' => $user,
-            'primaryDoctor' => $user->getPrimaryDoctor(),
         );
     }
 

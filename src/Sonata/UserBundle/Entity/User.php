@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * User
  *
  * @ORM\Table(name="users")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Sonata\UserBundle\Repository\UserRepository")
  */
 class User extends BaseUser {
 
@@ -135,7 +135,7 @@ class User extends BaseUser {
 
     public function __construct() {
         parent::__construct();
-        $this->createdOn = new \DateTime('NOW');
+        $this->createdOn = new \DateTime('now');
         $this->userRoles = new ArrayCollection();
         $this->appointmentInfo = new ArrayCollection();
         $this->allergies = new ArrayCollection();

@@ -5,7 +5,11 @@
 {# !!! BODY CONTENT !!! #}
 {% block content_content %}
 {{ parent() }}
-{% if is_granted('ROLE_DOCTOR') or is_granted('ROLE_NURSE') or is_granted('ROLE_EMT') or is_granted('ROLE_ADMIN') %}
+{% if is_granted('ROLE_DOCTOR') or is_granted('ROLE_NURSE') or is_granted('ROLE_ADMIN') %}
+    <h3>All Patients</h3>
+    {% for patient in patients %}
+        <a href="{{ path('user_show', { 'id': patient.getId() }) }}">{{ patient.getName() }}</a><br>
+    {% endfor %}
 {% elseif is_granted('ROLE_PATIENT') %}
     <h3>Patient Information</h3>
     <table class="record_properties">
@@ -137,6 +141,7 @@
             <br>
         {% endfor %}
     {% endif %}
+{% elseif is_granted('ROLE_EMT') %}
 {% endif %}
 {% endblock content_content %}
 
@@ -144,7 +149,11 @@
 {% block content_sidebar %}
 <h2>Actions</h2>
 <ul>
-{% if is_granted('ROLE_DOCTOR') or is_granted('ROLE_NURSE') or is_granted('ROLE_EMT') or is_granted('ROLE_ADMIN') %}
+{% if is_granted('ROLE_ADMIN') %}
+    <li>
+        <a href="{{ path('user_registration') }}">Register New User</a>
+    </li>
+{% elseif is_granted('ROLE_DOCTOR') or is_granted('ROLE_NURSE') or is_granted('ROLE_EMT') %}
 {% elseif is_granted('ROLE_PATIENT') %}
     <li>
         {# Address is OneToOne so Add or Edit check #}

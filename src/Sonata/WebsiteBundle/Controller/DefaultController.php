@@ -30,10 +30,11 @@ class DefaultController extends Controller {
             // Use deep search because parameter is in a multidimensional array
             $searchTerm = $this->getRequest()->get('sonata_websitebundle_searchtype[searchTerm]', null, true);
 
-            //@todo add user logged in check
-            //@todo create userRepository to search for patient names and/or doctor, nurse, admin, EMT
+            $em = $this->getDoctrine()->getManager();
             
-            return array('searchTerm' => $searchTerm);
+            $results = $em->getRepository('SonataUserBundle:User')->search($searchTerm);            
+            
+            return array('results' => $results);
         } else {
             $url = $this->container->get('router')->generate('search_error', array('type' => "Login Error: User must login to use this feature"));
             $response = new RedirectResponse($url);

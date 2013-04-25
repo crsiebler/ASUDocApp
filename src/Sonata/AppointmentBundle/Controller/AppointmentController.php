@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sonata\AppointmentBundle\Entity\Appointment;
+use Sonata\AppointmentBundle\Entity\Note;
 use Sonata\AppointmentBundle\Form\AppointmentType;
 
 /**
@@ -20,57 +21,83 @@ class AppointmentController extends Controller {
     /**
      * Creates a new Appointment entity.
      *
-     * @Route("/", name="appointment_create")
-     * @Method("POST")
+     * @Route("/create/{patientID}/{patientName}", requirements={"patientID" = "\d+"}, defaults={"patientName" = null}, name="appointment_create")
+     * @Method({"GET", "POST"})
      * @Template("SonataAppointmentBundle:Appointment:new.html.twig")
      */
-    public function createAction(Request $request) {
-        $appointment = new Appointment();
-        $form = $this->createForm(new AppointmentType(), $appointment);
+    public function createAction(Request $request, $patientID, $patientName) {
+        $inOffice = true;
+        
+        $appointment = new Appointment($inOffice);
+        $note = new Note($this->get('security.context')->getToken()->getUser());
+        
+        $appointment->setNote($note);
+        
+        $form = $this->createForm(new AppointmentType($this->get('security.context')), $appointment);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             
+            $patient = $em->getRepository('SonataUserBundle:User')->findOneById($patientID);
+
+            $appointment->setPatient($patient);
             $appointment->setInOffice(true);
             
             $em->persist($appointment);
+            $em->persist($note);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('appointment_show', array('id' => $appointment->getId())));
+            return $this->redirect($this->generateUrl('appointment_show', array('id' => $appointment->getId(), 'patientID' => $patientID, 'patientName' => $patientName)));
         }
 
         return array(
             'entity' => $appointment,
             'form' => $form->createView(),
+            'patientID' => $patientID,
+            'patientName' => $patientName,
         );
     }
 
     /**
      * Displays a form to create a new Appointment entity.
      *
-     * @Route("/new", name="appointment_new")
+     * @Route("/new/{patientID}/{patientName}", requirements={"patientID" = "\d+"}, defaults={"patientName" = null}, name="appointment_new")
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
-        $entity = new Appointment();
-        $form = $this->createForm(new AppointmentType(), $entity);
+    public function newAction($patientID, $patientName) {
+        $inOffice = true;
+        
+        $appointment = new Appointment($inOffice);
+        $note = new Note($this->get('security.context')->getToken()->getUser());
+        
+        $appointment->setNote($note);
+        
+        $form = $this->createForm(new AppointmentType($this->get('security.context')), $appointment);
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $patient = $em->getRepository('SonataUserBundle:User')->findOneById($patientID);
+        
+        $appointment->setPatient($patient);
 
         return array(
-            'entity' => $entity,
+            'entity' => $appointment,
             'form' => $form->createView(),
+            'patientID' => $patientID,
+            'patientName' => $patientName,
         );
     }
 
     /**
      * Finds and displays a Appointment entity.
      *
-     * @Route("/{id}", name="appointment_show")
+     * @Route("/show/{id}/{patientID}/{patientName}", requirements={"patientID" = "\d+"}, defaults={"patientName" = null}, name="appointment_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id) {
+    public function showAction($id, $patientID, $patientName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataAppointmentBundle:Appointment')->find($id);
@@ -81,17 +108,19 @@ class AppointmentController extends Controller {
 
         return array(
             'entity' => $entity,
+            'patientID' => $patientID,
+            'patientName' => $patientName,
         );
     }
 
     /**
      * Displays a form to edit an existing Appointment entity.
      *
-     * @Route("/{id}/edit", name="appointment_edit")
+     * @Route("/edit/{id}/{patientID}/{patientName}", requirements={"patientID" = "\d+"}, defaults={"patientName" = null}, name="appointment_edit")
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id) {
+    public function editAction($id, $patientID, $patientName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataAppointmentBundle:Appointment')->find($id);
@@ -101,23 +130,23 @@ class AppointmentController extends Controller {
         }
 
         $editForm = $this->createForm(new AppointmentType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'patientID' => $patientID,
+            'patientName' => $patientName,
         );
     }
 
     /**
      * Edits an existing Appointment entity.
      *
-     * @Route("/{id}", name="appointment_update")
+     * @Route("update/{id}/{patientID}/{patientName}", requirements={"patientID" = "\d+"}, defaults={"patientName" = null}, name="appointment_update")
      * @Method("PUT")
      * @Template("SonataAppointmentBundle:Appointment:edit.html.twig")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id, $patientID, $patientName) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SonataAppointmentBundle:Appointment')->find($id);
@@ -139,6 +168,8 @@ class AppointmentController extends Controller {
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
+            'patientID' => $patientID,
+            'patientName' => $patientName,
         );
     }
 
@@ -150,7 +181,9 @@ class AppointmentController extends Controller {
     private function newGlucoseAction($userID, $userName) {
         $request = $this->getRequest();
         
-        $appointment = new Appointment();
+        $inOffice = false;
+        
+        $appointment = new Appointment($inOffice);
         $form = $this->createForm(new BloodGlucoseType(), $appointment);
         
         if ("POST" === $request->getMethod()) {
@@ -202,7 +235,9 @@ class AppointmentController extends Controller {
     private function newWeightAction($userID, $userName) {
         $request = $this->getRequest();
         
-        $appointment = new Appointment();
+        $inOffice = false;
+        
+        $appointment = new Appointment($inOffice);
         $form = $this->createForm(new WeightType(), $appointment);
         
         if ("POST" === $request->getMethod()) {
@@ -254,7 +289,9 @@ class AppointmentController extends Controller {
     private function newPressureAction($userID, $userName) {
         $request = $this->getRequest();
         
-        $appointment = new Appointment();
+        $inOffice = false;
+        
+        $appointment = new Appointment($inOffice);
         $form = $this->createForm(new BloodPressureType(), $appointment);
         
         if ("POST" === $request->getMethod()) {

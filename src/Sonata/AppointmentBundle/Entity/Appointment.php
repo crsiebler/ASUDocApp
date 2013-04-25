@@ -58,11 +58,13 @@ class Appointment {
 
     /**
      * @ORM\OneToOne(targetEntity="Sonata\HealthBundle\Entity\BloodPressure")
+     * @ORM\JoinColumn(name="bp_id", referencedColumnName="id", nullable=true, unique=true)
      */
     private $bloodPressure;
 
     /**
-     * @ORM\OneToOne(targetEntity="Sonata\AppointmentBundle\Entity\Note")
+     * @ORM\OneToOne(targetEntity="Sonata\AppointmentBundle\Entity\Note", mappedBy="appointment", cascade={"persist"}, fetch="EAGER")
+     * @ORM\JoinColumn(name="note_id", referencedColumnName="id", nullable=true, unique=true)
      */
     private $note;
 
@@ -71,6 +73,11 @@ class Appointment {
      * @ORM\JoinColumn(name="patientID", referencedColumnName="id", nullable=false)
      */
     private $patient;
+    
+    public function __construct($inOffice) {
+        $this->dateOf = new \DateTime('now');
+        $this->inOffice = $inOffice;
+    }
 
     /**
      * Get id

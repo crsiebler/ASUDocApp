@@ -40,7 +40,18 @@ class Note {
      * @ORM\JoinColumn(name="doctor_id", referencedColumnName="id")
      */
     private $createdBy;
-
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Sonata\AppointmentBundle\Entity\Appointment")
+     * @ORM\JoinColumn(name="appointment_id", referencedColumnName="id")
+     */
+    private $appointment;
+    
+    public function __construct($user) {
+        $this->dateCreated = new \DateTime("now");
+        $this->createdBy = $user;
+    }
+    
     /**
      * Get id
      *
@@ -96,6 +107,15 @@ class Note {
 
     public function setCreatedBy($createdBy) {
         $this->createdBy = $createdBy;
+        return $this;
+    }
+    
+    public function getAppointment() {
+        return $this->appointment;
+    }
+
+    public function setAppointment($appointment) {
+        $this->appointment = $appointment;
         return $this;
     }
 }
