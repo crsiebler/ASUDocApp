@@ -11,5 +11,4 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class AppointmentRepository extends EntityRepository {
-    
 }

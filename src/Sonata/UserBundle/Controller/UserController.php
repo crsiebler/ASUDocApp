@@ -30,14 +30,31 @@ class UserController extends Controller {
     public function showAction($id) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SonataUserBundle:User')->find($id);
-
-        if (!$entity) {
+        $user = $em->getRepository('SonataUserBundle:User')->find($id);
+        
+        if (!$user) {
             throw $this->createNotFoundException('Unable to find User entity.');
+        }
+        
+        if ($user->hasRoleByName('ROLE_PATIENT')) {
+            $appointments = $user->getAppointments();
+            
+            foreach ($appointments as $appointment) {
+                if (true === $appointment->getInOffice()) {
+                    $lastAppointment = $appointment;
+                } else {
+                    continue;
+                }
+            }
+            
+            return array(
+                'entity' => $user,
+                'appointment' => $lastAppointment,
+            );
         }
 
         return array(
-            'entity' => $entity,
+            'entity' => $user,
         );
     }
 

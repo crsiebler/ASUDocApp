@@ -37,4 +37,16 @@
 </ul>
 {% endblock content_content %}
 
-{% block content_sidebar %}{% endblock content_sidebar %}
+{% block content_sidebar %}
+<h2>Actions</h2>
+<ul>
+    <li>
+        <a href="{{ path('appointment_new', { 'patientID': entity.getId(), 'patientName': entity.getName() }) }}">New Appointment</a>
+    </li>
+    {% if entity.hasRoleByName('ROLE_PATIENT') and appointment is not null %}
+        <li>
+            <a href="{{ path('appointment_edit', { 'id': appointment.getId(), 'patientID': entity.getId(), 'patientName': entity.getName() }) }}">Edit Last Appointment</a>
+        </li>
+    {% endif %}
+</ul>
+{% endblock content_sidebar %}
