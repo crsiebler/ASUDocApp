@@ -32,7 +32,10 @@ class DefaultController extends Controller {
 
             $em = $this->getDoctrine()->getManager();
             
-            $results = $em->getRepository('SonataUserBundle:User')->search($searchTerm);            
+            // Grab Patient Role to search only by patients
+            $role = $em->getRepository('SonataUserBundle:Role')->findOneByName('ROLE_PATIENT');
+            
+            $results = $em->getRepository('SonataUserBundle:User')->search($searchTerm, $role);            
             
             return array('results' => $results);
         } else {

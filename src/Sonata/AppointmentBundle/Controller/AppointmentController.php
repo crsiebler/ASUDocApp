@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sonata\AppointmentBundle\Entity\Appointment;
 use Sonata\AppointmentBundle\Entity\Note;
+use Sonata\HealthBundle\Entity\BloodPressure;
 use Sonata\AppointmentBundle\Form\AppointmentType;
 
 /**
@@ -28,10 +29,12 @@ class AppointmentController extends Controller {
     public function createAction(Request $request, $patientID, $patientName) {
         $inOffice = true;
         
-        $appointment = new Appointment($inOffice);
         $note = new Note($this->get('security.context')->getToken()->getUser());
+        $appointment = new Appointment($inOffice);
+        $bpReading = new BloodPressure();
         
         $appointment->setNote($note);
+        $appointment->setBloodPressure($bpReading);
         
         $form = $this->createForm(new AppointmentType($this->get('security.context')), $appointment);
         $form->bind($request);
@@ -46,6 +49,7 @@ class AppointmentController extends Controller {
             
             $em->persist($appointment);
             $em->persist($note);
+            $em->persist($bpReading);
             $em->flush();
 
             return $this->redirect($this->generateUrl('appointment_show', array('id' => $appointment->getId(), 'patientID' => $patientID, 'patientName' => $patientName)));

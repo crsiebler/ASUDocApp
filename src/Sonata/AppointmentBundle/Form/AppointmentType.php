@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\SecurityContext;
+use Sonata\HealthBundle\Form\BloodPressureType;
+use Sonata\AppointmentBundle\Form\NoteType;
 
 class AppointmentType extends AbstractType {
 
@@ -26,6 +28,9 @@ class AppointmentType extends AbstractType {
                 ->add('glucose', null, array(
                     'required' => false,
                     'label' => "Blood Glucose (mg/dl):",
+                ))
+                ->add('bloodPressure', new BloodPressureType(), array(
+                    'label' => "Blood Pressure",
                 ));
         
         $user = $this->securityContext->getToken()->getUser();

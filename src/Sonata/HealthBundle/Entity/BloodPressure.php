@@ -34,7 +34,7 @@ class BloodPressure {
      * @ORM\Column(name="min", type="integer")
      */
     private $min;
-
+    
     /**
      * Get id
      *
