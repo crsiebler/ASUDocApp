@@ -133,7 +133,7 @@ class AppointmentController extends Controller {
             throw $this->createNotFoundException('Unable to find Appointment entity.');
         }
 
-        $editForm = $this->createForm(new AppointmentType(), $entity);
+        $editForm = $this->createForm(new AppointmentType($this->get('security.context')), $entity);
 
         return array(
             'entity' => $entity,
@@ -146,7 +146,7 @@ class AppointmentController extends Controller {
     /**
      * Edits an existing Appointment entity.
      *
-     * @Route("update/{id}/{patientID}/{patientName}", requirements={"patientID" = "\d+"}, defaults={"patientName" = null}, name="appointment_update")
+     * @Route("/update/{id}/{patientID}/{patientName}", requirements={"patientID" = "\d+"}, defaults={"patientName" = null}, name="appointment_update")
      * @Method("PUT")
      * @Template("SonataAppointmentBundle:Appointment:edit.html.twig")
      */
@@ -159,7 +159,7 @@ class AppointmentController extends Controller {
             throw $this->createNotFoundException('Unable to find Appointment entity.');
         }
 
-        $editForm = $this->createForm(new AppointmentType(), $entity);
+        $editForm = $this->createForm(new AppointmentType($this->get('security.context')), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {

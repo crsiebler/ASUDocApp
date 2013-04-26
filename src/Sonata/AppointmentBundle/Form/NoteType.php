@@ -11,8 +11,8 @@ class NoteType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('note', "textarea", array(
                     'max_length' => 255,
-                    'required' => false,
-                    'label' => "Notes:",
+                    'required' => true,
+                    'label' => " ",
                 ));
     }
 

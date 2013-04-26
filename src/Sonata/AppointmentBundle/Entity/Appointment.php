@@ -57,20 +57,20 @@ class Appointment {
     private $glucose;
 
     /**
-     * @ORM\OneToOne(targetEntity="Sonata\HealthBundle\Entity\BloodPressure")
+     * @ORM\OneToOne(targetEntity="Sonata\HealthBundle\Entity\BloodPressure", inversedBy="appointment", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="bp_id", referencedColumnName="id", nullable=true, unique=true)
      */
     private $bloodPressure;
 
     /**
-     * @ORM\OneToOne(targetEntity="Sonata\AppointmentBundle\Entity\Note", mappedBy="appointment", cascade={"persist"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="Sonata\AppointmentBundle\Entity\Note", inversedBy="appointment", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="note_id", referencedColumnName="id", nullable=true, unique=true)
      */
     private $note;
 
     /**
      * @ORM\ManyToOne(targetEntity="Sonata\UserBundle\Entity\User", inversedBy="appointments", fetch="EAGER")
-     * @ORM\JoinColumn(name="patientID", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="patient_id", referencedColumnName="id", nullable=false, unique=false)
      */
     private $patient;
     

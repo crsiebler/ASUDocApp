@@ -4,7 +4,7 @@
 
 {% block content_content %}
 {{ parent() }}
-<form action="{{ path('appointment_create', { 'patientID': patientID }) }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('appointment_create', { 'patientID': patientID, 'patientName': patientName }) }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
         <button type="submit">Submit</button>

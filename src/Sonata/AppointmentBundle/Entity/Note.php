@@ -24,7 +24,7 @@ class Note {
     /**
      * @var string
      *
-     * @ORM\Column(name="note", type="string", length=255)
+     * @ORM\Column(name="note", type="string", length=255, nullable=true)
      */
     private $note;
 
@@ -36,16 +36,16 @@ class Note {
     private $dateCreated;
 
     /**
-     * @ORM\OneToOne(targetEntity="Sonata\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="doctor_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Sonata\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="doctor_id", referencedColumnName="id", unique=false, nullable=false)
      */
     private $createdBy;
     
     /**
-     * @ORM\OneToOne(targetEntity="Sonata\AppointmentBundle\Entity\Appointment")
-     * @ORM\JoinColumn(name="appointment_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Sonata\AppointmentBundle\Entity\Appointment", mappedBy="note")
      */
     private $appointment;
+    
     
     public function __construct($user) {
         $this->dateCreated = new \DateTime("now");
@@ -92,11 +92,6 @@ class Note {
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTime
-     */
     public function getDateCreated() {
         return $this->dateCreated;
     }

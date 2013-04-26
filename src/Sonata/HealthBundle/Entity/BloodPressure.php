@@ -36,6 +36,11 @@ class BloodPressure {
     private $min;
     
     /**
+     * @ORM\OneToOne(targetEntity="Sonata\AppointmentBundle\Entity\Appointment", mappedBy="bloodPressure")
+     */
+    private $appointment;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -83,5 +88,14 @@ class BloodPressure {
      */
     public function getMin() {
         return $this->min;
+    }
+    
+    public function getAppointment() {
+        return $this->appointment;
+    }
+
+    public function setAppointment($appointment) {
+        $this->appointment = $appointment;
+        return $this;
     }
 }

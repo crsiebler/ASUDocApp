@@ -17,12 +17,12 @@ class AppointmentType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('weight', null, array(
-                    'required' => false,
+                    'required' => true,
                     'label' => "Weight (kg):",
                     'precision' => 1,
                 ))
                 ->add('height', null, array(
-                    'required' => false,
+                    'required' => true,
                     'label' => "Height (cm):",
                 ))
                 ->add('glucose', null, array(
@@ -31,13 +31,15 @@ class AppointmentType extends AbstractType {
                 ))
                 ->add('bloodPressure', new BloodPressureType(), array(
                     'label' => "Blood Pressure",
+                    'required' => true,
                 ));
         
         $user = $this->securityContext->getToken()->getUser();
         
         if ($user->hasRoleByName('ROLE_DOCTOR')) {
             $builder->add('note', new NoteType(), array(
-                        'label' => " ",
+                        'label' => "Doctors Note:",
+                        'required' => true,
             ));
         }
         
