@@ -68,6 +68,10 @@ class Prescription {
      * @ORM\JoinColumn(name="patientID", referencedColumnName="id", nullable=false)
      */
     private $patient;
+    
+    public function __construct() {
+        $this->dateExpires = null;
+    }
 
     /**
      * Get id

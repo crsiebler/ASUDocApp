@@ -134,7 +134,11 @@
                     </tr>
                     <tr>
                         <th>Date Expires:</th>
-                        <td>{{ prescription.dateExpires|date('Y-m-d') }}</td>
+                        {% if prescription.dateExpires is not null %}
+                            <td>{{ prescription.dateExpires|date('Y-m-d') }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
                     </tr>
                 </tbody>
             </table>
@@ -185,7 +189,7 @@
     {# check to see if user has any Allergies to edit #}
     {% if not user.getAllergies().empty() %}
         <li>
-            <a href="{{ path('allergy_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show/Edit Allergies</a>
+            <a href="{{ path('allergy_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Allergies</a>
         </li>
     {% endif %}
     <li>
@@ -194,29 +198,25 @@
     {# check to see if user has any Prescriptions to edit #}
     {% if not user.getPrescriptions().empty() %}
         <li>
-            <a href="{{ path('prescription_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show/Edit Prescriptions</a>
+            <a href="{{ path('prescription_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Edit Prescriptions</a>
         </li>
     {% endif %}
     <li>
         <a href="{{ path('blood_pressure_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Blood Pressure Reading</a>
     </li>
-    {% if not user.getAppointments().empty() %}
-        <li>
-            <a href="{{ path('blood_pressure_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Blood Pressure Readings</a>
-        </li>
-    {% endif %}
     <li>
         <a href="{{ path('blood_glucose_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Blood Glucose Levels</a>
     </li>
-    {% if not user.getAppointments().empty() %}
-        <li>
-            <a href="{{ path('blood_glucose_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Blood Glucose Levels</a>
-        </li>
-    {% endif %}
     <li>
         <a href="{{ path('weight_new', { 'userName': user.getName(), 'userID': user.getId() }) }}">Add Weight</a>
     </li>
     {% if not user.getAppointments().empty() %}
+        <li>
+            <a href="{{ path('blood_pressure_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Blood Pressure Readings</a>
+        </li>
+        <li>
+            <a href="{{ path('blood_glucose_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Blood Glucose Levels</a>
+        </li>
         <li>
             <a href="{{ path('weight_show', { 'userName': user.getName(), 'userID': user.getId() }) }}">Show Weight Trends</a>
         </li>
