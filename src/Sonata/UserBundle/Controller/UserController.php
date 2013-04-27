@@ -47,10 +47,17 @@ class UserController extends Controller {
                 }
             }
             
-            return array(
-                'entity' => $user,
-                'appointment' => $lastAppointment,
-            );
+            if (isset($lastAppointment)) {
+                return array(
+                    'entity' => $user,
+                    'appointment' => $lastAppointment,
+                );
+            } else {
+                return array(
+                    'entity' => $user,
+                    'appointment' => null,
+                );
+            }
         }
 
         return array(
@@ -63,7 +70,7 @@ class UserController extends Controller {
      *
      * @Route("/edit/{id}", requirements={"id" = "\d+"}, name="user_edit")
      * @Method("GET")
-     * @Template()
+     * @Template("SonataUserBundle:User:edit.html.twig")
      */
     public function editAction($id) {
         $em = $this->getDoctrine()->getManager();

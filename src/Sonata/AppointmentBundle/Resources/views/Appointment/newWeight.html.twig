@@ -1,0 +1,29 @@
+{% extends '::base.html.twig' %}
+
+{% block headline %}Adding Appointment Information{% endblock headline %}
+
+{% block content_content %}
+{{ parent() }}
+<form action="{{ path('weight_new', { 'userID': patientID, 'userName': patientName }) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Submit</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ app.request.headers.get('referer') }}">Back</a>
+    </li>
+    {% if is_granted('ROLE_USER') %}
+        <li>
+            <a href="{{ path('user_splash') }}">View Splash Page</a>
+        </li>
+        <li>
+            <a href="{{ path('user_show', { 'id': patientID }) }}">View Patient Page</a>
+        </li>
+    {% endif %}
+</ul>
+{% endblock content_content %}
+
+{% block content_sidebar %}{% endblock content_sidebar %}

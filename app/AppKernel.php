@@ -29,6 +29,7 @@ class AppKernel extends Kernel {
             new Sonata\WebsiteBundle\SonataWebsiteBundle(),
             new Sonata\HealthBundle\SonataHealthBundle(),
             new Sonata\AppointmentBundle\SonataAppointmentBundle(),
+            new Ob\HighchartsBundle\ObHighchartsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

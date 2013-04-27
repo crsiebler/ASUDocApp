@@ -11,6 +11,10 @@ use Sonata\AppointmentBundle\Entity\Appointment;
 use Sonata\AppointmentBundle\Entity\Note;
 use Sonata\HealthBundle\Entity\BloodPressure;
 use Sonata\AppointmentBundle\Form\AppointmentType;
+use Sonata\AppointmentBundle\Form\PressureType;
+use Sonata\AppointmentBundle\Form\GlucoseType;
+use Sonata\AppointmentBundle\Form\WeightType;
+use Ob\HighchartsBundle\Highcharts\Highchart;
 
 /**
  * Appointment controller.
@@ -182,13 +186,13 @@ class AppointmentController extends Controller {
      * @Method({"GET", "POST"})
      * @Template("SonataAppointmentBundle:Appointment:newGlucose.html.twig")
      */
-    private function newGlucoseAction($userID, $userName) {
+    public function newGlucoseAction($userID, $userName) {
         $request = $this->getRequest();
         
         $inOffice = false;
         
         $appointment = new Appointment($inOffice);
-        $form = $this->createForm(new BloodGlucoseType(), $appointment);
+        $form = $this->createForm(new GlucoseType(), $appointment);
         
         if ("POST" === $request->getMethod()) {
             $form->bind($request);
@@ -215,8 +219,8 @@ class AppointmentController extends Controller {
         }
         
         return array(
-            'userName' => $userName,
-            'userID' => $userID,
+            'patientName' => $userName,
+            'patientID' => $userID,
             'entity' => $appointment,
             'form' => $form->createView(),
         );
@@ -225,18 +229,55 @@ class AppointmentController extends Controller {
     /**
      * @Route("/bloodGlucose/show/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="blood_glucose_show")
      * @Method("GET")
-     * @Template()
+     * @Template("SonataAppointmentBundle:Appointment:graph.html.twig")
      */
-    private function showGlucoseAction($userID, $userName) {
+    public function showGlucoseAction($userID, $userName) {
+        $em = $this->getDoctrine()->getManager();
         
+        $readings = $em->getRepository('SonataAppointmentBundle:Appointment')->getGlucoseReadings($userID);
+
+        if (!empty($readings)) {
+            foreach ($readings as $reading) {
+                $dateOf[] = $reading['dateOf'];
+                $glucose[] = intval($reading['glucose']);
+            }
+            
+            $series = array(
+                array("name" => "Glucose Level", "data" => $glucose)
+            );
+
+            $ob = new Highchart();
+            $ob->chart->renderTo('linechart');
+            $ob->title->text('Blood Glucose Levels');
+            $ob->xAxis->title(array('text' => "Date Range"));
+            $ob->subtitle->text($userName);
+            $ob->xAxis->categories($dateOf);
+            $ob->yAxis->title(array('text' => "Glucose Level (mg/dl)"));
+            $ob->yAxis->plotlines(array('value' => 0, 'width' => 1, 'color' => "#808080"));
+            $ob->legend->layout('vertical');
+            $ob->legend->align('right');
+            $ob->legend->verticleAlign('top');
+            $ob->legend->x(0);
+            $ob->legend->y(-200);
+            $ob->legend->borderWidth(0);
+            $ob->series($series);
+
+            return array(
+                'chart' => $ob,
+                'patientID' => $userID,
+                'patientName' => $userName,
+            );
+        } else {
+            return $this->redirect($this->generateUrl('search_error'));
+        }
     }
     
     /**
      * @Route("/weight/new/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="weight_new")
      * @Method({"GET", "POST"})
-     * @Template()
+     * @Template("SonataAppointmentBundle:Appointment:newWeight.html.twig")
      */
-    private function newWeightAction($userID, $userName) {
+    public function newWeightAction($userID, $userName) {
         $request = $this->getRequest();
         
         $inOffice = false;
@@ -269,8 +310,8 @@ class AppointmentController extends Controller {
         }
         
         return array(
-            'userName' => $userName,
-            'userID' => $userID,
+            'patientName' => $userName,
+            'patientID' => $userID,
             'entity' => $appointment,
             'form' => $form->createView(),
         );
@@ -279,24 +320,61 @@ class AppointmentController extends Controller {
     /**
      * @Route("/weight/show/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="weight_show")
      * @Method({"GET", "POST"})
-     * @Template()
+     * @Template("SonataAppointmentBundle:Appointment:graph.html.twig")
      */
-    private function showWeightAction($userID, $userName) {
+    public function showWeightAction($userID, $userName) {
+        $em = $this->getDoctrine()->getManager();
         
+        $readings = $em->getRepository('SonataAppointmentBundle:Appointment')->getWeightReadings($userID);
+
+        if (!empty($readings)) {
+            foreach ($readings as $reading) {
+                $dateOf[] = $reading['dateOf'];
+                $weight[] = intval($reading['weight']);
+            }
+            
+            $series = array(
+                array("name" => "weight", "data" => $weight),
+            );
+
+            $ob = new Highchart();
+            $ob->chart->renderTo('linechart');
+            $ob->title->text('Weight');
+            $ob->xAxis->title(array('text' => "Date Range"));
+            $ob->subtitle->text($userName);
+            $ob->xAxis->categories($dateOf);
+            $ob->yAxis->title(array('text' => "Weight (kg)"));
+            $ob->yAxis->plotlines(array('value' => 0, 'width' => 1, 'color' => "#808080"));
+            $ob->legend->layout('vertical');
+            $ob->legend->align('right');
+            $ob->legend->verticleAlign('top');
+            $ob->legend->x(0);
+            $ob->legend->y(-200);
+            $ob->legend->borderWidth(0);
+            $ob->series($series);
+
+            return array(
+                'chart' => $ob,
+                'patientID' => $userID,
+                'patientName' => $userName,
+            );
+        } else {
+            return $this->redirect($this->generateUrl('search_error'));
+        }
     }
     
     /**
      * @Route("/bloodPressure/new/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="blood_pressure_new")
      * @Method({"GET", "POST"})
-     * @Template()
-     */
-    private function newPressureAction($userID, $userName) {
+     * @Template("SonataAppointmentBundle:Appointment:newPressure.html.twig"
+)     */
+    public function newPressureAction($userID, $userName) {
         $request = $this->getRequest();
         
         $inOffice = false;
         
         $appointment = new Appointment($inOffice);
-        $form = $this->createForm(new BloodPressureType(), $appointment);
+        $form = $this->createForm(new PressureType(), $appointment);
         
         if ("POST" === $request->getMethod()) {
             $form->bind($request);
@@ -323,8 +401,8 @@ class AppointmentController extends Controller {
         }
         
         return array(
-            'userName' => $userName,
-            'userID' => $userID,
+            'patientName' => $userName,
+            'patientID' => $userID,
             'entity' => $appointment,
             'form' => $form->createView(),
         );
@@ -333,10 +411,49 @@ class AppointmentController extends Controller {
     /**
      * @Route("/bloodPressure/show/{userID}/{userName}", requirements={"userID" = "\d+"}, defaults={"userName" = null}, name="blood_pressure_show")
      * @Method({"GET", "POST"})
-     * @Template()
+     * @Template("SonataAppointmentBundle:Appointment:graph.html.twig")
      */
-    private function showPressureAction($userID, $userName) {
+    public function showPressureAction($userID, $userName) {
+        $em = $this->getDoctrine()->getManager();
         
+        $readings = $em->getRepository('SonataAppointmentBundle:Appointment')->getBPReadings($userID);
+
+        if (!empty($readings)) {
+            foreach ($readings as $reading) {
+                $dateOf[] = $reading['dateOf'];
+                $bpMax[] = intval($reading['max']);
+                $bpMin[] = intval($reading['min']);
+            }
+            
+            $series = array(
+                array("name" => "systolic", "data" => $bpMax),
+                array("name" => "diastolic", "data" => $bpMin)
+            );
+
+            $ob = new Highchart();
+            $ob->chart->renderTo('linechart');
+            $ob->title->text('Blood Pressure');
+            $ob->xAxis->title(array('text' => "Date Range"));
+            $ob->subtitle->text($userName);
+            $ob->xAxis->categories($dateOf);
+            $ob->yAxis->title(array('text' => "(mmHg)"));
+            $ob->yAxis->plotlines(array('value' => 0, 'width' => 1, 'color' => "#808080"));
+            $ob->legend->layout('vertical');
+            $ob->legend->align('right');
+            $ob->legend->verticleAlign('top');
+            $ob->legend->x(0);
+            $ob->legend->y(-200);
+            $ob->legend->borderWidth(0);
+            $ob->series($series);
+
+            return array(
+                'chart' => $ob,
+                'patientID' => $userID,
+                'patientName' => $userName,
+            );
+        } else {
+            return $this->redirect($this->generateUrl('search_error'));
+        }
     }
 
 }

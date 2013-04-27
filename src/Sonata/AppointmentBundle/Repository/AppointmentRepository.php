@@ -3,6 +3,7 @@
 namespace Sonata\AppointmentBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * AppointmentRepository
@@ -11,4 +12,106 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class AppointmentRepository extends EntityRepository {
+    public function getGlucoseReadings($id, $start = null, $end = null) {
+        $rsm = new ResultSetMapping();
+        
+        $rsm->addScalarResult('glucose', 'glucose');
+        $rsm->addScalarResult('dateOf', 'dateOf');
+        
+        if ($start == null && $end == null) {
+            $start = new \DateTime('NOW');
+            $start->setTime(0, 0, 0);
+            $end = new \DateTime('NOW');
+        } else if ($start != null && $end == null) {
+            $end = new \DateTime('NOW');
+        }
+        
+        $queryString = "SELECT
+                            appointments.glucose AS glucose,
+                            appointments.dateOf AS dateOf
+                        FROM appointments
+                            INNER JOIN users ON appointments.patient_id = users.id
+                        WHERE appointments.dateOf >= :start
+                            AND appointments.dateOf <= :end
+                            AND users.id = :id
+                            AND appointments.glucose IS NOT NULL
+                        ORDER BY appointments.dateOf ASC";
+        
+        $query = $this->_em->createNativeQuery($queryString, $rsm)
+                ->setParameter('id', $id)
+                ->setParameter('start', $start)
+                ->setParameter('end', $end);
+        
+        return $query->getResult();
+    }
+    
+    public function getBPReadings($id, $start = null, $end = null) {
+        $rsm = new ResultSetMapping();
+        
+        $rsm->addScalarResult('max', 'max');
+        $rsm->addScalarResult('min', 'min');
+        $rsm->addScalarResult('dateOf', 'dateOf');
+        
+        if ($start == null && $end == null) {
+            $start = new \DateTime('NOW');
+            $start->setTime(0, 0, 0);
+            $end = new \DateTime('NOW');
+        } else if ($start != null && $end == null) {
+            $end = new \DateTime('NOW');
+        }
+        
+        $queryString = "SELECT
+                            bloodpressure.max AS max,
+                            bloodpressure.min as min,
+                            appointments.dateOf as dateOf
+                        FROM appointments
+                            INNER JOIN users ON appointments.patient_id = users.id
+                            INNER JOIN bloodpressure ON bloodpressure.id = appointments.bp_id
+                        WHERE appointments.dateOf >= :start
+                            AND appointments.dateOf <= :end
+                            AND users.id = :id
+                            AND bloodpressure.max IS NOT NULL
+                            AND bloodpressure.min IS NOT NULL
+                        ORDER BY appointments.dateOf ASC";
+        
+        $query = $this->_em->createNativeQuery($queryString, $rsm)
+                ->setParameter('start', $start)
+                ->setParameter('end', $end)
+                ->setParameter('id', $id);
+        
+        return $query->getResult();
+    }
+    
+    public function getWeightReadings($id, $start = null, $end = null) {
+        $rsm = new ResultSetMapping();
+        
+        $rsm->addScalarResult('weight', 'weight');
+        $rsm->addScalarResult('dateOf', 'dateOf');
+                
+        if ($start == null && $end == null) {
+            $start = new \DateTime('NOW');
+            $start->setTime(0, 0, 0);
+            $end = new \DateTime('NOW');
+        } else if ($start != null && $end == null) {
+            $end = new \DateTime('NOW');
+        }
+        
+        $queryString = "SELECT
+                            appointments.weight AS weight,
+                            appointments.dateOf AS dateOf
+                        FROM appointments
+                            INNER JOIN users ON appointments.patient_id = users.id
+                        WHERE appointments.dateOf >= :start
+                            AND appointments.dateOf <= :end
+                            AND users.id = :id
+                            AND appointments.weight IS NOT NULL
+                        ORDER BY appointments.dateOf ASC";
+        
+        $query = $this->_em->createNativeQuery($queryString, $rsm)
+                ->setParameter('id', $id)
+                ->setParameter('start', $start)
+                ->setParameter('end', $end);
+        
+        return $query->getResult();
+    }
 }

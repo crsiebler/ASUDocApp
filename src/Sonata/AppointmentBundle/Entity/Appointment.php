@@ -38,21 +38,21 @@ class Appointment {
     /**
      * @var float
      *
-     * @ORM\Column(name="weight", type="decimal")
+     * @ORM\Column(name="weight", type="decimal", nullable=true)
      */
     private $weight;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="height", type="integer")
+     * @ORM\Column(name="height", type="integer", nullable=true)
      */
     private $height;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="glucose", type="integer")
+     * @ORM\Column(name="glucose", type="integer", nullable=true)
      */
     private $glucose;
 

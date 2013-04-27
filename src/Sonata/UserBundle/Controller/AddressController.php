@@ -31,7 +31,7 @@ class AddressController extends Controller {
 
         $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
 
-        $form = $this->createForm(new AddressType(), $address, array('prefCountry' => $country));
+        $form = $this->createForm(new AddressType(), $address);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -122,7 +122,7 @@ class AddressController extends Controller {
 
         $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
 
-        $editForm = $this->createForm(new AddressType(), $entity, array('prefCountry' => $country));
+        $editForm = $this->createForm(new AddressType(), $entity);
 
         return array(
             'userID' => $userID,
@@ -150,7 +150,7 @@ class AddressController extends Controller {
 
         $country = $em->getRepository('SonataUserBundle:Country')->findOneByCode('US');
 
-        $editForm = $this->createForm(new AddressType(), $address, array('prefCountry' => $country));
+        $editForm = $this->createForm(new AddressType(), $address);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
