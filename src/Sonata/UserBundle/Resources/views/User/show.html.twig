@@ -32,7 +32,10 @@
         </a>
     </li>
     <li>
+        {% if 'search' not in app.request.headers.get('referer')
+        %}
         <a href="{{ app.request.headers.get('referer') }}">Back</a>
+        {% endif %}
     </li>
 </ul>
 {% endblock content_content %}
