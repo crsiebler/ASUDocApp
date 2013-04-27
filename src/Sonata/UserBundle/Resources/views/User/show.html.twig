@@ -31,12 +31,13 @@
             Edit
         </a>
     </li>
+    
+        {% if 'search' not in app.request.headers.get('referer') %}
     <li>
-        {% if 'search' not in app.request.headers.get('referer')
-        %}
         <a href="{{ app.request.headers.get('referer') }}">Back</a>
-        {% endif %}
     </li>
+        {% endif %}
+    
 </ul>
 {% endblock content_content %}
 
