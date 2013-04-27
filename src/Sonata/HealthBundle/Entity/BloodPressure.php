@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BloodPressure
  *
  * @ORM\Table(name="bloodpressure")
- * @ORM\Entity(repositoryClass="Sonata\HealthBundle\Repository\BloodPressureRepository")
+ * @ORM\Entity()
  */
 class BloodPressure {
 
