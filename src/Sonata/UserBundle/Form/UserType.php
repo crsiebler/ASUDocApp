@@ -11,11 +11,11 @@ class UserType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('firstName', null, array(
                     'label' => "First Name:",
-                    'required' => false,
+                    'required' => true,
                 ))
                 ->add('lastName', null, array(
                     'label' => "Last Name:",
-                    'required' => false,
+                    'required' => true,
                 ));
     }
 

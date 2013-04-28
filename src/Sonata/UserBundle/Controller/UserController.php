@@ -259,9 +259,14 @@ class UserController extends Controller {
         $userManager = $this->container->get('fos_user.user_manager');
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->container->get('event_dispatcher');
-
+        
         $user = $userManager->createUser();
         $user->setEnabled(true);
+        
+        // Generate Temporary Password
+        // Save to memory in order to email to user
+        $tempPassword = substr(md5(microtime().rand()),0,10);
+        $user->setPlainPassword($tempPassword); // Autogenerate Password
 
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, new UserEvent($user, $request));
 
@@ -271,16 +276,42 @@ class UserController extends Controller {
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
 
+
             if ($form->isValid()) {
                 $event = new FormEvent($form, $request);
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
 
                 $userManager->updateUser($user);
-
+                
                 // Specify redirect URL to go to after User is registered
                 if (null === $response = $event->getResponse()) {
                     $url = $this->container->get('router')->generate('user_registration_confirmed');
                     $response = new RedirectResponse($url);
+                }
+                
+                $subject = 'Notification: User Registered';
+                
+                // Send Email Notification to User
+                $email = \Swift_Message::newInstance()
+                        ->setSubject($subject)
+                        ->setFrom($this->container->getParameter('mailer_user'))
+                        ->setReplyTo($this->container->getParameter('mailer_replyTo'))
+                        ->setTo($user->getEmail())
+                        ->setBody($this->renderView('SonataUserBundle:Email:registered.txt.twig', array('user' => $user, 'password' => $tempPassword)));
+                
+                $result = $this->get('mailer')->send($email);
+                
+                if (false === $result) {
+                    return $this->redirect($this->generateUrl('email_error', array(
+                            'subject' => $subject,
+                            'from' => $this->container->getParameter('mailer_user'),
+                            'replyTo' => $this->container->getParameter('mailer_replyTo'),
+                            'to' => $user->getEmail(),
+                            'body' => $this->renderView('SonataUserBundle:Email:registered.txt.twig', array(
+                                'user' => $user,
+                                'password' => $tempPassword
+                            ))
+                    )));
                 }
 
                 // Create Flash Message for User registration success

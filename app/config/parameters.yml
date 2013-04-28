@@ -11,6 +11,7 @@ parameters:
     mailer_host: smtp.gmail.com
     mailer_user: cory.siebler@gmail.com
     mailer_password: tphcpugeyskixyjf
+    mailer_replyTo: cory.siebler@gmail.com
     locale: en
     secret: 274aea36a65c0bf329e5edf23c8e137172838a7a
     database_path: null

@@ -1,0 +1,13 @@
+Dear {{ user.getName() }}:
+
+You are successfully registered for Sonata DocApp.
+
+Below is your login information:
+Email: {{ user.email }}
+Password: {{ password }}
+
+Please visit {{ 'http://' ~ app.request.host ~ path('fos_user_security_login') }} to access your account.
+
+Regards,
+Sonata Health Services
+{{ 'http://' ~ app.request.host ~ path('homepage') }}

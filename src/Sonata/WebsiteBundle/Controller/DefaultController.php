@@ -20,7 +20,7 @@ class DefaultController extends Controller {
 
     /**
      * @Route("/search", name="search")
-     * @Method({"POST"})
+     * @Method({"GET", "POST"})
      * @Template()
      */
     public function searchAction() {
@@ -49,7 +49,7 @@ class DefaultController extends Controller {
     
     /**
      * @Route("/search/error/{type}", defaults={"type" = null}, name="search_error")
-     * @Method({"GET"})
+     * @Method("GET")
      * @Template()
      */
     public function searchErrorAction($type) {
@@ -57,6 +57,15 @@ class DefaultController extends Controller {
             return array('error' => $type);
         }
         
+        return array('error' => null);
+    }
+    
+    /**
+     * @Route("/email/error/{to}/{subject}/{from}/{replyTo}/{body}", name="email_error")
+     * @Method("GET")
+     * @Template()
+     */
+    public function emailErrorAction($to, $subject, $from, $replyTo, $body) {
         return array('error' => null);
     }
 }

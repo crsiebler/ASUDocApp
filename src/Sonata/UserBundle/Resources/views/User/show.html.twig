@@ -20,37 +20,206 @@
         </tr>
         <tr>
             <th>Primary Doctor:</th>
-            <td>{{ entity.primaryDoctor }}</td>
+            <td>{% if entity.primaryDoctor is not null %}{{ entity.primaryDoctor }}{% else %}None Specified{% endif %}</td>
         </tr>
     </tbody>
 </table>
 
+{% if entity.getAddress() is not null %}
+    <h3>Address Information</h3>
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Address:</th>
+                <td>{{ entity.getAddress().address }}</td>
+            </tr>
+            {% if entity.getAddress().address2 is not null %}
+                <tr>
+                    <th>Address (line 2):</th>
+                    <td>{{ entity.getAddress().address2 }}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <th>Country:</th>
+                <td>{{ entity.getAddress().getCountry().name }}</td>
+            </tr>
+            {% if entity.getAddress().getState() is not null %}
+                <tr>
+                    <th>State:</th>
+                    <td>{{ entity.getAddress().getState().name }}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <th>City:</th>
+                <td>{{ entity.getAddress().city }}</td>
+            </tr>
+            {% if entity.getAddress().zipcode is not null %}
+                <tr>
+                    <th>Zipcode:</th>
+                    <td>{{ entity.getAddress().zipcode }}</td>
+                </tr>
+            {% endif %}
+            {% if entity.getAddress().phoneNumber is not null %}
+                <tr>
+                    <th>Phone Number:</th>
+                    <td>{{ entity.getAddress().phoneNumber|phone() }}</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if entity.getInsuranceInfo() is not null %}
+    <h3>Insurance Information</h3>
+    <table class="record_proerties">
+        <tbody>
+            <tr>
+                <th>Name:</th>
+                <td>{{ entity.getInsuranceInfo().name }}</td>
+            </tr>
+            <tr>
+                <th>Group Policy:</th>
+                <td>{{ entity.getInsuranceInfo().groupPolicy }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endif %}
+
+{% if not entity.getAllergies().empty() %}
+    <h3>Allergy Information</h3>
+    <table class="record_proerties">
+        <tbody>
+            {% for allergy in entity.getAllergies() %}
+                <tr>
+                    <th>Type:</th>
+                    <td>{{ allergy.type }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if not entity.getPrescriptions().empty() %}
+    <h3>Prescription Information</h3>
+    {% for prescription in entity.getPrescriptions() %}
+        <table class="record_proerties">
+            <tbody>
+                <tr>
+                    <th>Name:</th>
+                    <td>{{ prescription.name }}</td>
+                </tr>
+                <tr>
+                    <th>Frequency:</th>
+                    <td>{{ prescription.frequency }}</td>
+                </tr>
+                <tr>
+                    <th>Dosage:</th>
+                    <td>{{ prescription.dosage }}</td>
+                </tr>
+                <tr>
+                    <th>Reason:</th>
+                    <td>{{ prescription.reason }}</td>
+                </tr>
+                <tr>
+                    <th>Date Prescribed:</th>
+                    <td>{{ prescription.datePrescribed|date('Y-m-d') }}</td>
+                </tr>
+                <tr>
+                    <th>Date Expires:</th>
+                    {% if prescription.dateExpires is not null %}
+                        <td>{{ prescription.dateExpires|date('Y-m-d') }}</td>
+                    {% else %}
+                        <td>N/A</td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+        <br>
+    {% endfor %}
+{% endif %}
+
 <ul class="record_actions">
+    <li>
+        <a href="{{ app.request.headers.get('referer') }}">Back</a>
+    </li>
     <li>
         <a href="{{ path('user_edit', { 'id': entity.id }) }}">
             Edit
         </a>
     </li>
-    
-       {% if 'search' not in app.request.headers.get('referer') %}
-    <li>
-        <a href="{{ app.request.headers.get('referer') }}">Back</a>
-    </li>
-        {% endif %}
-    
 </ul>
 {% endblock content_content %}
 
 {% block content_sidebar %}
 <h2>Actions</h2>
 <ul>
-    {% if is_granted('ROLE_NURSE') or is_granted('ROLE_DOCTOR') %}
-        <li>
-            <a href="{{ path('appointment_new', { 'patientID': entity.getId(), 'patientName': entity.getName() }) }}">New Appointment</a>
-        </li>
-        {% if entity.hasRoleByName('ROLE_PATIENT') and appointment is not null %}
+    {# Display Patient Links #}
+    {% if entity.hasRoleByName('ROLE_PATIENT') %}
+        {# Display Doctor and Nurse Sidebar #}
+        {% if is_granted('ROLE_NURSE') or is_granted('ROLE_DOCTOR') %}
             <li>
-                <a href="{{ path('appointment_edit', { 'id': appointment.getId(), 'patientID': entity.getId(), 'patientName': entity.getName() }) }}">Edit Last Appointment</a>
+                <a href="{{ path('appointment_new', { 'patientID': entity.getId(), 'patientName': entity.getName() }) }}">New Appointment</a>
+            </li>
+            {% if appointment is not null %}
+                <li>
+                    <a href="{{ path('appointment_edit', { 'id': appointment.getId(), 'patientID': entity.getId(), 'patientName': entity.getName() }) }}">Edit Last Appointment</a>
+                </li>
+            {% endif %}
+            <li>
+                <a href="{{ path('allergy_new', { 'userName': entity.getName(), 'userID': entity.getId() }) }}">Add Allergy</a>
+            </li>
+            {# check to see if entity has any Allergies to edit #}
+            {% if not entity.getAllergies().empty() %}
+                <li>
+                    <a href="{{ path('allergy_show', { 'userName': entity.getName(), 'userID': entity.getId() }) }}">Edit Allergies</a>
+                </li>
+            {% endif %}
+            <li>
+                <a href="{{ path('prescription_new', { 'userName': entity.getName(), 'userID': entity.getId() }) }}">Add Prescription</a>
+            </li>
+            {# check to see if entity has any Prescriptions to edit #}
+            {% if not entity.getPrescriptions().empty() %}
+                <li>
+                    <a href="{{ path('prescription_show', { 'userName': entity.getName(), 'userID': entity.getId() }) }}">Edit Prescriptions</a>
+                </li>
+            {% endif %}
+            {# check to see if entity has any Appointment Information to Display #}
+            {% if not entity.getAppointments().empty() %}
+                <li>
+                    <a href="{{ path('blood_pressure_show', { 'userName': entity.getName(), 'userID': entity.getId() }) }}">Show Blood Pressure Readings</a>
+                </li>
+                <li>
+                    <a href="{{ path('blood_glucose_show', { 'userName': entity.getName(), 'userID': entity.getId() }) }}">Show Blood Glucose Levels</a>
+                </li>
+                <li>
+                    <a href="{{ path('weight_show', { 'userName': entity.getName(), 'userID': entity.getId() }) }}">Show Weight Trends</a>
+                </li>
+            {% endif %}
+        {# Display Office-Admin Sidebar #}
+        {% elseif is_granted('ROLE_ADMIN') %}
+            <li>
+                {# Address is OneToOne so Add or Edit check #}
+                {% if entity.getAddress() is null %}
+                    <a href="{{ path('address_new', { 'userID': entity.getId(), 'userName': entity.getName() }) }}">Add Address</a>
+                {% else %}
+                    <a href="{{ path('address_edit', { 'id': entity.getAddress().getId(), 'userID': entity.getId(), 'userName': entity.getName() }) }}">Edit Address</a>
+                {% endif %}
+            </li>
+            <li>
+                {# Insurance is OneToOne so Add or Edit check #}
+                {% if entity.getInsuranceInfo() is null %}
+                    <a href="{{ path('insurance_new', { 'userName': entity.getName(), 'userID': entity.getId() }) }}">Add Insurance</a>
+                {% else %}
+                    <a href="{{ path('insurance_edit', { 'id': entity.getInsuranceInfo().getId(), 'userName': entity.getName(), 'userID': entity.getId() }) }}">Edit Insurance</a>
+                {% endif %}
+            </li>
+            <li>
+                {# Primary Doctor check to Add or Edit #}
+                {% if entity.getPrimaryDoctor() is null %}
+                    <a href="{{ path('new_primary_doctor', { 'userName': entity.getName(), 'userID': entity.getId() }) }}">Add Primary Doctor</a>
+                {% else %}
+                    <a href="{{ path('edit_primary_doctor', { 'primaryDoctor': entity.getPrimaryDoctor(), 'userName': entity.getName(), 'userID': entity.getId() }) }}">Edit Primary Doctor</a>
+                {% endif %}
             </li>
         {% endif %}
     {% endif %}

@@ -140,7 +140,6 @@ class User extends BaseUser {
         $this->appointmentInfo = new ArrayCollection();
         $this->allergies = new ArrayCollection();
         $this->prescriptions = new ArrayCollection();
-        $this->setPlainPassword(substr(md5(microtime().rand()),0,10)); // Autogenerate Password
     }
 
     public function getUserRoles() {

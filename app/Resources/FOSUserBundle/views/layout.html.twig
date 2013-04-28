@@ -9,13 +9,13 @@
 
 {% block headline %}
     {% if "login" in app.request.attributes.get('_route') %}
-    Login
-    {% elseif "register" in app.request.attributes.get('_route') %}
-    User Registration
+        Login
+    {% elseif "register" in app.request.attributes.get('_route') or "user_registration" in app.request.attributes.get('_route') %}
+        User Registration
     {% elseif "confirmed" in app.request.attributes.get('_route') %}
-    Success!
+        Success!
     {% else %}
-    FOSUser Template
+        FOSUser Template
     {% endif %}
 {% endblock headline %}
 
